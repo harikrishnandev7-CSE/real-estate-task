@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 310 50" fill="none" role="img" aria-label="IMPERIA Luxury Estates">
+  <!--
+    IMPERIA — Luxury Estates
+    Primary horizontal lockup — light / reversed version (for dark backgrounds)
+
+    Icon: amber crown unchanged; column and plinth in cream #F4F1EA
+    Wordmark: "IMPERIA" in cream; "LUXURY ESTATES" amber unchanged
+    Divider: white/10 opacity — still present but subtle on dark
+  -->
+
+  <!-- ── Icon mark ─────────────────────────────── -->
+  <!-- Crown — amber #F5A623 (same in both themes) -->
+  <rect x="0" y="8" width="38" height="5.5" fill="#F5A623"/>
+  <!-- Column — cream -->
+  <rect x="14" y="13.5" width="10" height="23" fill="#F4F1EA"/>
+  <!-- Plinth — cream -->
+  <rect x="0" y="36.5" width="38" height="5.5" fill="#F4F1EA"/>
+
+  <!-- ── Divider ──────────────────────────────── -->
+  <line x1="52" y1="9" x2="52" y2="41" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+
+  <!-- ── Wordmark ─────────────────────────────── -->
+  <text
+    x="64"
+    y="33"
+    font-family="'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
+    font-weight="800"
+    font-size="21"
+    letter-spacing="5"
+    fill="#F4F1EA"
+  >IMPERIA</text>
+
+  <text
+    x="65"
+    y="44"
+    font-family="'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
+    font-weight="500"
+    font-size="6"
+    letter-spacing="3.2"
+    fill="#F5A623"
+  >LUXURY ESTATES</text>
+</svg>

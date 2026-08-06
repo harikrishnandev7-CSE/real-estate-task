@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="IMPERIA">
+  <!--
+    IMPERIA favicon — 32 × 32 canonical size, scales down cleanly to 16 × 16.
+
+    Background: cream #F4F1EA — matches the site's page background so the
+    browser tab feels like a seamless extension of the brand, not a dark or
+    white island in a sea of chrome.
+
+    Mark: the architectural "I" at maximal size within the tile —
+    amber crown fills the top band, drawing the eye instantly at tab scale.
+    Stroke-free, solid-fill only — thinnest element is 3 px (the column),
+    which renders without aliasing at 16 × 16 in every major browser.
+  -->
+  <!-- Background tile -->
+  <rect width="32" height="32" fill="#F4F1EA"/>
+
+  <!-- Crown — amber #F5A623 -->
+  <rect x="5" y="5" width="22" height="4" fill="#F5A623"/>
+  <!-- Column — near-black -->
+  <rect x="14" y="9" width="4" height="18" fill="#1A1A1A"/>
+  <!-- Plinth — near-black -->
+  <rect x="5" y="23" width="22" height="4" fill="#1A1A1A"/>
+</svg>

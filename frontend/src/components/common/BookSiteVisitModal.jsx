@@ -1,0 +1,367 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Calendar, Phone, User, Mail, Building, Clock, Check, X, ArrowRight, Loader2 } from 'lucide-react';
+import { useApp } from '../../context/AppContext';
+
+const BookSiteVisitModal = () => {
+  const { isBookModalOpen, closeBookModal, bookModalProperty, showToast, properties, addSiteVisit, currentUser } = useApp();
+
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    date: '',
+    time: '10:00 AM',
+    property: ''
+  });
+
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Sync property name & current logged-in user info when modal opens
+  useEffect(() => {
+    if (isBookModalOpen) {
+      let resolvedTitle = 'Architectural Estate';
+
+      if (typeof bookModalProperty === 'string' && bookModalProperty.trim()) {
+        resolvedTitle = bookModalProperty;
+      } else if (bookModalProperty && typeof bookModalProperty === 'object') {
+        resolvedTitle = bookModalProperty.title || bookModalProperty.name || bookModalProperty.propertyName || (properties[0] ? properties[0].title : 'Architectural Estate');
+      } else if (properties && properties.length > 0) {
+        resolvedTitle = properties[0].title || properties[0].name || 'Architectural Estate';
+      }
+
+      setFormData({
+        name: currentUser?.fullName || currentUser?.name || '',
+        email: currentUser?.email || '',
+        phone: currentUser?.phone || '',
+        date: new Date().toISOString().split('T')[0],
+        time: '10:00 AM',
+        property: resolvedTitle
+      });
+      setErrors({});
+      setIsSubmitted(false);
+    }
+  }, [isBookModalOpen, bookModalProperty, properties, currentUser]);
+
+  // Lock scroll
+  useEffect(() => {
+    if (isBookModalOpen) {
+      document.body.classList.add('overflow-hidden');
+    } else {
+      document.body.classList.remove('overflow-hidden');
+    }
+    return () => document.body.classList.remove('overflow-hidden');
+  }, [isBookModalOpen]);
+
+  // Escape key handler
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && isBookModalOpen) {
+        closeBookModal();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isBookModalOpen, closeBookModal]);
+
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.name.trim()) newErrors.name = 'Full name is required';
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email address is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+    const phoneClean = formData.phone.replace(/\D/g, '');
+    if (!phoneClean) {
+      newErrors.phone = 'Phone number is required';
+    } else if (phoneClean.length !== 10) {
+      newErrors.phone = 'Phone number must be exactly 10 digits';
+    }
+    if (!formData.date) newErrors.date = 'Preferred date is required';
+    if (!formData.time) newErrors.time = 'Preferred time is required';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+
+    setIsSubmitting(true);
+
+    try {
+      await addSiteVisit({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        propertyName: formData.property,
+        date: formData.date,
+        time: formData.time,
+        consultantName: 'Vikram Malhotra',
+        propertyId: bookModalProperty?.id || bookModalProperty?._id,
+      });
+
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      showToast(`Site visit request submitted for ${formData.property}`);
+    } catch (err) {
+      setIsSubmitting(false);
+      showToast(`Booking failed: ${err.message}`, 'error');
+    }
+  };
+
+  const timeSlots = [
+    '09:00 AM',
+    '11:00 AM',
+    '02:00 PM',
+    '04:00 PM',
+    '06:00 PM'
+  ];
+
+  return (
+    <AnimatePresence>
+      {isBookModalOpen && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={closeBookModal}
+            className="fixed inset-0 bg-black/80 backdrop-blur-md z-[9998]"
+          />
+
+          {/* Modal Card */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92vw] max-w-lg z-[9999] bg-white border border-[#E8E4DA] rounded-3xl p-6 sm:p-8 shadow-[0_25px_50px_rgba(0,0,0,0.15)] max-h-[90vh] overflow-y-auto custom-scrollbar font-sans text-left text-[#1A1A1A]"
+          >
+            {/* Close Button */}
+            <button
+              onClick={closeBookModal}
+              className="absolute top-6 right-6 p-2 rounded-full hover:bg-stone-100 text-[#8A8A85] hover:text-[#1A1A1A] transition-colors cursor-pointer outline-none"
+              aria-label="Close modal"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <AnimatePresence mode="wait">
+              {!isSubmitted ? (
+                <motion.form
+                  key="booking-form"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onSubmit={handleSubmit}
+                  className="space-y-5"
+                >
+                  <div className="border-b border-[#E8E4DA] pb-4">
+                    <span className="text-[10px] uppercase tracking-[0.25em] text-[#F5A623] font-bold block">
+                      IMPERIA ESTATES PRIVATE CONCIERGE
+                    </span>
+                    <h3 className="text-2xl font-bold text-[#1A1A1A] tracking-tight mt-1">
+                      Book Private Site Visit
+                    </h3>
+                    <p className="text-xs text-[#8A8A85] font-normal mt-1">
+                      Schedule a chauffeur-driven private estate tour with our senior property advisors.
+                    </p>
+                  </div>
+
+                  {/* Property Name */}
+                  <div className="space-y-1.5">
+                    <label className="block text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold">
+                      Selected Estate / Project
+                    </label>
+                    <div className="relative">
+                      <Building className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#F5A623]" />
+                      <input
+                        type="text"
+                        value={formData.property}
+                        onChange={(e) => setFormData({ ...formData, property: e.target.value })}
+                        placeholder="Enter or select property name"
+                        className="w-full bg-[#F4F1EA] border border-[#E8E4DA] focus:border-[#F5A623] outline-none rounded-xl py-3 pl-11 pr-4 text-xs text-[#1A1A1A] font-medium placeholder-[#8A8A85] transition-all font-sans"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Full Name */}
+                  <div className="space-y-1.5">
+                    <label className="block text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold">
+                      Full Name *
+                    </label>
+                    <div className="relative">
+                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#F5A623]" />
+                      <input
+                        type="text"
+                        placeholder="e.g. Alexander Wright"
+                        value={formData.name}
+                        onChange={(e) => {
+                          setFormData({ ...formData, name: e.target.value });
+                          if (errors.name) setErrors({ ...errors, name: null });
+                        }}
+                        className={`w-full bg-[#F4F1EA] border ${errors.name ? 'border-red-500' : 'border-[#E8E4DA]'} focus:border-[#F5A623] outline-none rounded-xl py-3 pl-11 pr-4 text-xs text-[#1A1A1A] font-medium placeholder-[#8A8A85] transition-all font-sans`}
+                      />
+                    </div>
+                    {errors.name && <p className="text-[10px] text-red-500 font-bold">{errors.name}</p>}
+                  </div>
+
+                  {/* Email & Phone Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Email */}
+                    <div className="space-y-1.5">
+                      <label className="block text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold">
+                        Email Address *
+                      </label>
+                      <div className="relative">
+                        <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#F5A623]" />
+                        <input
+                          type="email"
+                          placeholder="client@luxury.com"
+                          value={formData.email}
+                          onChange={(e) => {
+                            setFormData({ ...formData, email: e.target.value });
+                            if (errors.email) setErrors({ ...errors, email: null });
+                          }}
+                          className={`w-full bg-[#F4F1EA] border ${errors.email ? 'border-red-500' : 'border-[#E8E4DA]'} focus:border-[#F5A623] outline-none rounded-xl py-3 pl-10 pr-3 text-xs text-[#1A1A1A] font-medium placeholder-[#8A8A85] transition-all font-sans`}
+                        />
+                      </div>
+                      {errors.email && <p className="text-[10px] text-red-500 font-bold">{errors.email}</p>}
+                    </div>
+
+                    {/* Phone */}
+                    <div className="space-y-1.5">
+                      <label className="block text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold">
+                        Phone Number *
+                      </label>
+                      <div className="relative">
+                        <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#F5A623]" />
+                        <input
+                          type="tel"
+                          maxLength={10}
+                          placeholder="e.g. 9876543210"
+                          value={formData.phone}
+                          onChange={(e) => {
+                            const digitsOnly = e.target.value.replace(/\D/g, '').slice(0, 10);
+                            setFormData({ ...formData, phone: digitsOnly });
+                            if (errors.phone) setErrors({ ...errors, phone: null });
+                          }}
+                          className={`w-full bg-[#F4F1EA] border ${errors.phone ? 'border-red-500' : 'border-[#E8E4DA]'} focus:border-[#F5A623] outline-none rounded-xl py-3 pl-10 pr-3 text-xs text-[#1A1A1A] font-medium placeholder-[#8A8A85] transition-all font-sans`}
+                        />
+                      </div>
+                      {errors.phone && <p className="text-[10px] text-red-500 font-bold">{errors.phone}</p>}
+                    </div>
+                  </div>
+
+                  {/* Date & Time Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Date */}
+                    <div className="space-y-1.5">
+                      <label className="block text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold">
+                        Preferred Date *
+                      </label>
+                      <div className="relative">
+                        <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#F5A623]" />
+                        <input
+                          type="date"
+                          value={formData.date}
+                          onChange={(e) => {
+                            setFormData({ ...formData, date: e.target.value });
+                            if (errors.date) setErrors({ ...errors, date: null });
+                          }}
+                          className={`w-full bg-[#F4F1EA] border ${errors.date ? 'border-red-500' : 'border-[#E8E4DA]'} focus:border-[#F5A623] outline-none rounded-xl py-3 pl-10 pr-3 text-xs text-[#1A1A1A] font-medium transition-all font-sans`}
+                        />
+                      </div>
+                      {errors.date && <p className="text-[10px] text-red-500 font-bold">{errors.date}</p>}
+                    </div>
+
+                    {/* Time */}
+                    <div className="space-y-1.5">
+                      <label className="block text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold">
+                        Preferred Time *
+                      </label>
+                      <div className="relative">
+                        <Clock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#F5A623]" />
+                        <select
+                          value={formData.time}
+                          onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                          className="w-full bg-[#F4F1EA] border border-[#E8E4DA] focus:border-[#F5A623] outline-none rounded-xl py-3 pl-10 pr-3 text-xs text-[#1A1A1A] font-bold transition-all cursor-pointer font-sans"
+                        >
+                          {timeSlots.map(t => (
+                            <option key={t} value={t}>{t}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Submit Button */}
+                  <motion.button
+                    type="submit"
+                    disabled={isSubmitting}
+                    whileHover={isSubmitting ? {} : { scale: 1.02 }}
+                    whileTap={isSubmitting ? {} : { scale: 0.98 }}
+                    className="w-full py-4 bg-[#1A1A1A] hover:bg-black text-white font-bold text-xs tracking-wider uppercase rounded-full flex items-center justify-center gap-2 shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all mt-2"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin text-[#F5A623]" />
+                        <span>Reserving Chauffeur Transit...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>CONFIRM PRIVATE WALKTHROUGH</span>
+                        <ArrowRight className="w-4 h-4 text-[#F5A623]" />
+                      </>
+                    )}
+                  </motion.button>
+                </motion.form>
+              ) : (
+                <motion.div
+                  key="booking-success"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="text-center py-6 space-y-6"
+                >
+                  <div className="mx-auto w-16 h-16 rounded-full bg-[#F5A623] text-white flex items-center justify-center shadow-md">
+                    <Check className="w-8 h-8 stroke-[3]" />
+                  </div>
+
+                  <div className="space-y-2">
+                    <h4 className="text-2xl font-bold text-[#1A1A1A] tracking-tight">
+                      Private Tour Confirmed
+                    </h4>
+                    <p className="text-[#8A8A85] text-xs font-normal leading-relaxed max-w-sm mx-auto">
+                      Thank you, <span className="text-[#1A1A1A] font-bold">{formData.name}</span>. Your private walkthrough for <span className="text-[#F5A623] font-bold">{formData.property}</span> has been registered for <span className="text-[#1A1A1A] font-bold">{formData.date}</span> at <span className="text-[#1A1A1A] font-bold">{formData.time}</span>.
+                    </p>
+                    <p className="text-[#8A8A85] text-[11px] font-normal pt-2">
+                      Our senior wealth advisory manager will contact you at <span className="text-[#1A1A1A] font-bold">{formData.phone}</span> to coordinate your chauffeur transit.
+                    </p>
+                  </div>
+
+                  <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <button
+                      onClick={closeBookModal}
+                      className="w-full sm:w-auto px-8 py-3 bg-[#1A1A1A] hover:bg-black text-white font-bold text-xs uppercase tracking-wider rounded-full shadow-md cursor-pointer transition-all"
+                    >
+                      Done
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+};
+
+export default BookSiteVisitModal;

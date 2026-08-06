@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 50" fill="none" role="img" aria-label="IMPERIA Luxury Estates wordmark">
+  <!--
+    IMPERIA — Luxury Estates
+    Wordmark — light / reversed version (for dark backgrounds)
+    "IMPERIA" switches to cream #F4F1EA; tagline stays amber.
+  -->
+  <text
+    x="0"
+    y="33"
+    font-family="'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
+    font-weight="800"
+    font-size="28"
+    letter-spacing="6.5"
+    fill="#F4F1EA"
+  >IMPERIA</text>
+
+  <text
+    x="1"
+    y="46"
+    font-family="'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
+    font-weight="500"
+    font-size="7.5"
+    letter-spacing="4"
+    fill="#F5A623"
+  >LUXURY ESTATES</text>
+</svg>

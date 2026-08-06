@@ -1,0 +1,109 @@
+### IMPERIA ESTATES API Test Collection
+@baseUrl = http://localhost:5000/api/v1
+
+### 1. Health Check
+GET {{baseUrl}}/health
+
+### 2. Login Admin
+# @name loginAdmin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@imperiaestates.com",
+  "password": "Admin@123456"
+}
+
+### 3. Login Customer
+# @name loginCustomer
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "customer@imperiaestates.com",
+  "password": "Customer@123456"
+}
+
+### Store Token Variables from Login Response above
+@adminToken = {{loginAdmin.response.body.data.token}}
+@customerToken = {{loginCustomer.response.body.data.token}}
+
+### 4. Get Current User Profile
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{customerToken}}
+
+### 5. Get All Properties (with filtering, sorting & pagination)
+GET {{baseUrl}}/properties?purpose=Buy&city=Chennai&sort=price_desc&page=1&limit=6
+
+### 6. Get Single Property
+GET {{baseUrl}}/properties/imperia-ritz
+
+### 7. Search Properties
+GET {{baseUrl}}/search?q=Coimbatore
+
+### 8. Toggle Property in Wishlist
+POST {{baseUrl}}/user/wishlist/toggle
+Authorization: Bearer {{customerToken}}
+Content-Type: application/json
+
+{
+  "propertyId": "imperia-ritz"
+}
+
+### 9. Get User Wishlist
+GET {{baseUrl}}/user/wishlist
+Authorization: Bearer {{customerToken}}
+
+### 10. Toggle Property in Compare List (Max 4)
+POST {{baseUrl}}/user/compare/toggle
+Authorization: Bearer {{customerToken}}
+Content-Type: application/json
+
+{
+  "propertyId": "imperia-skyline"
+}
+
+### 11. Get User Compare List
+GET {{baseUrl}}/user/compare
+Authorization: Bearer {{customerToken}}
+
+### 12. Book Site Visit (Public Guest / User)
+POST {{baseUrl}}/site-visits
+Content-Type: application/json
+
+{
+  "propertyId": "imperia-ritz",
+  "propertyName": "The Ritz-Carlton Residences",
+  "name": "Anand Sharma",
+  "email": "anand.s@example.com",
+  "phone": "+91 99887 76655",
+  "date": "2026-03-15",
+  "time": "03:00 PM"
+}
+
+### 13. Get My Site Visits
+GET {{baseUrl}}/site-visits/my-visits
+Authorization: Bearer {{customerToken}}
+
+### 14. Admin: Get CRM Customers
+GET {{baseUrl}}/admin/customers
+Authorization: Bearer {{adminToken}}
+
+### 15. Public: Get Blogs
+GET {{baseUrl}}/blogs
+
+### 16. Submit Public Inquiry
+POST {{baseUrl}}/inquiries
+Content-Type: application/json
+
+{
+  "fullName": "Kavitha R",
+  "email": "kavitha@example.com",
+  "phone": "+91 91234 56789",
+  "serviceRequested": "Interior Design Consulting",
+  "message": "I would like to inquire about luxury interior customization."
+}
+
+### 17. Admin: Get Inquiries
+GET {{baseUrl}}/admin/inquiries
+Authorization: Bearer {{adminToken}}

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 50" fill="none" role="img" aria-label="IMPERIA Luxury Estates wordmark">
+  <!--
+    IMPERIA — Luxury Estates
+    Wordmark — dark version (for cream #F4F1EA and white backgrounds)
+
+    Typography system:
+      — "IMPERIA"       : 800-weight geometric sans, letter-spacing 0.22em
+      — "LUXURY ESTATES": 500-weight geometric sans, letter-spacing 0.38em
+
+    NOTE: This SVG uses the web-font stack loaded by the app (Plus Jakarta Sans
+    via Google Fonts). In pure-SVG contexts (export, email) the browser fallback
+    chain  system-ui → -apple-system → Segoe UI  renders acceptably.
+    For pixel-perfect exports, rasterize via the generate-logos.mjs script which
+    embeds the font before rendering.
+  -->
+  <!-- Primary wordmark "IMPERIA" -->
+  <text
+    x="0"
+    y="33"
+    font-family="'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
+    font-weight="800"
+    font-size="28"
+    letter-spacing="6.5"
+    fill="#1A1A1A"
+  >IMPERIA</text>
+
+  <!-- Tagline "LUXURY ESTATES" -->
+  <text
+    x="1"
+    y="46"
+    font-family="'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
+    font-weight="500"
+    font-size="7.5"
+    letter-spacing="4"
+    fill="#F5A623"
+  >LUXURY ESTATES</text>
+</svg>

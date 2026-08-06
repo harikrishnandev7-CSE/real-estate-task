@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" role="img" aria-label="IMPERIA icon mark">
+  <!--
+    IMPERIA — Luxury Estates
+    Icon / monogram mark — light version (for dark / near-black backgrounds)
+
+    Crown stays amber; column and plinth switch to cream #F4F1EA
+    so the mark reads clearly on both the app chrome dark theme
+    and any dark-background section of the site.
+  -->
+  <!-- Crown — amber accent #F5A623 (unchanged in both variants) -->
+  <rect x="15" y="13" width="70" height="10" fill="#F5A623"/>
+  <!-- Column — cream #F4F1EA -->
+  <rect x="44" y="23" width="12" height="53" fill="#F4F1EA"/>
+  <!-- Plinth — cream #F4F1EA -->
+  <rect x="15" y="76" width="70" height="11" fill="#F4F1EA"/>
+</svg>

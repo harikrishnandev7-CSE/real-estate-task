@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" role="img" aria-label="IMPERIA icon mark">
+  <!--
+    IMPERIA — Luxury Estates
+    Icon / monogram mark — dark version (for cream #F4F1EA and white backgrounds)
+
+    Geometry: architectural capital "I"
+      — amber crown bar:  the entry / capital element
+      — near-black stem:  structural column, 1:5 ratio to cap width
+      — near-black plinth: base / foundation element
+    No gradients. No shadows. Legible at 16 × 16 px.
+  -->
+  <!-- Crown — amber accent #F5A623 -->
+  <rect x="15" y="13" width="70" height="10" fill="#F5A623"/>
+  <!-- Column — near-black #1A1A1A -->
+  <rect x="44" y="23" width="12" height="53" fill="#1A1A1A"/>
+  <!-- Plinth — near-black #1A1A1A -->
+  <rect x="15" y="76" width="70" height="11" fill="#1A1A1A"/>
+</svg>
