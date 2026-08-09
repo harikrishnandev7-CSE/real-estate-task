@@ -8,29 +8,52 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 
 const router = Router();
 
-const propertySchema = z.object({
-  title: z.string().min(2, 'Title must be at least 2 characters'),
-  location: z.string().optional().or(z.literal('')),
-  city: z.string().optional().or(z.literal('')),
-  type: z.string().optional().or(z.literal('')),
-  numericPrice: z.number().or(z.string()).optional().default(0),
-  numericArea: z.number().or(z.string()).optional().default(0),
-}).passthrough();
-
 const bulkSchema = z.object({
   ids: z.array(z.string()).min(1, 'IDs array cannot be empty'),
   action: z.enum(['Publish', 'Archive', 'Delete']),
 });
 
-// Public endpoints
+// ── Public endpoints ──────────────────────────────────────────────────────────
 router.get('/', asyncHandler(propertiesController.getProperties));
 router.get('/:id', asyncHandler(propertiesController.getPropertyById));
 
-// Admin-only write endpoints
-router.post('/', verifyToken, requireRole('admin'), validate(propertySchema), asyncHandler(propertiesController.createProperty));
-router.put('/:id', verifyToken, requireRole('admin'), asyncHandler(propertiesController.updateProperty));
+// ── Admin-only write endpoints ────────────────────────────────────────────────
+// Middleware handles optional multipart file uploads (image, gallery, media) directly to Cloudinary
+const propertyUpload = upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'media', maxCount: 20 },
+  { name: 'gallery', maxCount: 20 },
+  { name: 'entrance', maxCount: 1 },
+  { name: 'hall', maxCount: 20 },
+  { name: 'kitchen', maxCount: 20 },
+  { name: 'bedrooms', maxCount: 20 },
+  { name: 'bathrooms', maxCount: 20 },
+  { name: 'terrace', maxCount: 20 },
+]);
+
+router.post('/',       verifyToken, requireRole('admin'), propertyUpload, asyncHandler(propertiesController.createProperty));
+router.put('/:id',    verifyToken, requireRole('admin'), propertyUpload, asyncHandler(propertiesController.updateProperty));
 router.delete('/:id', verifyToken, requireRole('admin'), asyncHandler(propertiesController.deleteProperty));
-router.post('/bulk', verifyToken, requireRole('admin'), validate(bulkSchema), asyncHandler(propertiesController.bulkPropertiesAction));
-router.post('/media', verifyToken, requireRole('admin'), upload.array('media', 5), asyncHandler(propertiesController.uploadMedia));
+router.post('/bulk',  verifyToken, requireRole('admin'), validate(bulkSchema), asyncHandler(propertiesController.bulkPropertiesAction));
+
+/**
+ * POST /media & POST /upload
+ * Direct media upload endpoint — files stream directly to Cloudinary CDN
+ */
+router.post(
+  '/media',
+  verifyToken,
+  requireRole('admin'),
+  upload.array('media', 20),
+  asyncHandler(propertiesController.uploadMedia)
+);
+
+router.post(
+  '/upload',
+  verifyToken,
+  requireRole('admin'),
+  upload.array('media', 20),
+  asyncHandler(propertiesController.uploadMedia)
+);
 
 export default router;

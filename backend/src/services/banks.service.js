@@ -1,0 +1,121 @@
+/**
+ * Banks Service — static data, no DB.
+ * The frontend redirects to officialLoanPageUrl in a new tab.
+ * No loan-application logic here.
+ */
+
+const BANKS = [
+  {
+    id: 'sbi',
+    name: 'State Bank of India',
+    bankName: 'State Bank of India',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/SBI-logo.svg/200px-SBI-logo.svg.png',
+    rate: '8.50%',
+    interestRateFrom: '8.50%',
+    tenure: '30 years',
+    maxTenure: '30 years',
+    link: 'https://homeloans.sbi.bank.in/',
+    officialLoanPageUrl: 'https://homeloans.sbi.bank.in/',
+  },
+  {
+    id: 'hdfc',
+    name: 'HDFC Bank',
+    bankName: 'HDFC Bank',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/HDFC_Bank_Logo.svg/200px-HDFC_Bank_Logo.svg.png',
+    rate: '8.70%',
+    interestRateFrom: '8.70%',
+    tenure: '30 years',
+    maxTenure: '30 years',
+    link: 'https://homeloans.hdfc.bank.in/',
+    officialLoanPageUrl: 'https://homeloans.hdfc.bank.in/',
+  },
+  {
+    id: 'icici',
+    name: 'ICICI Bank',
+    bankName: 'ICICI Bank',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/ICICI_Bank_Logo.svg/200px-ICICI_Bank_Logo.svg.png',
+    rate: '8.75%',
+    interestRateFrom: '8.75%',
+    tenure: '30 years',
+    maxTenure: '30 years',
+    link: 'https://www.icicibank.com/personal-banking/loans/home-loan',
+    officialLoanPageUrl: 'https://www.icicibank.com/personal-banking/loans/home-loan',
+  },
+  {
+    id: 'axis',
+    name: 'Axis Bank',
+    bankName: 'Axis Bank',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Axis_Bank_logo.svg/200px-Axis_Bank_logo.svg.png',
+    rate: '8.75%',
+    interestRateFrom: '8.75%',
+    tenure: '30 years',
+    maxTenure: '30 years',
+    link: 'https://www.axisbank.com/retail/loans/home-loan',
+    officialLoanPageUrl: 'https://www.axisbank.com/retail/loans/home-loan',
+  },
+  {
+    id: 'kotak',
+    name: 'Kotak Mahindra Bank',
+    bankName: 'Kotak Mahindra Bank',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Kotak_Mahindra_Bank_logo.svg/200px-Kotak_Mahindra_Bank_logo.svg.png',
+    rate: '8.85%',
+    interestRateFrom: '8.85%',
+    tenure: '20 years',
+    maxTenure: '20 years',
+    link: 'https://www.kotak.com/en/personal-banking/loans/home-loan.html',
+    officialLoanPageUrl: 'https://www.kotak.com/en/personal-banking/loans/home-loan.html',
+  },
+  {
+    id: 'bajaj',
+    name: 'Bajaj Housing Finance',
+    bankName: 'Bajaj Housing Finance',
+    logoUrl: 'https://www.bajajhousingfinance.in/assets/images/logo.png',
+    rate: '8.50%',
+    interestRateFrom: '8.50%',
+    tenure: '32 years',
+    maxTenure: '32 years',
+    link: 'https://www.bajajhousingfinance.in/home-loan',
+    officialLoanPageUrl: 'https://www.bajajhousingfinance.in/home-loan',
+  },
+  {
+    id: 'lic',
+    name: 'LIC Housing Finance',
+    bankName: 'LIC Housing Finance',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/LIC_logo.svg/200px-LIC_logo.svg.png',
+    rate: '8.65%',
+    interestRateFrom: '8.65%',
+    tenure: '30 years',
+    maxTenure: '30 years',
+    link: 'https://www.lichousing.com/home-loans',
+    officialLoanPageUrl: 'https://www.lichousing.com/home-loans',
+  },
+  {
+    id: 'pnb',
+    name: 'PNB Housing Finance',
+    bankName: 'PNB Housing Finance',
+    logoUrl: 'https://www.pnbhfl.com/img/pnb-hfl-logo.png',
+    rate: '8.75%',
+    interestRateFrom: '8.75%',
+    tenure: '30 years',
+    maxTenure: '30 years',
+    link: 'https://www.pnbhousing.com/home-loan/',
+    officialLoanPageUrl: 'https://www.pnbhousing.com/home-loan/',
+  },
+  {
+    id: 'indian',
+    name: 'Indian Bank',
+    bankName: 'Indian Bank',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Indian_Bank_logo.svg/200px-Indian_Bank_logo.svg.png',
+    rate: '8.60%',
+    interestRateFrom: '8.60%',
+    tenure: '30 years',
+    maxTenure: '30 years',
+    link: 'https://indianbank.bank.in/en/home-loan',
+    officialLoanPageUrl: 'https://indianbank.bank.in/en/home-loan',
+  }
+];
+
+export const getBanks = async () => BANKS;
+
+const banksService = { getBanks };
+export default banksService;

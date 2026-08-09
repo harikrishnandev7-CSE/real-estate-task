@@ -14,6 +14,22 @@ const bookingSchema = new mongoose.Schema(
     status: { type: String, default: 'Scheduled' }, // Confirmed / Scheduled / Completed / Cancelled / No-show
     cancelReason: { type: String, default: null },
     completionNote: { type: String, default: null },
+
+    // ─── New fields added for auto-assignment (additive, backward-compatible) ─────
+    // cityName: plain string city for assignment engine — keeps Property.city convention
+    cityName: { type: String, default: null },
+    // consultant: ref to Consultant profile (null = unassigned)
+    consultant: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Consultant',
+      default: null,
+    },
+    // assignmentStatus tracks auto-assignment workflow
+    assignmentStatus: {
+      type: String,
+      enum: ['PendingAssignment', 'Assigned', 'PendingAdminReview', 'Reassigned'],
+      default: 'PendingAssignment',
+    },
   },
   {
     timestamps: true,

@@ -1,5 +1,4 @@
 import Wishlist from '../models/Wishlist.js';
-import Compare from '../models/Compare.js';
 import RecentlyViewed from '../models/RecentlyViewed.js';
 import User from '../models/User.js';
 import Notification from '../models/Notification.js';
@@ -30,35 +29,6 @@ export const toggleWishlist = async (userId, propertyId) => {
     Property.findByIdAndUpdate(propertyId, { $inc: { saves: 1 } }).exec().catch(() => {});
 
     return { inWishlist: true, propertyId, message: 'Added to wishlist.' };
-  }
-};
-
-// --- Compare ---
-export const getUserCompareList = async (userId) => {
-  const items = await Compare.find({ user: userId })
-    .populate('property')
-    .sort({ createdAt: 1 })
-    .lean();
-  return items.map(item => formatProperty(item.property));
-};
-
-export const toggleCompareList = async (userId, propertyId) => {
-  const existing = await Compare.findOne({ user: userId, property: propertyId });
-
-  if (existing) {
-    await Compare.findByIdAndDelete(existing._id);
-    return { inCompare: false, propertyId, message: 'Removed from comparison list.' };
-  } else {
-    const currentCount = await Compare.countDocuments({ user: userId });
-    if (currentCount >= 4) {
-      const error = new Error('Comparison limit reached. Maximum 4 properties allowed.');
-      error.statusCode = 400;
-      error.code = 'COMPARE_LIMIT_REACHED';
-      throw error;
-    }
-
-    await Compare.create({ user: userId, property: propertyId });
-    return { inCompare: true, propertyId, message: 'Added to comparison list.' };
   }
 };
 

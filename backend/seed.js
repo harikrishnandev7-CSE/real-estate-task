@@ -42,7 +42,7 @@ async function seed() {
     }
 
     // 1. Seed Users
-    const adminPasswordHash = await bcrypt.hash('Admin@123456', 10);
+    const adminPasswordHash = await bcrypt.hash('admin1234', 10);
     const customerPasswordHash = await bcrypt.hash('Customer@123456', 10);
 
     const adminUser = await User.findOneAndUpdate(

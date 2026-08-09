@@ -8,17 +8,22 @@ export const getBlogs = async (query = {}) => {
   if (status && status !== 'all') where.status = { $regex: new RegExp(`^${status}$`, 'i') };
   if (featured !== undefined) where.featured = featured === 'true' || featured === true;
 
-  const blogs = await Blog.find(where)
-    .sort({ createdAt: -1 })
-    .lean();
+  try {
+    const blogs = await Blog.find(where)
+      .sort({ createdAt: -1 })
+      .lean();
 
-  return blogs.map(blog => ({
-    ...blog,
-    id: blog._id ? blog._id.toString() : blog.id,
-    image: blog.imageUrl,
-    summary: blog.excerpt,
-    content: blog.body,
-  }));
+    return blogs.map(blog => ({
+      ...blog,
+      id: blog._id ? blog._id.toString() : blog.id,
+      image: blog.imageUrl,
+      summary: blog.excerpt,
+      content: blog.body,
+    }));
+  } catch (err) {
+    console.warn(`Blogs DB query warning: ${err.message}`);
+    return [];
+  }
 };
 
 export const getBlogBySlug = async (slug) => {
@@ -36,7 +41,7 @@ export const getBlogBySlug = async (slug) => {
   }
 
   // Increment view count
-  Blog.findByIdAndUpdate(blog._id, { $inc: { views: 1 } }).exec().catch(() => {});
+  Blog.findByIdAndUpdate(blog._id, { $inc: { views: 1 } }).exec().catch(() => { });
 
   return {
     ...blog,

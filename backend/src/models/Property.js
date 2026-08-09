@@ -27,8 +27,22 @@ const propertySchema = new mongoose.Schema(
     builder: { type: String, default: null },
     rating: { type: Number, default: 4.8 },
     growthRate: { type: String, default: null },
-    investmentRating: { type: String, default: null },
-    description: { type: String, default: null },
+    furnishing: { type: String, enum: ['full', 'semi', 'none'], default: 'full' },
+    images: {
+      entrance: { type: String, default: null },
+      hall: { type: [String], default: [] },
+      kitchen: { type: [String], default: [] },
+      bedrooms: { type: [String], default: [] },
+      bathrooms: { type: [String], default: [] },
+      terrace: { type: [String], default: [] },
+    },
+    roomImages: [
+      {
+        url: { type: String, required: true },
+        type: { type: String, required: true }, // 'bedroom', 'hall', 'kitchen', 'bathroom', 'exterior'
+        furnished: { type: Boolean, required: true }
+      }
+    ],
     specs: { type: mongoose.Schema.Types.Mixed, default: {} },
 
     // Plot specific fields
@@ -42,6 +56,16 @@ const propertySchema = new mongoose.Schema(
     views: { type: Number, default: 0 },
     enquiries: { type: Number, default: 0 },
     saves: { type: Number, default: 0 },
+
+    // ─── New media & legal fields (additive, backward-compatible) ─────────────
+    videoUrl: { type: String, default: null },
+    tourUrl360: { type: String, default: null },
+    legal: {
+      ecStatus: { type: String, default: null },
+      dtcpCmdaApproval: { type: String, default: null },
+      reraStatus: { type: String, default: null },
+      propertyTaxStatus: { type: String, default: null },
+    },
   },
   {
     timestamps: true,

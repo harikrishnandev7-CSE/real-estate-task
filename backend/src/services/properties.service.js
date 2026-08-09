@@ -1,4 +1,6 @@
 import Property from '../models/Property.js';
+import Booking from '../models/Booking.js';
+import Consultant from '../models/Consultant.js';
 import { formatProperty } from '../utils/transform.js';
 
 export const getProperties = async (query = {}) => {
@@ -50,24 +52,35 @@ export const getProperties = async (query = {}) => {
   const limitNum = Math.max(1, parseInt(limit, 10) || 12);
   const skip = (pageNum - 1) * limitNum;
 
-  const [total, rawProperties] = await Promise.all([
-    Property.countDocuments(where),
-    Property.find(where)
-      .sort(sortObj)
-      .skip(skip)
-      .limit(limitNum)
-      .lean(),
-  ]);
+  try {
+    const [total, rawProperties] = await Promise.all([
+      Property.countDocuments(where),
+      Property.find(where)
+        .sort(sortObj)
+        .skip(skip)
+        .limit(limitNum)
+        .lean(),
+    ]);
 
-  const properties = rawProperties.map(formatProperty);
+    const properties = rawProperties.map(formatProperty);
 
-  return {
-    total,
-    page: pageNum,
-    limit: limitNum,
-    totalPages: Math.ceil(total / limitNum),
-    properties,
-  };
+    return {
+      total,
+      page: pageNum,
+      limit: limitNum,
+      totalPages: Math.ceil(total / limitNum),
+      properties,
+    };
+  } catch (err) {
+    console.warn(`Properties DB query warning: ${err.message}`);
+    return {
+      total: 0,
+      page: pageNum,
+      limit: limitNum,
+      totalPages: 0,
+      properties: [],
+    };
+  }
 };
 
 export const getPropertyById = async (id) => {
@@ -129,6 +142,10 @@ export const createProperty = async (data) => {
     frontage,
     dimensions,
     registrationStatus,
+    // New media & legal fields
+    videoUrl,
+    tourUrl360,
+    legal,
   } = data;
 
   const generatedId = id || title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -147,6 +164,7 @@ export const createProperty = async (data) => {
     areaDisplay: areaDisplay || area || null,
     numericArea: parseInt(numericArea, 10) || 0,
     pricePerSqft: pricePerSqft || null,
+    images: data.images || {},
     imageUrl: imageUrl || image || null,
     galleryUrls: galleryUrls || gallery || [],
     amenities: amenities || [],
@@ -168,6 +186,9 @@ export const createProperty = async (data) => {
     frontage: frontage || null,
     dimensions: dimensions || null,
     registrationStatus: registrationStatus || null,
+    videoUrl: videoUrl || null,
+    tourUrl360: tourUrl360 || null,
+    legal: legal || {},
   });
 
   return formatProperty(created.toObject());
@@ -199,6 +220,7 @@ export const updateProperty = async (id, data) => {
   }
   if (data.numericArea !== undefined) updateData.numericArea = parseInt(data.numericArea, 10);
   if (data.pricePerSqft !== undefined) updateData.pricePerSqft = data.pricePerSqft;
+  if (data.images !== undefined) updateData.images = data.images;
   if (data.imageUrl !== undefined || data.image !== undefined) {
     updateData.imageUrl = data.imageUrl || data.image;
   }
@@ -224,6 +246,9 @@ export const updateProperty = async (id, data) => {
     updateData.description = data.description || data.desc;
   }
   if (data.specs !== undefined) updateData.specs = data.specs;
+  if (data.videoUrl !== undefined) updateData.videoUrl = data.videoUrl;
+  if (data.tourUrl360 !== undefined) updateData.tourUrl360 = data.tourUrl360;
+  if (data.legal !== undefined) updateData.legal = { ...(data.legal) };
 
   const updated = await Property.findByIdAndUpdate(id, updateData, { new: true }).lean();
 

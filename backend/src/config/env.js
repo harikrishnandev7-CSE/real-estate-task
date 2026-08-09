@@ -10,4 +10,8 @@ export const env = {
   JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || 'fallback_refresh_secret_imperia_2026',
   JWT_ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN || '15m',
   JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
+  // Cloudinary
+  CLOUD_NAME:       process.env.CLOUD_NAME       || '',
+  CLOUD_API_KEY:    process.env.CLOUD_API_KEY    || '',
+  CLOUD_API_SECRET: process.env.CLOUD_API_SECRET || '',
 };

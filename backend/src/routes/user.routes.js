@@ -16,10 +16,9 @@ router.use(verifyToken);
 // Wishlist
 router.get('/wishlist', asyncHandler(userController.getWishlist));
 router.post('/wishlist/toggle', validate(propertyIdSchema), asyncHandler(userController.toggleWishlist));
+router.post('/wishlist', validate(propertyIdSchema), asyncHandler(userController.toggleWishlist));
+router.delete('/wishlist/:propertyId', asyncHandler(userController.toggleWishlist));
 
-// Compare
-router.get('/compare', asyncHandler(userController.getCompare));
-router.post('/compare/toggle', validate(propertyIdSchema), asyncHandler(userController.toggleCompare));
 
 // Recently Viewed
 router.get('/recently-viewed', asyncHandler(userController.getRecentlyViewed));

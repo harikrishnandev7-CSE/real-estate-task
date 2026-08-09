@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
@@ -19,6 +20,13 @@ export const generateTokens = (user) => {
 };
 
 export const registerUser = async ({ name, fullName, email, phone, password }) => {
+  if (mongoose.connection.readyState !== 1) {
+    const error = new Error('Database is offline. Please check MongoDB Atlas IP Whitelist (0.0.0.0/0).');
+    error.statusCode = 400;
+    error.code = 'DB_OFFLINE';
+    throw error;
+  }
+
   const userEmail = email.toLowerCase().trim();
   const userName = fullName || name || 'Imperia User';
 
@@ -51,32 +59,47 @@ export const registerUser = async ({ name, fullName, email, phone, password }) =
 };
 
 export const loginUser = async ({ email, password }) => {
-  const userEmail = email.toLowerCase().trim();
+  if (mongoose.connection.readyState !== 1) {
+    const error = new Error('Database connection is offline. Please add current IP to MongoDB Atlas Network Access (0.0.0.0/0).');
+    error.statusCode = 401;
+    error.code = 'DB_OFFLINE';
+    throw error;
+  }
 
-  const user = await User.findOne({ email: userEmail });
+  try {
+    const userEmail = email.toLowerCase().trim();
 
-  if (!user) {
-    const error = new Error('Invalid email or password.');
+    const user = await User.findOne({ email: userEmail });
+
+    if (!user) {
+      const error = new Error('Invalid email or password.');
+      error.statusCode = 401;
+      error.code = 'INVALID_CREDENTIALS';
+      throw error;
+    }
+
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
+    if (!isMatch) {
+      const error = new Error('Invalid email or password.');
+      error.statusCode = 401;
+      error.code = 'INVALID_CREDENTIALS';
+      throw error;
+    }
+
+    const tokens = generateTokens(user);
+    return {
+      user: sanitizeUser(user),
+      token: tokens.accessToken,
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+    };
+  } catch (err) {
+    if (err.statusCode) throw err;
+    const error = new Error('Invalid email or password or database connection unavailable.');
     error.statusCode = 401;
     error.code = 'INVALID_CREDENTIALS';
     throw error;
   }
-
-  const isMatch = await bcrypt.compare(password, user.passwordHash);
-  if (!isMatch) {
-    const error = new Error('Invalid email or password.');
-    error.statusCode = 401;
-    error.code = 'INVALID_CREDENTIALS';
-    throw error;
-  }
-
-  const tokens = generateTokens(user);
-  return {
-    user: sanitizeUser(user),
-    token: tokens.accessToken,
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
-  };
 };
 
 export const refreshAccessToken = async (refreshToken) => {

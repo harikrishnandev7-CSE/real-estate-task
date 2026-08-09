@@ -8,20 +8,11 @@ export const getWishlist = async (req, res) => {
 };
 
 export const toggleWishlist = async (req, res) => {
-  const result = await userService.toggleWishlist(req.user.id, req.body.propertyId);
+  const propertyId = req.body.propertyId || req.params.propertyId;
+  const result = await userService.toggleWishlist(req.user.id, propertyId);
   return successResponse(res, result);
 };
 
-// Compare
-export const getCompare = async (req, res) => {
-  const compareList = await userService.getUserCompareList(req.user.id);
-  return successResponse(res, { compareList, properties: compareList });
-};
-
-export const toggleCompare = async (req, res) => {
-  const result = await userService.toggleCompareList(req.user.id, req.body.propertyId);
-  return successResponse(res, result);
-};
 
 // Recently Viewed
 export const getRecentlyViewed = async (req, res) => {

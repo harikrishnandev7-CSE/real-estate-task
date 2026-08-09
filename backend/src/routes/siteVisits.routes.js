@@ -30,13 +30,24 @@ const createVisitSchema = z.object({
   propertyName: z.string().optional(),
   consultantName: z.string().optional(),
   propertyId: z.string().optional(),
+  // New optional fields for assignment engine (backward compatible)
+  city: z.string().optional(),
+  cityName: z.string().optional(),
 }).passthrough();
 
 // Public booking with optional auth context
 router.post('/', optionalAuth, validate(createVisitSchema), asyncHandler(siteVisitsController.createSiteVisit));
 
 // Protected user route
+router.get('/my', verifyToken, asyncHandler(siteVisitsController.getMySiteVisits));
 router.get('/my-visits', verifyToken, asyncHandler(siteVisitsController.getMySiteVisits));
+
+// Admin calendar routes
+router.get('/calendar', verifyToken, requireRole('admin'), asyncHandler(siteVisitsController.getCalendarMonthData));
+router.get('/admin/site-visits/calendar', verifyToken, requireRole('admin'), asyncHandler(siteVisitsController.getCalendarMonthData));
+
+router.get('/by-date', verifyToken, requireRole('admin'), asyncHandler(siteVisitsController.getSiteVisitsByDate));
+router.get('/admin/site-visits/by-date', verifyToken, requireRole('admin'), asyncHandler(siteVisitsController.getSiteVisitsByDate));
 
 // Admin routes (supports both /api/v1/admin/site-visits and /api/v1/site-visits/admin/site-visits)
 router.get('/admin/site-visits', verifyToken, requireRole('admin'), asyncHandler(siteVisitsController.getAllSiteVisitsAdmin));
@@ -44,6 +55,9 @@ router.get('/', verifyToken, requireRole('admin'), asyncHandler(siteVisitsContro
 
 router.put('/:id', verifyToken, requireRole('admin'), asyncHandler(siteVisitsController.rescheduleSiteVisit));
 router.patch('/admin/site-visits/:id/confirm', verifyToken, requireRole('admin'), asyncHandler(siteVisitsController.confirmSiteVisit));
+router.patch('/:id/confirm', verifyToken, requireRole('admin'), asyncHandler(siteVisitsController.confirmSiteVisit));
+router.post('/:id/confirm', verifyToken, requireRole('admin'), asyncHandler(siteVisitsController.confirmSiteVisit));
+
 router.patch('/admin/site-visits/:id/reschedule', verifyToken, requireRole('admin'), asyncHandler(siteVisitsController.rescheduleSiteVisit));
 router.patch('/admin/site-visits/:id/cancel', verifyToken, requireRole('admin'), asyncHandler(siteVisitsController.cancelSiteVisit));
 router.patch('/admin/site-visits/:id/complete', verifyToken, requireRole('admin'), asyncHandler(siteVisitsController.completeSiteVisit));
