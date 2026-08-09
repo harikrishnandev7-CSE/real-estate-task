@@ -108,8 +108,8 @@ const Statistics = () => {
     },
     hover: {
       y: shouldReduceMotion ? 0 : -6,
-      borderColor: "#F5A623",
-      boxShadow: "0 20px 40px rgba(0, 0, 0, 0.08)",
+      borderColor: "#CFB6A8",
+      boxShadow: "0 20px 40px rgba(54, 60, 70, 0.08)",
       transition: {
         duration: 0.45,
         ease: [0.16, 1, 0.3, 1]
@@ -118,7 +118,7 @@ const Statistics = () => {
   };
 
   return (
-    <section className="py-24 md:py-28 lg:py-32 bg-white relative border-t border-[#E8E4DA] overflow-hidden">
+    <section className="py-24 md:py-28 lg:py-32 bg-[#E0EEE9] relative border-t border-[rgba(93,100,114,0.15)] overflow-hidden font-sans">
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         <motion.div 
           variants={containerVariants}
@@ -134,30 +134,33 @@ const Statistics = () => {
                 key={idx}
                 variants={cardVariants}
                 whileHover="hover"
-                className="group relative p-8 bg-[#F4F1EA] border border-[#E8E4DA] rounded-3xl overflow-hidden shadow-sm flex flex-col justify-between min-h-[220px] transition-all duration-300"
+                className="group relative p-8 bg-white border border-[rgba(93,100,114,0.15)] rounded-xl overflow-hidden shadow-xs flex flex-col justify-between min-h-[220px] transition-all duration-300"
               >
                 <div className="space-y-4">
                   {/* Top Bar with Icon */}
                   <div className="flex items-center justify-between">
-                    <div className="p-2.5 rounded-xl bg-amber-50 text-[#F5A623] group-hover:bg-[#F5A623] group-hover:text-white transition-all duration-300 shadow-xs">
+                    <div className="p-2.5 rounded-lg bg-[rgba(207,182,168,0.15)] text-[#CFB6A8] group-hover:bg-[#CFB6A8] group-hover:text-white transition-all duration-300 shadow-xs">
                       <Icon className="w-4.5 h-4.5 stroke-[2]" />
                     </div>
                   </div>
 
                   {/* Counter Digit */}
-                  <div className="text-4xl lg:text-5xl font-black text-[#1A1A1A] font-sans tracking-tight group-hover:text-[#F5A623] transition-colors">
+                  <div
+                    className="text-4xl lg:text-5xl font-bold text-[#363C46] tracking-tight group-hover:text-[#CFB6A8] transition-colors"
+                    style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                  >
                     <AnimatedCounter value={stat.value} duration={1200} />
                   </div>
                 </div>
 
                 {/* Metadata Description */}
                 <div className="space-y-1 mt-6">
-                  <h4 className="text-xs uppercase tracking-widest text-[#1A1A1A] font-bold font-sans">{stat.label}</h4>
-                  <p className="text-[#8A8A85] text-[11px] leading-relaxed font-normal font-sans">{stat.desc}</p>
+                  <h4 className="text-xs uppercase tracking-widest text-[#363C46] font-bold font-sans">{stat.label}</h4>
+                  <p className="text-[#5D6472] text-[11px] leading-relaxed font-normal font-sans">{stat.desc}</p>
                 </div>
 
                 {/* Hover indicator line */}
-                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#F5A623] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" />
+                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#CFB6A8] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" />
               </motion.div>
             );
           })}

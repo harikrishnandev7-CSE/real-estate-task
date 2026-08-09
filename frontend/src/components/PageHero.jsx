@@ -13,21 +13,15 @@ import { ChevronRight } from 'lucide-react';
 const EASE = [0.16, 1, 0.3, 1];
 
 /**
- * PageHero — A single reusable sub-page banner that matches the homepage
- * hero quality bar.
+ * PageHero — Phase 2 restyled reusable sub-page banner.
  *
- * Features:
- *  - Full-bleed contextual background image
- *  - Scroll-triggered parallax (image slower than content)
- *  - Mount entrance: image scale 1.08 → 1.0 over 1.4 s
- *  - Desktop-only mouse tilt (±3°) with spring physics
- *  - Staggered text entrance: eyebrow → heading → description
- *  - Gradient overlay matching the homepage hero
- *  - Fully respects prefers-reduced-motion
+ * Changes: gradient overlay tones shifted to Azureish White (#E0EEE9),
+ * eyebrow/breadcrumb/heading/description colors updated to new palette.
+ * All parallax, tilt, and animation logic preserved unchanged.
  *
  * Props:
- *  image          string  — Unsplash CDN URL (use ?auto=format&fit=crop&w=1600&q=75)
- *  breadcrumbs    array   — [{ label, href? }]  (last item has no href → current page)
+ *  image          string  — Unsplash CDN URL
+ *  breadcrumbs    array   — [{ label, href? }]
  *  eyebrow        string  — ALL CAPS small label above heading
  *  heading        node    — JSX (can include <em> italic spans)
  *  description    string  — Body copy below heading
@@ -89,14 +83,15 @@ const PageHero = ({ image, breadcrumbs = [], eyebrow, heading, description }) =>
   return (
     <div
       ref={sectionRef}
-      className="relative w-full h-[360px] sm:h-[400px] md:h-[460px] lg:h-[500px] overflow-hidden bg-[#F4F1EA]"
+      className="relative w-full h-[360px] sm:h-[400px] md:h-[460px] lg:h-[500px] overflow-hidden"
+      style={{ background: '#E0EEE9' }}   /* Azureish White — matches page bg */
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{ perspective: 1000 }}
+      style={{ perspective: 1000, background: '#E0EEE9' }}
     >
-      {/* Background Image Container with Notch Cut-out + Mount Scale + Parallax + Tilt */}
+      {/* Background Image Container */}
       <motion.div
-        className="absolute inset-x-2 sm:inset-x-4 md:inset-x-8 top-3 sm:top-4 bottom-0 z-0 overflow-hidden rounded-2xl sm:rounded-3xl clip-notch shadow-lg"
+        className="absolute inset-x-2 sm:inset-x-4 md:inset-x-8 top-3 sm:top-4 bottom-0 z-0 overflow-hidden rounded-xl sm:rounded-2xl clip-notch shadow-md"
         style={{
           y: imgY,
           rotateX: springTiltX,
@@ -116,19 +111,22 @@ const PageHero = ({ image, breadcrumbs = [], eyebrow, heading, description }) =>
           className="w-full h-full object-cover"
         />
 
-        {/* Vibrant backdrop overlay for maximum image clarity & text contrast */}
-        <div className="absolute inset-0 bg-black/10 z-10" />
+        {/* Subtle dark scrim */}
+        <div className="absolute inset-0 z-10" style={{ background: 'rgba(54,60,70,0.08)' }} />
+
+        {/* Bottom gradient — Azureish White fade */}
         <div
           className="absolute inset-0 z-10 pointer-events-none"
           style={{
             background:
-              'linear-gradient(180deg, rgba(244,241,234,0.1) 0%, transparent 45%, rgba(244,241,234,0.3) 80%, rgba(244,241,234,0.65) 100%)',
+              'linear-gradient(180deg, rgba(224,238,233,0.08) 0%, transparent 42%, rgba(224,238,233,0.28) 78%, rgba(224,238,233,0.62) 100%)',
           }}
         />
+        {/* Left gradient — Azureish White fade */}
         <div
           className="absolute inset-0 z-10 pointer-events-none"
           style={{
-            background: 'linear-gradient(90deg, rgba(244,241,234,0.75) 0%, rgba(244,241,234,0.45) 40%, transparent 85%)',
+            background: 'linear-gradient(90deg, rgba(224,238,233,0.70) 0%, rgba(224,238,233,0.40) 38%, transparent 82%)',
           }}
         />
       </motion.div>
@@ -150,40 +148,57 @@ const PageHero = ({ image, breadcrumbs = [], eyebrow, heading, description }) =>
               <motion.nav
                 variants={eyebrowVariants}
                 aria-label="Breadcrumb"
-                className="flex items-center flex-wrap gap-1.5 text-xs font-sans font-bold text-[#3A3732] mb-1"
+                className="flex items-center flex-wrap gap-1.5 text-xs font-bold mb-1"
+                style={{
+                  fontFamily: "'Inter', 'Plus Jakarta Sans', sans-serif",
+                  color: '#363C46',
+                }}
               >
                 {breadcrumbs.map((crumb, i) => (
                   <React.Fragment key={i}>
-                    {i > 0 && <ChevronRight className="w-3 h-3 text-[#3A3732]/70 shrink-0" />}
+                    {i > 0 && (
+                      <ChevronRight className="w-3 h-3 shrink-0" style={{ color: 'rgba(54,60,70,0.50)' }} />
+                    )}
                     {crumb.href ? (
                       <Link
                         to={crumb.href}
-                        className="hover:text-[#F5A623] transition-colors duration-200"
+                        className="transition-colors duration-200 hover:opacity-70"
+                        style={{ color: '#363C46' }}
                       >
                         {crumb.label}
                       </Link>
                     ) : (
-                      <span className="text-[#D97706] font-extrabold">{crumb.label}</span>
+                      <span style={{ color: '#CFB6A8', fontWeight: 700 }}>{crumb.label}</span>
                     )}
                   </React.Fragment>
                 ))}
               </motion.nav>
             )}
 
-            {/* Eyebrow label */}
+            {/* Eyebrow label — Dark Vanilla */}
             {eyebrow && (
               <motion.span
                 variants={eyebrowVariants}
-                className="text-xs uppercase tracking-[0.25em] text-[#D97706] font-extrabold block font-sans"
+                className="text-xs uppercase tracking-[0.25em] font-extrabold block"
+                style={{
+                  fontFamily: "'Inter', 'Plus Jakarta Sans', sans-serif",
+                  color: '#CFB6A8',
+                }}
               >
                 {eyebrow}
               </motion.span>
             )}
 
-            {/* Mixed-weight Heading */}
+            {/* Editorial Serif Heading */}
             <motion.h1
               variants={itemVariants}
-              className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold font-sans text-[#1A1A1A] tracking-tight leading-[1.15] sm:leading-[1.1] [&_em]:font-normal [&_em]:text-[#4A4640] [&_em]:not-italic [&_span.light]:font-normal [&_span.light]:text-[#4A4640]"
+              className="tracking-tight leading-[1.12]"
+              style={{
+                fontFamily: "'Fraunces', 'Playfair Display', serif",
+                fontSize: 'clamp(28px, 4.5vw, 60px)',
+                fontWeight: 600,
+                color: '#363C46',
+              }}
             >
               {heading}
             </motion.h1>
@@ -192,7 +207,12 @@ const PageHero = ({ image, breadcrumbs = [], eyebrow, heading, description }) =>
             {description && (
               <motion.p
                 variants={itemVariants}
-                className="text-[#2B2926] font-medium text-sm md:text-base max-w-2xl leading-relaxed font-sans pt-1 drop-shadow-xs"
+                className="text-sm md:text-[15px] max-w-2xl leading-relaxed pt-1"
+                style={{
+                  fontFamily: "'Inter', 'Plus Jakarta Sans', sans-serif",
+                  fontWeight: 400,
+                  color: '#5D6472',
+                }}
               >
                 {description}
               </motion.p>

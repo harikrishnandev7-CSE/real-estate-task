@@ -58,17 +58,6 @@ const Blog = () => {
       author: "Pranav Rajan",
       image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=80",
       featured: false
-    },
-    {
-      id: "art-5",
-      title: "Bespoke Lighting Design: Sculpting Luxury Spaces",
-      excerpt: "How dynamic lighting fixtures and smart automation systems affect physical well-being and premium aesthetics.",
-      category: "Design & Style",
-      date: "June 22, 2026",
-      readTime: "3 Min Read",
-      author: "Aditi Sen",
-      image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=600&q=80",
-      featured: false
     }
   ];
 
@@ -76,255 +65,123 @@ const Blog = () => {
     e.preventDefault();
     if (emailVal) {
       setNewsletterSubscribed(true);
-      showToast('Subscribed to IMPERIA ESTATES Journal Intel newsletter.');
+      showToast("Subscribed to IMPERIA Intelligence Briefing.");
     }
   };
 
-  const handleArticleClick = (artTitle) => {
-    showToast(`Opening paper: "${artTitle}"`);
-  };
-
-  const filteredArticles = activeCategory === 'All' 
-    ? articles.filter(a => !a.featured)
-    : articles.filter(a => a.category === activeCategory && !a.featured);
-
-  const featuredArticle = articles.find(a => a.featured);
-
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: { staggerChildren: 0.08 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 25 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
-    }
-  };
-
-  const imageVariants = {
-    hidden: { opacity: 1, scale: 1 },
-    visible: { opacity: 1, scale: 1 },
-    hover: {
-      scale: 1.04,
-      transition: { duration: 0.5, ease: "easeOut" }
-    }
-  };
+  const filteredArticles = articles.filter(a => activeCategory === 'All' || a.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-[#F4F1EA] text-[#1A1A1A]">
-
-      {/* PageHero — editorial reading/lounge mood image */}
+    <div className="min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
       <div className="pt-[64px] lg:pt-[72px]">
         <PageHero
-          image="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=80"
+          image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
           breadcrumbs={[
             { label: 'Home', href: '/' },
-            { label: 'Insights' },
+            { label: 'Editorial Insights' },
           ]}
-          eyebrow="EDITORIAL INTELLIGENCE"
+          eyebrow="IMPERIA JOURNAL"
           heading={
-            <>The IMPERIA ESTATES <span className="font-normal text-[#8A8A85]">Journal</span></>
+            <>Market Intelligence &amp; <span className="font-normal text-[#5D6472]">Luxury Trends</span></>
           }
-          description="Bespoke essays, investment breakdowns, and design inspirations curated weekly by our specialist advisory and interior design divisions."
+          description="Curated essays, tax compliance briefs, and architectural analyses published by our private office."
         />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 space-y-20">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 space-y-16 font-sans">
         
-        {/* FEATURED ARTICLES SECTION */}
-        {featuredArticle && (
-          <div className="space-y-6">
-            <div className="flex items-center gap-2 text-xs font-bold text-[#F5A623] font-sans">
-              <Star className="w-4 h-4 fill-current" />
-              <span>FEATURED INTEL</span>
-            </div>
-            
-            <div 
-              onClick={() => handleArticleClick(featuredArticle.title)}
-              className="border border-[#E8E4DA] bg-white rounded-3xl overflow-hidden p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center cursor-pointer group hover:border-[#F5A623] transition-all duration-300 shadow-[0_20px_40px_rgba(0,0,0,0.06)] hover:shadow-[0_25px_50px_rgba(0,0,0,0.1)]"
+        {/* Category Pills */}
+        <div className="flex flex-wrap gap-2 justify-center border-b border-[rgba(93,100,114,0.15)] pb-6">
+          {categories.map((c) => (
+            <button
+              key={c}
+              onClick={() => setActiveCategory(c)}
+              className={`px-5 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                activeCategory === c
+                  ? 'bg-[#363C46] text-white shadow-xs'
+                  : 'bg-white border border-[rgba(93,100,114,0.15)] text-[#5D6472] hover:text-[#363C46]'
+              }`}
             >
-              {/* Image */}
-              <div className="lg:col-span-7 h-[280px] md:h-[400px] rounded-2xl overflow-hidden bg-stone-100">
-                <ImageWithSkeleton 
-                  variants={imageVariants}
-                  src={featuredArticle.image} 
-                  alt={featuredArticle.title} 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent z-10 pointer-events-none" />
-              </div>
-
-              {/* Text Meta info */}
-              <div className="lg:col-span-5 space-y-6 font-sans">
-                <div className="flex items-center gap-4 text-[10px] uppercase tracking-wider text-[#3A3732] font-bold">
-                  <span className="text-[#D97706] font-extrabold">{featuredArticle.category}</span>
-                  <span className="h-1 w-1 bg-stone-400 rounded-full" />
-                  <span>{featuredArticle.date}</span>
-                  <span className="h-1 w-1 bg-stone-400 rounded-full" />
-                  <span>{featuredArticle.readTime}</span>
-                </div>
-
-                <h2 className="text-2xl md:text-3xl font-extrabold text-[#1A1A1A] tracking-tight group-hover:text-[#F5A623] transition-colors leading-snug">
-                  {featuredArticle.title}
-                </h2>
-
-                <p className="text-[#2B2926] text-xs font-medium leading-relaxed">
-                  {featuredArticle.excerpt}
-                </p>
-
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#F5A623] text-white flex items-center justify-center font-bold text-sm shadow-xs">
-                    {featuredArticle.author.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="text-xs font-extrabold text-[#1A1A1A]">{featuredArticle.author}</p>
-                    <p className="text-[10px] text-[#4A4640] font-semibold">Specialist Analyst</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* CATEGORY NAV BAR */}
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E8E4DA] pb-4 font-sans">
-          <div className="flex gap-2 p-1 bg-white border border-[#E8E4DA] rounded-full text-xs shadow-2xs">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2 rounded-full transition-colors cursor-pointer font-bold ${
-                  activeCategory === cat 
-                    ? 'bg-[#1A1A1A] text-white' 
-                    : 'text-[#3A3732] hover:text-[#1A1A1A]'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-          <span className="text-xs text-[#3A3732] font-bold">Discovered {filteredArticles.length} papers</span>
+              {c}
+            </button>
+          ))}
         </div>
 
-        {/* REGULAR ARTICLES GRID */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
+        {/* Article Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredArticles.map((art) => (
-            <motion.div
+            <article
               key={art.id}
-              variants={itemVariants}
-              whileHover="hover"
-              onClick={() => handleArticleClick(art.title)}
-              className="group relative border border-[#E8E4DA] rounded-3xl overflow-hidden bg-white shadow-[0_20px_40px_rgba(0,0,0,0.06)] hover:border-[#F5A623] flex flex-col justify-between cursor-pointer transition-all duration-300"
+              className="group border border-[rgba(93,100,114,0.15)] hover:border-[#CFB6A8] rounded-xl overflow-hidden bg-white shadow-[0_12px_32px_rgba(54,60,70,0.06)] transition-all cursor-pointer flex flex-col justify-between"
             >
-              <div>
-                <div className="relative h-[220px] overflow-hidden bg-stone-100">
-                  <ImageWithSkeleton 
-                    variants={imageVariants}
-                    src={art.image} 
-                    alt={art.title} 
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent z-10 pointer-events-none" />
-                </div>
-
-                <div className="p-6 space-y-4 font-sans">
-                  <div className="flex items-center gap-3 text-[9px] uppercase tracking-wider text-[#3A3732] font-bold">
-                    <span className="text-[#D97706] font-extrabold">{art.category}</span>
-                    <span className="h-1 w-1 bg-stone-400 rounded-full" />
-                    <span>{art.readTime}</span>
-                  </div>
-
-                  <h3 className="text-lg font-extrabold text-[#1A1A1A] tracking-tight group-hover:text-[#F5A623] transition-colors line-clamp-2">
+              <div className="relative h-[220px] overflow-hidden bg-[#E0EEE9]">
+                <ImageWithSkeleton
+                  src={art.image}
+                  alt={art.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                <div className="space-y-2">
+                  <span className="text-[10px] uppercase font-bold text-[#CFB6A8]">{art.category}</span>
+                  <h3
+                    className="text-lg font-bold text-[#363C46] tracking-tight group-hover:text-[#CFB6A8] transition-colors"
+                    style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                  >
                     {art.title}
                   </h3>
-
-                  <p className="text-[#2B2926] text-xs font-medium line-clamp-2 leading-relaxed">
-                    {art.excerpt}
-                  </p>
+                  <p className="text-xs text-[#5D6472] leading-relaxed line-clamp-2">{art.excerpt}</p>
+                </div>
+                <div className="pt-4 border-t border-[rgba(93,100,114,0.15)] flex justify-between items-center text-[10px] text-[#5D6472] font-bold">
+                  <span>{art.date}</span>
+                  <span>{art.readTime}</span>
                 </div>
               </div>
-
-              <div className="p-6 border-t border-[#E8E4DA] flex items-center justify-between text-[10px] uppercase tracking-wider text-[#1A1A1A] font-extrabold font-sans mt-auto">
-                <span className="group-hover:text-[#F5A623] transition-colors">READ JOURNAL</span>
-                <ChevronRight className="w-4 h-4 text-[#F5A623] group-hover:translate-x-1 transition-transform" />
-              </div>
-            </motion.div>
+            </article>
           ))}
-        </motion.div>
+        </div>
 
-        {/* NEWSLETTER SIGNUP PANEL */}
-        <div className="border border-[#E8E4DA] bg-white rounded-3xl p-8 md:p-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center shadow-[0_20px_40px_rgba(0,0,0,0.06)] font-sans">
-          <div className="lg:col-span-6 space-y-4">
-            <div className="p-3 bg-amber-50 text-[#F5A623] rounded-2xl w-fit shadow-2xs">
-              <Mail className="w-5 h-5 stroke-[2]" />
-            </div>
-            <h3 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] tracking-tight">Subscribe to the Journal</h3>
-            <p className="text-[#8A8A85] text-xs leading-relaxed font-normal max-w-sm">
-              Receive weekly research briefings on real estate market projections, state tax compliance guidelines, and designer architecture trends.
+        {/* Newsletter Signup Banner */}
+        <div className="p-8 md:p-12 rounded-xl bg-white border border-[rgba(93,100,114,0.15)] shadow-[0_12px_32px_rgba(54,60,70,0.06)] text-center space-y-6 max-w-3xl mx-auto">
+          <div className="w-12 h-12 rounded-lg bg-[rgba(207,182,168,0.15)] text-[#CFB6A8] flex items-center justify-center mx-auto">
+            <Mail className="w-6 h-6" />
+          </div>
+          <div className="space-y-2">
+            <h3
+              className="text-2xl font-bold text-[#363C46] tracking-tight"
+              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+            >
+              Subscribe to Private Briefings
+            </h3>
+            <p className="text-xs text-[#5D6472] max-w-md mx-auto">
+              Receive confidential market reports, off-market opportunities, and legal regulatory updates directly in your inbox.
             </p>
           </div>
-
-          <div className="lg:col-span-6">
-            {newsletterSubscribed ? (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="border border-[#F5A623]/30 bg-amber-50 rounded-2xl p-8 text-center space-y-4"
+          {!newsletterSubscribed ? (
+            <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+              <input
+                type="email"
+                placeholder="Enter your private email..."
+                value={emailVal}
+                onChange={(e) => setEmailVal(e.target.value)}
+                className="flex-1 bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] rounded-lg px-4 py-3 text-xs text-[#363C46] outline-none focus:border-[#CFB6A8]"
+                required
+              />
+              <button
+                type="submit"
+                className="px-6 py-3 bg-[#363C46] hover:bg-[#1A1A1A] text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow-xs cursor-pointer transition-all shrink-0"
               >
-                <div className="w-12 h-12 rounded-full bg-[#F5A623] text-white flex items-center justify-center mx-auto shadow-xs">
-                  <CheckOpenIcon />
-                </div>
-                <h4 className="text-base font-bold text-[#1A1A1A] tracking-tight">Subscription Confirmed</h4>
-                <p className="text-xs text-[#8A8A85] leading-relaxed font-normal">
-                  We have added your coordinate to IMPERIA ESTATES' private weekly mailing database. Welcome to the circle.
-                </p>
-              </motion.div>
-            ) : (
-              <form onSubmit={handleSubscribe} className="space-y-4 text-xs">
-                <div className="space-y-1.5">
-                  <label className="text-[10px] text-[#8A8A85] uppercase tracking-wider font-bold">Your Email Address</label>
-                  <div className="relative">
-                    <input 
-                      type="email" 
-                      placeholder="e.g. client@familyoffice.com" 
-                      value={emailVal}
-                      onChange={(e) => setEmailVal(e.target.value)}
-                      required
-                      className="w-full bg-[#F4F1EA] border border-[#E8E4DA] rounded-full py-4 pl-5 pr-14 text-[#1A1A1A] placeholder-[#8A8A85] font-medium outline-none focus:border-[#F5A623]"
-                    />
-                    <button 
-                      type="submit"
-                      className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-[#1A1A1A] hover:bg-black text-white rounded-full transition-all cursor-pointer flex items-center justify-center"
-                      aria-label="Subscribe"
-                    >
-                      <ArrowRight className="w-4 h-4 text-[#F5A623]" />
-                    </button>
-                  </div>
-                </div>
-              </form>
-            )}
-          </div>
+                Subscribe
+              </button>
+            </form>
+          ) : (
+            <p className="text-xs text-emerald-600 font-bold">You are subscribed to IMPERIA Intelligence Briefings.</p>
+          )}
         </div>
 
       </div>
     </div>
   );
 };
-
-const CheckOpenIcon = () => (
-  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-);
 
 export default Blog;

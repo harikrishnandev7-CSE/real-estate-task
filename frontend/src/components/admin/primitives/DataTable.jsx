@@ -14,22 +14,6 @@ import {
 } from 'lucide-react';
 import { EmptyState } from '../../common/FeedbackStates';
 
-/**
- * DataTable — Admin Dense Data Table Primitive
- *
- * Props:
- *  - columns: Array<{ key, label, sortable?, render? }>
- *  - data: Array<Object>
- *  - loading: boolean
- *  - emptyTitle: string
- *  - emptyMessage: string
- *  - onRowClick: function(row)
- *  - onEdit: function(row)
- *  - onView: function(row)
- *  - onDelete: function(row)
- *  - bulkActions: Array<{ label, action, icon? }>
- *  - pageSize: number (default: 8)
- */
 const DataTable = ({
   columns = [],
   data = [],
@@ -46,10 +30,9 @@ const DataTable = ({
 }) => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [sortKey, setSortKey] = useState(null);
-  const [sortOrder, setSortOrder] = useState('asc'); // 'asc' | 'desc'
+  const [sortOrder, setSortOrder] = useState('asc');
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Sorting
   const sortedData = useMemo(() => {
     if (!sortKey) return data;
     return [...data].sort((a, b) => {
@@ -64,14 +47,12 @@ const DataTable = ({
     });
   }, [data, sortKey, sortOrder]);
 
-  // Pagination
   const totalPages = Math.ceil(sortedData.length / pageSize) || 1;
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * pageSize;
     return sortedData.slice(start, start + pageSize);
   }, [sortedData, currentPage, pageSize]);
 
-  // Handle Sort Toggle
   const handleSort = (key, sortable) => {
     if (!sortable) return;
     if (sortKey === key) {
@@ -83,7 +64,6 @@ const DataTable = ({
     }
   };
 
-  // Checkbox Select All / Item Select
   const isAllSelected = paginatedData.length > 0 && paginatedData.every(row => selectedIds.includes(row.id || row._id));
   const toggleSelectAll = () => {
     if (isAllSelected) {
@@ -101,21 +81,20 @@ const DataTable = ({
     );
   };
 
-  // Render Skeleton Loading Rows
   if (loading) {
     return (
-      <div className={`bg-white border border-[#E8E4DA] rounded-2xl overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.04)] font-sans ${className}`}>
-        <div className="p-4 bg-[#F4F1EA] border-b border-[#E8E4DA] animate-pulse flex items-center justify-between">
-          <div className="h-4 bg-[#E8E4DA] rounded w-1/4" />
-          <div className="h-4 bg-[#E8E4DA] rounded w-1/6" />
+      <div className={`bg-white border border-[rgba(93,100,114,0.15)] rounded-xl overflow-hidden shadow-[0_12px_32px_rgba(54,60,70,0.06)] font-sans ${className}`}>
+        <div className="p-4 bg-[#E0EEE9] border-b border-[rgba(93,100,114,0.15)] animate-pulse flex items-center justify-between">
+          <div className="h-4 bg-[rgba(93,100,114,0.15)] rounded w-1/4" />
+          <div className="h-4 bg-[rgba(93,100,114,0.15)] rounded w-1/6" />
         </div>
-        <div className="divide-y divide-[#E8E4DA]">
+        <div className="divide-y divide-[rgba(93,100,114,0.15)]">
           {Array.from({ length: 5 }).map((_, idx) => (
             <div key={idx} className="p-4 flex items-center gap-4 animate-pulse">
-              <div className="w-5 h-5 bg-[#E8E4DA] rounded" />
-              <div className="h-4 bg-[#E8E4DA] rounded flex-1" />
-              <div className="h-4 bg-[#E8E4DA] rounded w-1/4" />
-              <div className="h-4 bg-[#E8E4DA] rounded w-1/6" />
+              <div className="w-5 h-5 bg-[rgba(93,100,114,0.15)] rounded" />
+              <div className="h-4 bg-[rgba(93,100,114,0.15)] rounded flex-1" />
+              <div className="h-4 bg-[rgba(93,100,114,0.15)] rounded w-1/4" />
+              <div className="h-4 bg-[rgba(93,100,114,0.15)] rounded w-1/6" />
             </div>
           ))}
         </div>
@@ -124,13 +103,13 @@ const DataTable = ({
   }
 
   return (
-    <div className={`bg-white border border-[#E8E4DA] rounded-2xl overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.04)] font-sans relative flex flex-col ${className}`}>
+    <div className={`bg-white border border-[rgba(93,100,114,0.15)] rounded-xl overflow-hidden shadow-[0_12px_32px_rgba(54,60,70,0.06)] font-sans relative flex flex-col ${className}`}>
       
-      {/* Sticky Bulk Action Bar when items selected */}
+      {/* Sticky Bulk Action Bar */}
       {selectedIds.length > 0 && (
-        <div className="bg-[#1A1A1A] text-white px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 z-20 animate-fadeIn">
+        <div className="bg-[#363C46] text-white px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 z-20 animate-fadeIn">
           <div className="flex items-center gap-3 text-xs font-bold font-sans">
-            <span className="w-5 h-5 rounded-full bg-[#F5A623] text-black flex items-center justify-center text-[10px]">
+            <span className="w-5 h-5 rounded-full bg-[#CFB6A8] text-[#363C46] flex items-center justify-center text-[10px]">
               {selectedIds.length}
             </span>
             <span>{selectedIds.length} item{selectedIds.length > 1 ? 's' : ''} selected — Bulk actions</span>
@@ -149,7 +128,7 @@ const DataTable = ({
             ))}
             <button
               onClick={() => setSelectedIds([])}
-              className="text-xs text-[#8A8A85] hover:text-white underline ml-2 cursor-pointer font-semibold"
+              className="text-xs text-[#CFB6A8] hover:text-white underline ml-2 cursor-pointer font-semibold"
             >
               Deselect all
             </button>
@@ -168,29 +147,28 @@ const DataTable = ({
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse font-sans">
-            {/* Table Header */}
             <thead>
-              <tr className="bg-[#F4F1EA] text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold border-b border-[#E8E4DA]">
+              <tr className="bg-[#E0EEE9] text-[10px] uppercase tracking-wider text-[#5D6472] font-bold border-b border-[rgba(93,100,114,0.15)]">
                 <th className="py-3.5 px-4 w-10">
                   <input
                     type="checkbox"
                     checked={isAllSelected}
                     onChange={toggleSelectAll}
-                    className="rounded border-[#E8E4DA] text-[#F5A623] focus:ring-0 cursor-pointer accent-[#1A1A1A]"
+                    className="rounded border-[rgba(93,100,114,0.20)] text-[#363C46] focus:ring-0 cursor-pointer accent-[#363C46]"
                   />
                 </th>
                 {columns.map(col => (
                   <th
                     key={col.key}
                     onClick={() => handleSort(col.key, col.sortable)}
-                    className={`py-3.5 px-4 select-none ${col.sortable ? 'cursor-pointer hover:text-[#1A1A1A]' : ''}`}
+                    className={`py-3.5 px-4 select-none ${col.sortable ? 'cursor-pointer hover:text-[#363C46]' : ''}`}
                   >
                     <div className="flex items-center gap-1">
                       <span>{col.label}</span>
                       {col.sortable && (
-                        <span className="text-[#8A8A85]">
+                        <span className="text-[#5D6472]">
                           {sortKey === col.key ? (
-                            sortOrder === 'asc' ? <ChevronUp className="w-3 h-3 text-[#F5A623]" /> : <ChevronDown className="w-3 h-3 text-[#F5A623]" />
+                            sortOrder === 'asc' ? <ChevronUp className="w-3 h-3 text-[#CFB6A8]" /> : <ChevronDown className="w-3 h-3 text-[#CFB6A8]" />
                           ) : (
                             <ChevronsUpDown className="w-3 h-3 opacity-40" />
                           )}
@@ -205,8 +183,7 @@ const DataTable = ({
               </tr>
             </thead>
 
-            {/* Table Body */}
-            <tbody className="divide-y divide-[#E8E4DA] text-sm text-[#1A1A1A]">
+            <tbody className="divide-y divide-[rgba(93,100,114,0.15)] text-xs text-[#363C46]">
               {paginatedData.map((row, rowIdx) => {
                 const rowId = row._id || row.id || rowIdx;
                 const isSelected = selectedIds.includes(rowId);
@@ -215,7 +192,7 @@ const DataTable = ({
                     key={rowId}
                     onClick={() => onRowClick && onRowClick(row)}
                     className={`transition-colors font-medium ${
-                      isSelected ? 'bg-amber-50/40' : 'hover:bg-[#F4F1EA]/60'
+                      isSelected ? 'bg-[rgba(207,182,168,0.15)]' : 'hover:bg-[#E0EEE9]/40'
                     } ${onRowClick ? 'cursor-pointer' : ''}`}
                   >
                     <td className="py-4 px-4" onClick={(e) => e.stopPropagation()}>
@@ -223,7 +200,7 @@ const DataTable = ({
                         type="checkbox"
                         checked={isSelected}
                         onChange={(e) => toggleSelectRow(rowId, e)}
-                        className="rounded border-[#E8E4DA] text-[#F5A623] focus:ring-0 cursor-pointer accent-[#1A1A1A]"
+                        className="rounded border-[rgba(93,100,114,0.20)] text-[#363C46] focus:ring-0 cursor-pointer accent-[#363C46]"
                       />
                     </td>
 
@@ -239,7 +216,7 @@ const DataTable = ({
                           {onView && (
                             <button
                               onClick={() => onView(row)}
-                              className="p-1.5 rounded-lg text-[#8A8A85] hover:text-[#F5A623] hover:bg-amber-50 transition-colors cursor-pointer"
+                              className="p-1.5 rounded-md text-[#5D6472] hover:text-[#CFB6A8] hover:bg-[rgba(207,182,168,0.15)] transition-colors cursor-pointer"
                               title="View details"
                             >
                               <Eye className="w-4 h-4 stroke-[2]" />
@@ -248,7 +225,7 @@ const DataTable = ({
                           {onEdit && (
                             <button
                               onClick={() => onEdit(row)}
-                              className="p-1.5 rounded-lg text-[#8A8A85] hover:text-[#1A1A1A] hover:bg-[#F4F1EA] transition-colors cursor-pointer"
+                              className="p-1.5 rounded-md text-[#5D6472] hover:text-[#363C46] hover:bg-[#E0EEE9] transition-colors cursor-pointer"
                               title="Edit"
                             >
                               <Pencil className="w-4 h-4 stroke-[2]" />
@@ -257,7 +234,7 @@ const DataTable = ({
                           {onDelete && (
                             <button
                               onClick={() => onDelete(row)}
-                              className="p-1.5 rounded-lg text-[#8A8A85] hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                              className="p-1.5 rounded-md text-[#5D6472] hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
                               title="Delete"
                             >
                               <Trash2 className="w-4 h-4 stroke-[2]" />
@@ -276,18 +253,18 @@ const DataTable = ({
 
       {/* Pagination Footer */}
       {sortedData.length > 0 && (
-        <div className="py-3 px-6 bg-white border-t border-[#E8E4DA] flex items-center justify-between font-sans">
-          <p className="text-xs text-[#8A8A85]">
-            Showing <span className="font-bold text-[#1A1A1A]">{(currentPage - 1) * pageSize + 1}</span> to{' '}
-            <span className="font-bold text-[#1A1A1A]">{Math.min(currentPage * pageSize, sortedData.length)}</span> of{' '}
-            <span className="font-bold text-[#1A1A1A]">{sortedData.length}</span> entries
+        <div className="py-3 px-6 bg-white border-t border-[rgba(93,100,114,0.15)] flex items-center justify-between font-sans">
+          <p className="text-xs text-[#5D6472]">
+            Showing <span className="font-bold text-[#363C46]">{(currentPage - 1) * pageSize + 1}</span> to{' '}
+            <span className="font-bold text-[#363C46]">{Math.min(currentPage * pageSize, sortedData.length)}</span> of{' '}
+            <span className="font-bold text-[#363C46]">{sortedData.length}</span> entries
           </p>
 
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
-              className="w-8 h-8 rounded-full border border-[#E8E4DA] flex items-center justify-center text-[#1A1A1A] hover:bg-[#F4F1EA] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              className="w-8 h-8 rounded-lg border border-[rgba(93,100,114,0.20)] flex items-center justify-center text-[#363C46] hover:bg-[#E0EEE9] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -298,10 +275,10 @@ const DataTable = ({
                 <button
                   key={pageNum}
                   onClick={() => setCurrentPage(pageNum)}
-                  className={`w-8 h-8 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                  className={`w-8 h-8 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                     currentPage === pageNum
-                      ? 'bg-[#1A1A1A] text-white shadow-xs'
-                      : 'text-[#8A8A85] hover:bg-[#F4F1EA] hover:text-[#1A1A1A]'
+                      ? 'bg-[#363C46] text-white shadow-xs'
+                      : 'text-[#5D6472] hover:bg-[#E0EEE9] hover:text-[#363C46]'
                   }`}
                 >
                   {pageNum}
@@ -312,7 +289,7 @@ const DataTable = ({
             <button
               onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
               disabled={currentPage === totalPages}
-              className="w-8 h-8 rounded-full border border-[#E8E4DA] flex items-center justify-center text-[#1A1A1A] hover:bg-[#F4F1EA] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              className="w-8 h-8 rounded-lg border border-[rgba(93,100,114,0.20)] flex items-center justify-center text-[#363C46] hover:bg-[#E0EEE9] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

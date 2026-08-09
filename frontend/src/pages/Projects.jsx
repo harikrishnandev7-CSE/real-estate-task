@@ -75,14 +75,6 @@ const Projects = () => {
     }
   ];
 
-  const handleBookVisit = (e) => {
-    e.preventDefault();
-    if (formData.name && formData.phone && formData.date) {
-      setSiteVisitBooked(true);
-      showToast(`Walkthrough requested for ${formData.project}`);
-    }
-  };
-
   const handleDownloadBrochure = (projectName) => {
     showToast(`Brochure download initiated for ${projectName}`);
   };
@@ -104,9 +96,9 @@ const Projects = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F1EA] text-[#1A1A1A]">
+    <div className="min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
 
-      {/* PageHero — architectural landmark image */}
+      {/* PageHero */}
       <div className="pt-[64px] lg:pt-[72px]">
         <PageHero
           image="https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1600&q=80"
@@ -116,7 +108,7 @@ const Projects = () => {
           ]}
           eyebrow="SIGNATURE PROJECTS"
           heading={
-            <>Masterful Architectural <span className="font-normal text-[#8A8A85]">Creations</span></>
+            <>Masterful Architectural <span className="font-normal text-[#5D6472]">Creations</span></>
           }
           description="A curated showcase of luxury landmarks developed by IMPERIA ESTATES in collaboration with elite global designers, mapping out upcoming luxury horizons."
         />
@@ -136,23 +128,24 @@ const Projects = () => {
               <motion.div 
                 key={project.id}
                 variants={itemVariants}
-                className="border border-[#E8E4DA] rounded-3xl overflow-hidden bg-white shadow-[0_20px_40px_rgba(0,0,0,0.06)] p-6 md:p-8 space-y-8 relative group transition-all duration-300 hover:shadow-[0_25px_50px_rgba(0,0,0,0.1)]"
+                className="border border-[rgba(93,100,114,0.15)] rounded-xl overflow-hidden bg-white shadow-[0_12px_32px_rgba(54,60,70,0.06)] p-6 md:p-8 space-y-8 relative group transition-all duration-300 hover:shadow-[0_20px_40px_rgba(54,60,70,0.1)]"
               >
                 {/* Visual highlight line */}
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#F5A623] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#CFB6A8] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
                 {/* Project Header Info */}
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 font-sans">
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-[#3A3732] text-xs font-bold">
-                      <MapPin className="w-3.5 h-3.5 text-[#F5A623]" />
+                    <div className="flex items-center gap-2 text-[#5D6472] text-xs font-bold">
+                      <MapPin className="w-3.5 h-3.5 text-[#CFB6A8]" />
                       <span>{project.location}</span>
-                      <span className="h-1 w-1 bg-stone-400 rounded-full" />
-                      <span className="text-[#D97706] font-extrabold">{project.builder}</span>
+                      <span className="h-1 w-1 bg-[#5D6472] rounded-full" />
+                      <span className="text-[#CFB6A8] font-bold">{project.builder}</span>
                     </div>
                     <h3 
                       onClick={() => navigate(`/property/${project.id}`)}
-                      className="text-2xl font-extrabold text-[#1A1A1A] tracking-tight group-hover:text-[#F5A623] transition-colors cursor-pointer"
+                      className="text-2xl font-bold text-[#363C46] tracking-tight group-hover:text-[#CFB6A8] transition-colors cursor-pointer"
+                      style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
                     >
                       {project.name}
                     </h3>
@@ -160,7 +153,7 @@ const Projects = () => {
 
                   <button
                     onClick={() => handleDownloadBrochure(project.name)}
-                    className="flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-[#E8E4DA] hover:border-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white text-[#1A1A1A] text-xs font-bold tracking-wider uppercase transition-all shrink-0 w-fit cursor-pointer bg-white shadow-xs"
+                    className="flex items-center gap-1.5 px-5 py-2.5 rounded-lg border border-[rgba(93,100,114,0.20)] hover:border-[#363C46] hover:bg-[#363C46] hover:text-white text-[#363C46] text-xs font-bold tracking-wider uppercase transition-all shrink-0 w-fit cursor-pointer bg-white shadow-xs"
                   >
                     <Download className="w-3.5 h-3.5" />
                     Download Brochure
@@ -170,7 +163,7 @@ const Projects = () => {
                 {/* Project Showcase Image */}
                 <div 
                   onClick={() => navigate(`/property/${project.id}`)}
-                  className="relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden bg-stone-100 cursor-pointer"
+                  className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden bg-[#E0EEE9] cursor-pointer"
                 >
                   <ImageWithSkeleton 
                     src={project.image} 
@@ -181,36 +174,36 @@ const Projects = () => {
                 </div>
 
                 {/* Description & Timeline */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm leading-relaxed text-[#1A1A1A] font-sans">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm leading-relaxed text-[#363C46] font-sans">
                   <div className="space-y-4">
-                    <p className="font-medium text-xs text-[#2B2926]">
+                    <p className="font-medium text-xs text-[#5D6472]">
                       {project.desc}
                     </p>
-                    <div className="flex items-center gap-2 text-xs font-extrabold text-[#D97706] bg-amber-50 border border-[#F5A623]/30 px-4 py-2.5 rounded-xl w-fit">
-                      <Calendar className="w-4 h-4 text-[#F5A623]" />
+                    <div className="flex items-center gap-2 text-xs font-bold text-[#CFB6A8] bg-[rgba(207,182,168,0.12)] border border-[rgba(207,182,168,0.25)] px-4 py-2.5 rounded-lg w-fit">
+                      <Calendar className="w-4 h-4 text-[#CFB6A8]" />
                       <span>{project.timeline}</span>
                     </div>
                   </div>
 
                   {/* Progress Tracker Widget */}
-                  <div className="space-y-4 bg-[#F4F1EA] border border-[#E8E4DA] rounded-2xl p-5">
+                  <div className="space-y-4 bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.15)] rounded-lg p-5">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs uppercase tracking-wider text-[#3A3732] font-extrabold">Construction Progress</span>
-                      <span className="text-sm font-bold text-[#F5A623]">{project.progress}%</span>
+                      <span className="text-xs uppercase tracking-wider text-[#5D6472] font-bold">Construction Progress</span>
+                      <span className="text-sm font-bold text-[#CFB6A8]">{project.progress}%</span>
                     </div>
                     {/* Progress Bar */}
-                    <div className="w-full h-2 bg-stone-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-[#F5A623] rounded-full" style={{ width: `${project.progress}%` }} />
+                    <div className="w-full h-2 bg-white rounded-full overflow-hidden">
+                      <div className="h-full bg-[#CFB6A8] rounded-full" style={{ width: `${project.progress}%` }} />
                     </div>
 
                     {/* Timeline Steps */}
                     <div className="space-y-3 pt-2">
                       {project.milestones.map((m, idx) => (
                         <div key={idx} className="flex items-center justify-between text-xs font-bold">
-                          <span className={m.status === 'completed' ? 'text-[#1A1A1A]' : 'text-[#4A4640]'}>{m.label}</span>
+                          <span className={m.status === 'completed' ? 'text-[#363C46]' : 'text-[#5D6472]'}>{m.label}</span>
                           {m.status === 'completed' && <Check className="w-3.5 h-3.5 text-emerald-600" />}
-                          {m.status === 'in-progress' && <Clock className="w-3.5 h-3.5 text-[#F5A623]" />}
-                          {m.status === 'pending' && <span className="w-2 h-2 rounded-full bg-stone-400" />}
+                          {m.status === 'in-progress' && <Clock className="w-3.5 h-3.5 text-[#CFB6A8]" />}
+                          {m.status === 'pending' && <span className="w-2 h-2 rounded-full bg-[#5D6472]/40" />}
                         </div>
                       ))}
                     </div>
@@ -222,21 +215,26 @@ const Projects = () => {
 
           {/* RIGHT COLUMN: SITE VISIT BOOKING FORM */}
           <aside className="lg:col-span-4 sticky top-28 font-sans">
-            <div className="border border-[#E8E4DA] bg-white rounded-3xl p-6 md:p-8 space-y-6 shadow-[0_20px_40px_rgba(0,0,0,0.06)]">
-              <div className="space-y-2 border-b border-[#E8E4DA] pb-4">
-                <span className="text-xs uppercase tracking-widest text-[#F5A623] font-bold">VIP TOUR</span>
-                <h3 className="text-xl font-bold text-[#1A1A1A] tracking-tight">Book Project Site Visit</h3>
-                <p className="text-xs text-[#8A8A85] font-normal">Schedule a private, guided walkthrough of active construction landmarks.</p>
+            <div className="border border-[rgba(93,100,114,0.15)] bg-white rounded-xl p-6 md:p-8 space-y-6 shadow-[0_12px_32px_rgba(54,60,70,0.06)]">
+              <div className="space-y-2 border-b border-[rgba(93,100,114,0.15)] pb-4">
+                <span className="text-xs uppercase tracking-widest text-[#CFB6A8] font-bold">VIP TOUR</span>
+                <h3
+                  className="text-xl font-bold text-[#363C46] tracking-tight"
+                  style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                >
+                  Book Project Site Visit
+                </h3>
+                <p className="text-xs text-[#5D6472] font-normal">Schedule a private, guided walkthrough of active construction landmarks.</p>
               </div>
 
               {!siteVisitBooked ? (
                 <form onSubmit={handleBookSiteVisit} className="space-y-4">
                   <div>
-                    <label className="block text-[10px] uppercase tracking-wider text-[#8A8A85] mb-1.5 font-bold">Select Project</label>
+                    <label className="block text-[10px] uppercase tracking-wider text-[#5D6472] mb-1.5 font-bold">Select Project</label>
                     <select
                       value={formData.project}
                       onChange={(e) => setFormData({...formData, project: e.target.value})}
-                      className="w-full bg-[#F4F1EA] border border-[#E8E4DA] focus:border-[#F5A623] outline-none rounded-xl py-3 px-4 text-xs text-[#1A1A1A] font-bold"
+                      className="w-full bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] focus:border-[#CFB6A8] outline-none rounded-lg py-3 px-4 text-xs text-[#363C46] font-bold"
                     >
                       {activeProjects.map(p => (
                         <option key={p.id} value={p.name}>{p.name}</option>
@@ -245,43 +243,43 @@ const Projects = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[10px] uppercase tracking-wider text-[#8A8A85] mb-1.5 font-bold">Full Name</label>
+                    <label className="block text-[10px] uppercase tracking-wider text-[#5D6472] mb-1.5 font-bold">Full Name</label>
                     <input
                       type="text"
                       placeholder="Devendra Sharma"
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="w-full bg-[#F4F1EA] border border-[#E8E4DA] focus:border-[#F5A623] outline-none rounded-xl py-3 px-4 text-xs text-[#1A1A1A] font-medium"
+                      className="w-full bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] focus:border-[#CFB6A8] outline-none rounded-lg py-3 px-4 text-xs text-[#363C46] font-medium"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[10px] uppercase tracking-wider text-[#8A8A85] mb-1.5 font-bold">Phone Number</label>
+                    <label className="block text-[10px] uppercase tracking-wider text-[#5D6472] mb-1.5 font-bold">Phone Number</label>
                     <input
                       type="tel"
                       placeholder="+91 98765 43210"
                       value={formData.phone}
                       onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                      className="w-full bg-[#F4F1EA] border border-[#E8E4DA] focus:border-[#F5A623] outline-none rounded-xl py-3 px-4 text-xs text-[#1A1A1A] font-medium"
+                      className="w-full bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] focus:border-[#CFB6A8] outline-none rounded-lg py-3 px-4 text-xs text-[#363C46] font-medium"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[10px] uppercase tracking-wider text-[#8A8A85] mb-1.5 font-bold">Preferred Date</label>
+                    <label className="block text-[10px] uppercase tracking-wider text-[#5D6472] mb-1.5 font-bold">Preferred Date</label>
                     <input
                       type="date"
                       value={formData.date}
                       onChange={(e) => setFormData({...formData, date: e.target.value})}
-                      className="w-full bg-[#F4F1EA] border border-[#E8E4DA] focus:border-[#F5A623] outline-none rounded-xl py-3 px-4 text-xs text-[#1A1A1A] font-medium"
+                      className="w-full bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] focus:border-[#CFB6A8] outline-none rounded-lg py-3 px-4 text-xs text-[#363C46] font-medium"
                       required
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full py-3.5 bg-[#1A1A1A] hover:bg-black text-white font-bold text-xs uppercase tracking-wider rounded-full shadow-md transition-all cursor-pointer mt-2"
+                    className="w-full py-3.5 bg-[#363C46] hover:bg-[#1A1A1A] text-white font-bold text-xs uppercase tracking-wider rounded-lg shadow-xs transition-all cursor-pointer mt-2"
                   >
                     Schedule Chauffeur Visit
                   </button>
@@ -291,11 +289,11 @@ const Projects = () => {
                   <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
                     <Check className="w-6 h-6 stroke-[3]" />
                   </div>
-                  <h4 className="text-lg font-bold text-[#1A1A1A]">Site Visit Confirmed!</h4>
-                  <p className="text-xs text-[#8A8A85]">Our team will call you at {formData.phone} to finalize your pickup location.</p>
+                  <h4 className="text-lg font-bold text-[#363C46]">Site Visit Confirmed!</h4>
+                  <p className="text-xs text-[#5D6472]">Our team will call you at {formData.phone} to finalize your pickup location.</p>
                   <button
                     onClick={() => setSiteVisitBooked(false)}
-                    className="text-xs text-[#F5A623] font-bold underline cursor-pointer"
+                    className="text-xs text-[#CFB6A8] font-bold underline cursor-pointer"
                   >
                     Book Another Tour
                   </button>

@@ -109,28 +109,36 @@ const AdminLayout = () => {
   // Auth & Role Guard Check
   if (!currentUser) {
     return (
-      <div className="min-h-screen bg-[#F4F1EA] flex items-center justify-center px-6 py-20 font-sans">
-        <div className="max-w-md w-full border border-[#E8E4DA] bg-white rounded-3xl p-8 text-center space-y-6 shadow-[0_20px_40px_rgba(0,0,0,0.06)]">
-          <div className="w-16 h-16 rounded-full bg-amber-50 border border-amber-200 text-[#F5A623] flex items-center justify-center mx-auto shadow-sm">
+      <div className="min-h-screen flex items-center justify-center px-6 py-20 font-sans" style={{ background: '#E0EEE9' }}>
+        <div
+          className="max-w-md w-full p-8 text-center space-y-6"
+          style={{ background: '#FFFFFF', border: '1px solid rgba(93,100,114,0.15)', borderRadius: 10, boxShadow: '0 20px 48px rgba(54,60,70,0.08)' }}
+        >
+          <div
+            className="w-16 h-16 rounded-full flex items-center justify-center mx-auto"
+            style={{ background: 'rgba(207,182,168,0.12)', border: '1px solid rgba(207,182,168,0.28)', color: '#CFB6A8' }}
+          >
             <Lock className="w-8 h-8 stroke-[2]" />
           </div>
           <div className="space-y-2">
-            <h2 className="text-2xl font-extrabold text-[#1A1A1A] tracking-tight">Admin Login Required</h2>
-            <p className="text-xs text-[#8A8A85] leading-relaxed font-normal">
+            <h2 className="text-2xl font-medium tracking-tight" style={{ fontFamily: "'Fraunces','Playfair Display',serif", color: '#363C46' }}>Admin Login Required</h2>
+            <p className="text-xs leading-relaxed font-normal" style={{ color: '#5D6472' }}>
               You must be signed into an authorized admin or consultant account to view the IMPERIA Control Panel.
             </p>
           </div>
           <div className="pt-2 space-y-3">
             <Link
               to="/admin/login"
-              className="w-full py-3.5 bg-[#1A1A1A] hover:bg-black text-white text-xs font-bold tracking-wider uppercase rounded-full flex items-center justify-center gap-2 shadow-md transition-all block cursor-pointer"
+              className="w-full py-3 text-white text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 cursor-pointer transition-opacity hover:opacity-85 block"
+              style={{ background: '#363C46', borderRadius: 6, boxShadow: '0 4px 14px rgba(54,60,70,0.18)' }}
             >
-              <User className="w-4 h-4 text-[#F5A623]" />
+              <User className="w-4 h-4" style={{ color: '#CFB6A8' }} />
               <span>LOG IN TO ADMIN PORTAL</span>
             </Link>
             <Link
               to="/"
-              className="w-full py-3.5 border border-[#E8E4DA] bg-[#F4F1EA] hover:bg-stone-200 text-[#1A1A1A] text-xs font-bold tracking-wider uppercase rounded-full flex items-center justify-center transition-all block cursor-pointer"
+              className="w-full py-3 text-xs font-bold tracking-wider uppercase flex items-center justify-center transition-opacity hover:opacity-75 block cursor-pointer"
+              style={{ border: '1px solid rgba(93,100,114,0.18)', background: '#E0EEE9', color: '#363C46', borderRadius: 6 }}
             >
               <span>RETURN TO MAIN SITE</span>
             </Link>
@@ -142,28 +150,36 @@ const AdminLayout = () => {
 
   if (currentUser.role === 'customer') {
     return (
-      <div className="min-h-screen bg-[#F4F1EA] flex items-center justify-center px-6 py-20 font-sans">
-        <div className="max-w-md w-full border border-[#E8E4DA] bg-white rounded-3xl p-8 text-center space-y-6 shadow-[0_20px_40px_rgba(0,0,0,0.06)]">
-          <div className="w-16 h-16 rounded-full bg-red-50 border border-red-200 text-red-600 flex items-center justify-center mx-auto shadow-sm">
+      <div className="min-h-screen flex items-center justify-center px-6 py-20 font-sans" style={{ background: '#E0EEE9' }}>
+        <div
+          className="max-w-md w-full p-8 text-center space-y-6"
+          style={{ background: '#FFFFFF', border: '1px solid rgba(93,100,114,0.15)', borderRadius: 10, boxShadow: '0 20px 48px rgba(54,60,70,0.08)' }}
+        >
+          <div
+            className="w-16 h-16 rounded-full flex items-center justify-center mx-auto"
+            style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#DC2626' }}
+          >
             <ShieldAlert className="w-8 h-8 stroke-[2]" />
           </div>
           <div className="space-y-2">
-            <h2 className="text-2xl font-extrabold text-[#1A1A1A] tracking-tight">Access Denied</h2>
-            <p className="text-xs text-[#8A8A85] leading-relaxed font-normal">
-              Your account currently has <span className="font-bold text-[#1A1A1A]">Customer</span> status. Admin or Consultant privileges are required to access this panel.
+            <h2 className="text-2xl font-medium tracking-tight" style={{ fontFamily: "'Fraunces','Playfair Display',serif", color: '#363C46' }}>Access Denied</h2>
+            <p className="text-xs leading-relaxed font-normal" style={{ color: '#5D6472' }}>
+              Your account currently has <span className="font-bold" style={{ color: '#363C46' }}>Customer</span> status. Admin or Consultant privileges are required to access this panel.
             </p>
           </div>
           <div className="pt-2 space-y-3">
             <button
               onClick={() => switchRole('admin')}
-              className="w-full py-3.5 bg-[#1A1A1A] hover:bg-black text-white text-xs font-bold tracking-wider uppercase rounded-full flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
+              className="w-full py-3 text-white text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 cursor-pointer transition-opacity hover:opacity-85"
+              style={{ background: '#363C46', borderRadius: 6, boxShadow: '0 4px 14px rgba(54,60,70,0.18)' }}
             >
-              <Sparkles className="w-4 h-4 text-[#F5A623]" />
+              <Sparkles className="w-4 h-4" style={{ color: '#CFB6A8' }} />
               <span>SWITCH ROLE TO ADMIN (DEMO)</span>
             </button>
             <Link
               to="/dashboard"
-              className="w-full py-3.5 border border-[#E8E4DA] bg-[#F4F1EA] hover:bg-stone-200 text-[#1A1A1A] text-xs font-bold tracking-wider uppercase rounded-full flex items-center justify-center transition-all block cursor-pointer"
+              className="w-full py-3 text-xs font-bold tracking-wider uppercase flex items-center justify-center transition-opacity hover:opacity-75 block cursor-pointer"
+              style={{ border: '1px solid rgba(93,100,114,0.18)', background: '#E0EEE9', color: '#363C46', borderRadius: 6 }}
             >
               <span>GO TO CUSTOMER DASHBOARD</span>
             </Link>
@@ -204,24 +220,25 @@ const AdminLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F1EA] text-[#1A1A1A] font-sans flex flex-col md:flex-row">
+    <div className="min-h-screen font-sans flex flex-col md:flex-row" style={{ background: '#E0EEE9', color: '#363C46' }}>
       
       {/* ── DESKTOP SIDEBAR ────────────────────────────────────────── */}
       <aside
-        className={`hidden md:flex flex-col fixed top-0 bottom-0 left-0 z-40 bg-white border-r border-[#E8E4DA] transition-all duration-300 ${
+        className={`hidden md:flex flex-col fixed top-0 bottom-0 left-0 z-40 transition-all duration-300 ${
           collapsed ? 'w-20' : 'w-64'
         }`}
+        style={{ background: '#FFFFFF', borderRight: '1px solid rgba(93,100,114,0.15)' }}
       >
         {/* Sidebar Header / Logo */}
-        <div className="h-16 border-b border-[#E8E4DA] px-5 flex items-center justify-between shrink-0">
+        <div className="h-16 px-5 flex items-center justify-between shrink-0" style={{ borderBottom: '1px solid rgba(93,100,114,0.15)' }}>
           <Link to="/admin" className="flex items-center gap-3 overflow-hidden">
-            <ImperiaLogo layout="icon" variant="dark" height={28} className="shrink-0" />
+            <ImperiaLogo layout="icon" variant="dark" height={26} className="shrink-0" />
             {!collapsed && (
-              <div className="flex flex-col font-sans">
-                <span className="font-extrabold text-base tracking-widest text-[#1A1A1A] leading-none">
+              <div className="flex flex-col" style={{ fontFamily: "'Inter','Plus Jakarta Sans',sans-serif" }}>
+                <span className="font-bold text-sm tracking-[0.18em]" style={{ color: '#363C46', lineHeight: 1 }}>
                   IMPERIA
                 </span>
-                <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#F5A623] mt-1 leading-none">
+                <span className="text-[9px] font-bold uppercase tracking-[0.22em] mt-1" style={{ color: '#CFB6A8', lineHeight: 1 }}>
                   ADMIN PANEL
                 </span>
               </div>
@@ -232,13 +249,16 @@ const AdminLayout = () => {
         {/* Navigation List */}
         <div className="flex-1 overflow-y-auto custom-scrollbar py-6 px-3 space-y-6">
           {NAV_GROUPS.map((group, gIdx) => (
-            <div key={gIdx} className="space-y-1.5">
+            <div key={gIdx} className="space-y-1">
               {!collapsed && (
-                <span className="text-[10px] uppercase tracking-widest text-[#8A8A85] font-bold px-3 block mb-2 font-sans">
+                <span
+                  className="text-[9px] uppercase tracking-widest font-bold px-3 block mb-2"
+                  style={{ color: 'rgba(93,100,114,0.50)', fontFamily: "'Inter',sans-serif" }}
+                >
                   {group.title}
                 </span>
               )}
-              <ul className="space-y-1">
+              <ul className="space-y-0.5">
                 {group.items.map((item, iIdx) => {
                   const active = isNavActive(item.href);
                   const Icon = item.icon;
@@ -247,17 +267,26 @@ const AdminLayout = () => {
                       <Link
                         to={item.href}
                         title={collapsed ? item.label : undefined}
-                        className={`group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
-                          active
-                            ? 'bg-[#1A1A1A] text-white shadow-xs'
-                            : 'text-[#8A8A85] hover:bg-[#F4F1EA] hover:text-[#1A1A1A]'
-                        }`}
+                        className="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-medium transition-all"
+                        style={{
+                          background: active ? '#363C46' : 'transparent',
+                          color: active ? '#FFFFFF' : '#5D6472',
+                          fontFamily: "'Inter','Plus Jakarta Sans',sans-serif",
+                        }}
+                        onMouseEnter={e => { if (!active) { e.currentTarget.style.background = '#E0EEE9'; e.currentTarget.style.color = '#363C46'; } }}
+                        onMouseLeave={e => { if (!active) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#5D6472'; } }}
                       >
-                        {/* Amber Left Accent Bar for Active item */}
+                        {/* Dark Vanilla left bar for active item */}
                         {active && (
-                          <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] bg-[#F5A623] rounded-r" />
+                          <span
+                            className="absolute left-0 top-2 bottom-2 w-[3px] rounded-r"
+                            style={{ background: '#CFB6A8' }}
+                          />
                         )}
-                        <Icon className={`w-4 h-4 shrink-0 stroke-[2] ${active ? 'text-[#F5A623]' : 'group-hover:text-[#1A1A1A]'}`} />
+                        <Icon
+                          className="w-4 h-4 shrink-0 stroke-[1.8]"
+                          style={{ color: active ? '#CFB6A8' : undefined }}
+                        />
                         {!collapsed && <span className="truncate">{item.label}</span>}
                       </Link>
                     </li>
@@ -269,23 +298,35 @@ const AdminLayout = () => {
         </div>
 
         {/* Sidebar Footer: User Card + Collapse Toggle */}
-        <div className="p-3 border-t border-[#E8E4DA] bg-[#F4F1EA]/50 shrink-0 space-y-2">
+        <div className="p-3 shrink-0 space-y-2" style={{ borderTop: '1px solid rgba(93,100,114,0.12)', background: 'rgba(224,238,233,0.35)' }}>
           {!collapsed ? (
-            <div className="flex items-center justify-between p-2 rounded-xl bg-white border border-[#E8E4DA]">
+            <div
+              className="flex items-center justify-between p-2 rounded-lg"
+              style={{ background: '#FFFFFF', border: '1px solid rgba(93,100,114,0.12)' }}
+            >
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-8 h-8 rounded-full bg-[#1A1A1A] text-[#F5A623] font-bold text-xs flex items-center justify-center shrink-0">
+                <div
+                  className="w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center shrink-0"
+                  style={{ background: '#363C46', color: '#CFB6A8' }}
+                >
                   {currentUser.name ? currentUser.name.charAt(0) : 'A'}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-bold text-[#1A1A1A] truncate">{currentUser.name}</p>
-                  <span className="text-[9px] font-bold text-[#F5A623] uppercase tracking-wider block">
+                  <p className="text-xs font-bold truncate" style={{ color: '#363C46' }}>{currentUser.name}</p>
+                  <span
+                    className="text-[9px] font-bold uppercase tracking-wider block"
+                    style={{ color: '#CFB6A8' }}
+                  >
                     {currentUser.role || 'ADMIN'}
                   </span>
                 </div>
               </div>
               <button
                 onClick={logoutUser}
-                className="p-1.5 text-[#8A8A85] hover:text-red-600 transition-colors rounded-lg hover:bg-red-50 cursor-pointer"
+                className="p-1.5 rounded-lg transition-colors cursor-pointer"
+                style={{ color: '#5D6472' }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.background = '#FEF2F2'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = '#5D6472'; e.currentTarget.style.background = 'transparent'; }}
                 title="Log Out"
               >
                 <LogOut className="w-4 h-4" />
@@ -294,19 +335,25 @@ const AdminLayout = () => {
           ) : (
             <button
               onClick={logoutUser}
-              className="w-full flex justify-center py-2 text-[#8A8A85] hover:text-red-600 cursor-pointer"
+              className="w-full flex justify-center py-2 transition-colors cursor-pointer"
+              style={{ color: '#5D6472' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#DC2626'}
+              onMouseLeave={e => e.currentTarget.style.color = '#5D6472'}
               title="Log Out"
             >
               <LogOut className="w-5 h-5" />
             </button>
           )}
 
-          {/* Collapse Toggle Button */}
+          {/* Collapse Toggle */}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="w-full flex items-center justify-center py-2 text-xs font-bold text-[#8A8A85] hover:text-[#1A1A1A] border border-[#E8E4DA] bg-white rounded-xl hover:bg-[#F4F1EA] transition-all cursor-pointer"
+            className="w-full flex items-center justify-center py-2 text-xs font-bold transition-all cursor-pointer rounded-lg"
+            style={{ color: '#5D6472', border: '1px solid rgba(93,100,114,0.15)', background: '#FFFFFF' }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#E0EEE9'; e.currentTarget.style.color = '#363C46'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.color = '#5D6472'; }}
           >
-            {collapsed ? <ChevronRight className="w-4 h-4" /> : <div className="flex items-center gap-1.5"><ChevronLeft className="w-4 h-4" /><span>Collapse Sidebar</span></div>}
+            {collapsed ? <ChevronRight className="w-4 h-4" /> : <div className="flex items-center gap-1.5"><ChevronLeft className="w-4 h-4" /><span>Collapse</span></div>}
           </button>
         </div>
       </aside>
@@ -317,41 +364,63 @@ const AdminLayout = () => {
       }`}>
         
         {/* ── TOPBAR HEADER ───────────────────────────────────────── */}
-        <header className="sticky top-0 z-30 h-16 bg-white/95 backdrop-blur-md border-b border-[#E8E4DA] px-6 lg:px-10 flex items-center justify-between gap-4 font-sans">
-          
-          {/* Left: Mobile Menu Trigger + Page Title / Breadcrumb */}
+        <header
+          className="sticky top-0 z-30 h-16 px-6 lg:px-10 flex items-center justify-between gap-4 font-sans"
+          style={{
+            background: 'rgba(224,238,233,0.94)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            borderBottom: '1px solid rgba(93,100,114,0.14)',
+          }}
+        >
+          {/* Left: Mobile Menu Trigger + Page Title */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="md:hidden p-2 rounded-lg text-[#1A1A1A] hover:bg-[#F4F1EA] cursor-pointer"
+              className="md:hidden p-2 rounded-lg cursor-pointer transition-colors"
+              style={{ color: '#363C46' }}
+              onMouseEnter={e => e.currentTarget.style.background = 'rgba(93,100,114,0.10)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
               aria-label="Open sidebar"
             >
               <Menu className="w-5 h-5" />
             </button>
 
             <div>
-              <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold">
+              <div
+                className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold"
+                style={{ color: '#5D6472', fontFamily: "'Inter',sans-serif" }}
+              >
                 <span>ADMIN</span>
                 <span>/</span>
-                <span className="text-[#F5A623]">{getPageTitle()}</span>
+                <span style={{ color: '#CFB6A8' }}>{getPageTitle()}</span>
               </div>
-              <h1 className="text-base font-extrabold text-[#1A1A1A] tracking-tight leading-none mt-0.5">
+              <h1
+                className="text-sm font-semibold tracking-tight leading-none mt-0.5"
+                style={{ fontFamily: "'Fraunces','Playfair Display',serif", color: '#363C46' }}
+              >
                 {getPageTitle()}
               </h1>
             </div>
           </div>
 
-          {/* Right Controls: Search, Notifications Bell & Profile Dropdown */}
+          {/* Right Controls */}
           <div className="flex items-center gap-3">
-            {/* Global Search Input */}
+            {/* Search Input */}
             <div className="relative hidden sm:block">
-              <Search className="w-3.5 h-3.5 text-[#8A8A85] absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Search className="w-3.5 h-3.5 absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: '#5D6472' }} />
               <input
                 type="text"
                 placeholder="Search admin entities..."
                 value={searchVal}
                 onChange={(e) => setSearchVal(e.target.value)}
-                className="bg-[#F4F1EA] border border-[#E8E4DA] rounded-full text-xs px-4 py-2 pl-9 text-[#1A1A1A] placeholder-[#8A8A85] focus:outline-none focus:border-[#F5A623] w-48 lg:w-64 transition-all"
+                className="text-xs px-4 py-2 pl-9 focus:outline-none w-48 lg:w-64 transition-all rounded-lg"
+                style={{
+                  background: '#FFFFFF',
+                  border: '1px solid rgba(93,100,114,0.18)',
+                  color: '#363C46',
+                  fontFamily: "'Inter',sans-serif",
+                }}
               />
             </div>
 
@@ -359,12 +428,15 @@ const AdminLayout = () => {
             <div className="relative" ref={notifRef}>
               <button
                 onClick={() => setAdminNotifOpen(!adminNotifOpen)}
-                className="w-9 h-9 rounded-full border border-[#E8E4DA] bg-white hover:bg-[#F4F1EA] text-[#1A1A1A] flex items-center justify-center relative cursor-pointer transition-colors"
+                className="w-9 h-9 rounded-full flex items-center justify-center relative cursor-pointer transition-colors"
+                style={{ background: '#FFFFFF', border: '1px solid rgba(93,100,114,0.18)', color: '#5D6472' }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#E0EEE9'; e.currentTarget.style.color = '#363C46'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.color = '#5D6472'; }}
                 aria-label="Admin Alerts"
               >
-                <Bell className="w-4 h-4 stroke-[2]" />
+                <Bell className="w-4 h-4 stroke-[1.8]" />
                 {unreadAlertsCount > 0 && (
-                  <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#F5A623]" />
+                  <span className="absolute top-1 right-1 w-2 h-2 rounded-full" style={{ background: '#CFB6A8' }} />
                 )}
               </button>
 
@@ -375,14 +447,21 @@ const AdminLayout = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.98 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-3 w-80 bg-white border border-[#E8E4DA] rounded-2xl p-4 shadow-[0_20px_40px_rgba(0,0,0,0.12)] z-50 text-left font-sans"
+                    className="absolute right-0 mt-3 w-80 z-50 text-left p-4"
+                    style={{ background: '#FFFFFF', border: '1px solid rgba(93,100,114,0.15)', borderRadius: 10, boxShadow: '0 20px 48px rgba(54,60,70,0.12)' }}
                   >
-                    <div className="flex items-center justify-between border-b border-[#E8E4DA] pb-3 mb-3">
-                      <span className="font-extrabold text-xs text-[#1A1A1A] uppercase tracking-wider">
-                        Admin System Alerts
+                    <div className="flex items-center justify-between pb-3 mb-3" style={{ borderBottom: '1px solid rgba(93,100,114,0.12)' }}>
+                      <span
+                        className="font-bold text-xs uppercase tracking-wider"
+                        style={{ color: '#363C46', fontFamily: "'Inter',sans-serif" }}
+                      >
+                        Admin Alerts
                       </span>
                       {unreadAlertsCount > 0 && (
-                        <span className="px-2 py-0.5 text-[9px] font-bold bg-amber-50 text-[#F5A623] border border-amber-200 rounded-full">
+                        <span
+                          className="px-2 py-0.5 text-[9px] font-bold rounded-full"
+                          style={{ background: 'rgba(207,182,168,0.15)', color: '#CFB6A8', border: '1px solid rgba(207,182,168,0.25)' }}
+                        >
                           {unreadAlertsCount} New
                         </span>
                       )}
@@ -392,13 +471,15 @@ const AdminLayout = () => {
                       {adminAlerts.map(alert => (
                         <div
                           key={alert.id}
-                          className={`p-2.5 rounded-xl border text-xs transition-colors ${
-                            alert.unread ? 'bg-amber-50/50 border-amber-200' : 'bg-[#F4F1EA]/50 border-[#E8E4DA]'
-                          }`}
+                          className="p-2.5 rounded-lg border text-xs"
+                          style={{
+                            background: alert.unread ? 'rgba(207,182,168,0.08)' : 'rgba(224,238,233,0.50)',
+                            border: `1px solid ${alert.unread ? 'rgba(207,182,168,0.25)' : 'rgba(93,100,114,0.12)'}`,
+                          }}
                         >
-                          <p className="font-bold text-[#1A1A1A]">{alert.title}</p>
-                          <p className="text-[11px] text-[#8A8A85] mt-0.5 leading-relaxed">{alert.desc}</p>
-                          <span className="text-[9px] text-[#8A8A85] mt-1 block font-medium">{alert.time}</span>
+                          <p className="font-semibold" style={{ color: '#363C46' }}>{alert.title}</p>
+                          <p className="text-[11px] mt-0.5 leading-relaxed" style={{ color: '#5D6472' }}>{alert.desc}</p>
+                          <span className="text-[9px] mt-1 block font-medium" style={{ color: 'rgba(93,100,114,0.55)' }}>{alert.time}</span>
                         </div>
                       ))}
                     </div>
@@ -411,12 +492,18 @@ const AdminLayout = () => {
             <div className="relative" ref={profileRef}>
               <button
                 onClick={() => setAdminProfileOpen(!adminProfileOpen)}
-                className="flex items-center gap-2 p-1.5 rounded-full border border-[#E8E4DA] bg-white hover:bg-[#F4F1EA] cursor-pointer transition-colors"
+                className="flex items-center gap-2 p-1.5 rounded-full cursor-pointer transition-colors"
+                style={{ border: '1px solid rgba(93,100,114,0.18)', background: '#FFFFFF' }}
+                onMouseEnter={e => e.currentTarget.style.background = '#E0EEE9'}
+                onMouseLeave={e => e.currentTarget.style.background = '#FFFFFF'}
               >
-                <div className="w-7 h-7 rounded-full bg-[#1A1A1A] text-[#F5A623] font-extrabold text-xs flex items-center justify-center">
+                <div
+                  className="w-7 h-7 rounded-full font-bold text-xs flex items-center justify-center"
+                  style={{ background: '#363C46', color: '#CFB6A8' }}
+                >
                   {currentUser.name ? currentUser.name.charAt(0) : 'A'}
                 </div>
-                <ChevronDown className="w-3.5 h-3.5 text-[#8A8A85] mr-1" />
+                <ChevronDown className="w-3.5 h-3.5 mr-1" style={{ color: '#5D6472' }} />
               </button>
 
               <AnimatePresence>
@@ -426,30 +513,38 @@ const AdminLayout = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.98 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-3 w-64 bg-white border border-[#E8E4DA] rounded-2xl p-3 shadow-[0_20px_40px_rgba(0,0,0,0.12)] z-50 text-left font-sans"
+                    className="absolute right-0 mt-3 w-60 z-50 text-left p-3"
+                    style={{ background: '#FFFFFF', border: '1px solid rgba(93,100,114,0.15)', borderRadius: 10, boxShadow: '0 20px 48px rgba(54,60,70,0.12)' }}
                   >
-                    <div className="px-3 py-2 border-b border-[#E8E4DA] mb-2">
-                      <p className="text-xs font-extrabold text-[#1A1A1A]">{currentUser.name}</p>
-                      <p className="text-[10px] text-[#8A8A85]">{currentUser.email}</p>
-                      <span className="inline-block mt-1 px-2 py-0.5 bg-amber-50 border border-amber-200 text-[#F5A623] text-[9px] font-bold uppercase rounded-full">
+                    <div className="px-3 py-2 mb-2" style={{ borderBottom: '1px solid rgba(93,100,114,0.12)' }}>
+                      <p className="text-xs font-bold" style={{ color: '#363C46' }}>{currentUser.name}</p>
+                      <p className="text-[10px]" style={{ color: '#5D6472' }}>{currentUser.email}</p>
+                      <span
+                        className="inline-block mt-1 px-2 py-0.5 text-[9px] font-bold uppercase rounded-full"
+                        style={{ background: 'rgba(207,182,168,0.12)', border: '1px solid rgba(207,182,168,0.28)', color: '#CFB6A8' }}
+                      >
                         Role: {currentUser.role || 'Admin'}
                       </span>
                     </div>
 
-                    {/* Role Switcher Demo Options */}
-                    <div className="px-3 py-1 mb-2 border-b border-[#E8E4DA] space-y-1">
-                      <p className="text-[9px] uppercase tracking-wider text-[#8A8A85] font-bold">Switch Role (Testing)</p>
+                    {/* Role Switcher */}
+                    <div className="px-3 py-1 mb-2 space-y-1" style={{ borderBottom: '1px solid rgba(93,100,114,0.10)' }}>
+                      <p
+                        className="text-[9px] uppercase tracking-wider font-bold"
+                        style={{ color: 'rgba(93,100,114,0.55)' }}
+                      >
+                        Switch Role (Testing)
+                      </p>
                       <div className="flex gap-1 pt-1 pb-2">
                         {['admin', 'consultant', 'customer'].map(r => (
                           <button
                             key={r}
-                            onClick={() => {
-                              switchRole(r);
-                              setAdminProfileOpen(false);
+                            onClick={() => { switchRole(r); setAdminProfileOpen(false); }}
+                            className="px-2 py-1 rounded text-[10px] font-bold uppercase cursor-pointer"
+                            style={{
+                              background: currentUser.role === r ? '#363C46' : '#E0EEE9',
+                              color: currentUser.role === r ? '#FFFFFF' : '#363C46',
                             }}
-                            className={`px-2 py-1 rounded text-[10px] font-bold uppercase cursor-pointer ${
-                              currentUser.role === r ? 'bg-[#1A1A1A] text-white' : 'bg-[#F4F1EA] text-[#1A1A1A]'
-                            }`}
                           >
                             {r}
                           </button>
@@ -457,24 +552,27 @@ const AdminLayout = () => {
                       </div>
                     </div>
 
-                    <ul className="space-y-1 text-xs font-bold text-[#1A1A1A]">
+                    <ul className="space-y-0.5 text-xs">
                       <li>
                         <Link
                           to="/admin/settings"
                           onClick={() => setAdminProfileOpen(false)}
-                          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#F4F1EA]"
+                          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-colors"
+                          style={{ color: '#363C46', fontWeight: 600 }}
+                          onMouseEnter={e => e.currentTarget.style.background = '#E0EEE9'}
+                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                         >
-                          <Settings className="w-3.5 h-3.5 text-[#F5A623]" />
+                          <Settings className="w-3.5 h-3.5" style={{ color: '#CFB6A8' }} />
                           <span>Admin Settings</span>
                         </Link>
                       </li>
                       <li>
                         <button
-                          onClick={() => {
-                            logoutUser();
-                            setAdminProfileOpen(false);
-                          }}
-                          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-red-600 hover:bg-red-50 cursor-pointer"
+                          onClick={() => { logoutUser(); setAdminProfileOpen(false); }}
+                          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-colors cursor-pointer"
+                          style={{ color: '#DC2626', fontWeight: 600 }}
+                          onMouseEnter={e => e.currentTarget.style.background = '#FEF2F2'}
+                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                         >
                           <LogOut className="w-3.5 h-3.5" />
                           <span>Log Out</span>
@@ -488,8 +586,11 @@ const AdminLayout = () => {
           </div>
         </header>
 
-        {/* ── CONTENT CANVAS (150ms opacity-only page transition) ──── */}
-        <main className="flex-1 bg-[#F4F1EA] max-w-[1600px] w-full mx-auto px-3.5 sm:px-6 lg:px-10 py-4 sm:py-8 font-sans">
+        {/* ── CONTENT CANVAS ───────────────────────────────────────── */}
+        <main
+          className="flex-1 max-w-[1600px] w-full mx-auto px-3.5 sm:px-6 lg:px-10 py-4 sm:py-8 font-sans"
+          style={{ background: '#E0EEE9' }}
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
@@ -521,25 +622,30 @@ const AdminLayout = () => {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed top-0 bottom-0 left-0 w-72 bg-white z-50 flex flex-col font-sans border-r border-[#E8E4DA] md:hidden"
+              className="fixed top-0 bottom-0 left-0 w-72 z-50 flex flex-col font-sans md:hidden"
+              style={{ background: '#FFFFFF', borderRight: '1px solid rgba(93,100,114,0.15)' }}
             >
-              <div className="h-16 border-b border-[#E8E4DA] px-6 flex items-center justify-between">
-                <ImperiaLogo layout="lockup" variant="dark" height={28} />
+              <div className="h-16 px-6 flex items-center justify-between" style={{ borderBottom: '1px solid rgba(93,100,114,0.15)' }}>
+                <ImperiaLogo layout="lockup" variant="dark" height={26} />
                 <button
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-1 rounded-full text-[#8A8A85] hover:text-[#1A1A1A]"
+                  className="p-1 rounded-full transition-colors cursor-pointer"
+                  style={{ color: '#5D6472' }}
                 >
-                  <X className="w-6 h-6" />
+                  <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto py-6 px-4 space-y-6">
+              <div className="flex-1 overflow-y-auto py-6 px-3 space-y-5">
                 {NAV_GROUPS.map((group, gIdx) => (
-                  <div key={gIdx} className="space-y-1.5">
-                    <span className="text-[10px] uppercase tracking-widest text-[#8A8A85] font-bold px-3 block mb-2">
+                  <div key={gIdx} className="space-y-1">
+                    <span
+                      className="text-[9px] uppercase tracking-widest font-bold px-3 block mb-1"
+                      style={{ color: 'rgba(93,100,114,0.50)', fontFamily: "'Inter',sans-serif" }}
+                    >
                       {group.title}
                     </span>
-                    <ul className="space-y-1">
+                    <ul className="space-y-0.5">
                       {group.items.map((item, iIdx) => {
                         const active = isNavActive(item.href);
                         const Icon = item.icon;
@@ -548,13 +654,15 @@ const AdminLayout = () => {
                             <Link
                               to={item.href}
                               onClick={() => setMobileMenuOpen(false)}
-                              className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
-                                active
-                                  ? 'bg-[#1A1A1A] text-white'
-                                  : 'text-[#8A8A85] hover:bg-[#F4F1EA] hover:text-[#1A1A1A]'
-                              }`}
+                              className="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-medium transition-all"
+                              style={{
+                                background: active ? '#363C46' : 'transparent',
+                                color: active ? '#FFFFFF' : '#5D6472',
+                              }}
+                              onMouseEnter={e => { if (!active) { e.currentTarget.style.background = '#E0EEE9'; e.currentTarget.style.color = '#363C46'; } }}
+                              onMouseLeave={e => { if (!active) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#5D6472'; } }}
                             >
-                              <Icon className="w-4 h-4 stroke-[2]" />
+                              <Icon className="w-4 h-4 stroke-[1.8]" style={{ color: active ? '#CFB6A8' : undefined }} />
                               <span>{item.label}</span>
                             </Link>
                           </li>

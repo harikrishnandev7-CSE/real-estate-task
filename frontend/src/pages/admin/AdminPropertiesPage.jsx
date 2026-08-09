@@ -251,12 +251,15 @@ const AdminPropertiesPage = () => {
     <div className="space-y-6 font-sans pb-16">
       
       {/* ── TOPBAR CONTROLS & ACTION ROW ────────────────────────────── */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-[#E8E4DA] rounded-2xl p-5 shadow-[0_10px_25px_rgba(0,0,0,0.04)]">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-[rgba(93,100,114,0.15)] rounded-xl p-5 shadow-[0_12px_32px_rgba(54,60,70,0.06)]">
         <div>
-          <span className="text-[10px] uppercase tracking-[0.25em] text-[#F5A623] font-extrabold block">
+          <span className="text-[10px] uppercase tracking-[0.25em] text-[#CFB6A8] font-bold block font-sans">
             INVENTORY MANAGEMENT
           </span>
-          <h2 className="text-2xl font-extrabold text-[#1A1A1A] tracking-tight">
+          <h2
+            className="text-2xl font-bold text-[#363C46] tracking-tight"
+            style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+          >
             Properties Catalog
           </h2>
         </div>
@@ -265,22 +268,22 @@ const AdminPropertiesPage = () => {
         <div className="flex flex-wrap items-center gap-3">
           {/* Search Input */}
           <div className="relative">
-            <Search className="w-3.5 h-3.5 text-[#8A8A85] absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-[#5D6472] absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search title, city, type..."
               value={searchVal}
               onChange={(e) => setSearchVal(e.target.value)}
-              className="bg-[#F4F1EA] border border-[#E8E4DA] rounded-full text-xs px-4 py-2 pl-9 text-[#1A1A1A] placeholder-[#8A8A85] focus:outline-none focus:border-[#F5A623] w-48 sm:w-60 transition-all"
+              className="bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] rounded-lg text-xs px-4 py-2 pl-9 text-[#363C46] placeholder-[#5D6472]/60 focus:outline-none focus:border-[#CFB6A8] w-48 sm:w-60 transition-all font-sans"
             />
           </div>
 
           {/* Filters Button */}
           <button
             onClick={() => setIsFilterDrawerOpen(true)}
-            className="px-4 py-2 bg-[#F4F1EA] hover:bg-[#1A1A1A] hover:text-white border border-[#E8E4DA] text-[#1A1A1A] text-xs font-bold rounded-full transition-all flex items-center gap-1.5 cursor-pointer"
+            className="px-4 py-2 bg-[#E0EEE9]/50 hover:bg-[#363C46] hover:text-white border border-[rgba(93,100,114,0.20)] text-[#363C46] text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer font-sans"
           >
-            <Filter className="w-3.5 h-3.5 text-[#F5A623]" />
+            <Filter className="w-3.5 h-3.5 text-[#CFB6A8]" />
             <span>Filters</span>
           </button>
 
@@ -318,9 +321,9 @@ const AdminPropertiesPage = () => {
           {/* Add Property Primary Black Pill */}
           <button
             onClick={() => navigate('/admin/properties/new')}
-            className="px-5 py-2.5 bg-[#1A1A1A] hover:bg-black text-white text-xs font-bold tracking-wider uppercase rounded-full shadow-md transition-all cursor-pointer flex items-center gap-2"
+            className="px-5 py-2.5 bg-[#363C46] hover:bg-[#1A1A1A] text-white text-xs font-bold tracking-wider uppercase rounded-lg shadow-xs transition-all cursor-pointer flex items-center gap-2 font-sans"
           >
-            <PlusCircle className="w-4 h-4 text-[#F5A623]" />
+            <PlusCircle className="w-4 h-4 text-[#CFB6A8]" />
             <span>Add Property</span>
           </button>
         </div>

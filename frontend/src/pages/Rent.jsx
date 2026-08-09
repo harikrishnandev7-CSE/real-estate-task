@@ -158,24 +158,29 @@ const Rent = () => {
   };
 
   return (
-    <div className="pt-20 lg:pt-24 min-h-screen bg-[#F4F1EA] text-[#1A1A1A]">
-      {/* Page Header */}
-      <div className="border-b border-[#E8E4DA] py-12 relative overflow-hidden bg-white">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6 font-sans">
-          <div className="space-y-3">
-            <span className="text-xs uppercase tracking-[0.25em] text-[#F5A623] font-bold block">PREMIUM LEASING</span>
-            <h1 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] tracking-tight">
-              Rent Premium <span className="font-normal text-[#8A8A85]">Estates</span>
+    <div className="pt-20 lg:pt-24 min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
+      {/* Page Header / Hero Section */}
+      <div className="border-b border-[rgba(93,100,114,0.15)] pt-10 pb-8 md:pt-12 md:pb-10 relative overflow-hidden bg-white">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div>
+            <span className="text-[11px] uppercase tracking-[0.25em] text-[#CFB6A8] font-bold block mb-2 font-sans">
+              LEASING PORTFOLIO
+            </span>
+            <h1
+              className="text-3xl sm:text-4xl md:text-5xl font-medium text-[#363C46] tracking-tight leading-tight"
+              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+            >
+              Luxury Residences <span className="font-normal text-[#5D6472]">for Rent</span>
             </h1>
           </div>
           <div className="relative w-full md:w-[350px]">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#F5A623] w-4 h-4" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#CFB6A8] w-4 h-4" />
             <input 
               type="text" 
               placeholder="Search by workspace, title..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#F4F1EA] border border-[#E8E4DA] rounded-full py-3 pl-11 pr-5 text-sm outline-none text-[#1A1A1A] placeholder-[#8A8A85] focus:border-[#F5A623] transition-all font-sans font-medium"
+              className="w-full bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] rounded-lg py-3 pl-11 pr-5 text-sm outline-none text-[#363C46] placeholder-[#5D6472]/60 focus:border-[#CFB6A8] transition-all font-sans font-medium"
             />
           </div>
         </div>
@@ -185,10 +190,10 @@ const Rent = () => {
         <div className="flex gap-10 items-start">
           
           {/* DESKTOP FILTER SIDEBAR */}
-          <aside className="hidden lg:block w-[300px] shrink-0 border border-[#E8E4DA] bg-white rounded-3xl py-8 px-6 space-y-9 sticky top-28 shadow-[0_20px_40px_rgba(0,0,0,0.06)] font-sans">
-            <div className="flex items-center justify-between border-b border-[#E8E4DA] pb-4">
+          <aside className="hidden lg:block w-[300px] shrink-0 border border-[rgba(93,100,114,0.15)] bg-white rounded-xl py-8 px-6 space-y-9 sticky top-28 shadow-[0_12px_32px_rgba(54,60,70,0.06)] font-sans">
+            <div className="flex items-center justify-between border-b border-[rgba(93,100,114,0.15)] pb-4">
               <div className="flex items-center gap-2">
-                <Filter className="w-4 h-4 text-[#F5A623]" />
+                <Filter className="w-4 h-4 text-[#CFB6A8]" />
                 <h2 className="text-lg font-bold text-[#1A1A1A] tracking-tight">Filters</h2>
               </div>
               <button 

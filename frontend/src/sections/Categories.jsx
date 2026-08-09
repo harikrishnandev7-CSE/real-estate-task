@@ -4,10 +4,6 @@ import { motion, useReducedMotion, useInView, animate } from 'framer-motion';
 import { Layers, Home, Building2, Landmark, Tent, Sparkles, ArrowRight } from 'lucide-react';
 import ImageWithSkeleton from '../components/ImageWithSkeleton';
 
-// Animates "42 listings" counting up from 0 once it scrolls into view — the
-// numbers are real data (this section's structure is literally a count), so
-// this is the one signature moment for this section rather than a decorative
-// flourish.
 const CountBadge = ({ count, reduceMotion }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-40px' });
@@ -34,7 +30,7 @@ const CountBadge = ({ count, reduceMotion }) => {
   }, [isInView, reduceMotion, target, suffix]);
 
   return (
-    <span ref={ref} className="text-[10px] uppercase tracking-[0.2em] font-semibold text-neutral-400 tabular-nums">
+    <span ref={ref} className="text-[10px] uppercase tracking-[0.2em] font-semibold text-[#5D6472] tabular-nums">
       {count}
     </span>
   );
@@ -121,8 +117,8 @@ const Categories = () => {
     },
     hover: {
       y: shouldReduceMotion ? 0 : -6,
-      borderColor: "#F5A623",
-      boxShadow: "0 25px 50px rgba(0, 0, 0, 0.08)",
+      borderColor: "#CFB6A8",
+      boxShadow: "0 20px 40px rgba(54, 60, 70, 0.08)",
       transition: {
         duration: 0.4,
         ease: [0.16, 1, 0.3, 1]
@@ -142,37 +138,28 @@ const Categories = () => {
     }
   };
 
-  const overlayVariants = {
-    hidden: { opacity: 0.2 },
-    visible: { opacity: 0.2 },
-    hover: {
-      opacity: 0.1,
-      transition: { duration: 0.35, ease: "easeInOut" }
-    }
-  };
-
   const titleVariants = {
-    default: { color: "#1A1A1A" },
+    default: { color: "#363C46" },
     hover: {
-      color: "#F5A623",
+      color: "#CFB6A8",
       transition: { duration: 0.3 }
     }
   };
 
   const descVariants = {
-    default: { color: "#8A8A85" },
+    default: { color: "#5D6472" },
     hover: {
-      color: "#1A1A1A",
+      color: "#363C46",
       transition: { duration: 0.3 }
     }
   };
 
   const iconVariants = {
-    default: { backgroundColor: "#FEF3C7", color: "#F5A623", scale: 1, rotate: 0 },
+    default: { backgroundColor: "rgba(207, 182, 168, 0.15)", color: "#CFB6A8", scale: 1, rotate: 0 },
     hover: {
       scale: 1.08,
-      rotate: -8,
-      backgroundColor: "#F5A623",
+      rotate: -6,
+      backgroundColor: "#CFB6A8",
       color: "#ffffff",
       transition: {
         duration: 0.35,
@@ -190,7 +177,7 @@ const Categories = () => {
   };
 
   return (
-    <section className="pt-12 md:pt-14 lg:pt-16 pb-24 md:pb-28 lg:pb-32 bg-[#F4F1EA] relative border-t border-[#E8E4DA]">
+    <section className="pt-12 md:pt-14 lg:pt-16 pb-24 md:pb-28 lg:pb-32 bg-[#E0EEE9] relative border-t border-[rgba(93,100,114,0.15)]">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
 
         {/* Section Header */}
@@ -201,7 +188,7 @@ const Categories = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="text-xs uppercase tracking-[0.25em] text-[#F5A623] font-bold inline-block font-sans"
+              className="text-xs uppercase tracking-[0.25em] text-[#CFB6A8] font-bold inline-block font-sans"
             >
               COLLECTION SPECTRUM
             </motion.span>
@@ -210,10 +197,11 @@ const Categories = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="text-3xl md:text-5xl font-bold text-[#1A1A1A] leading-tight font-sans tracking-tight"
+              className="text-3xl md:text-5xl font-medium text-[#363C46] leading-tight tracking-tight"
+              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
             >
               Curated Asset <br />
-              <span className="font-normal text-[#8A8A85]">Portfolios</span>
+              <span className="font-normal text-[#5D6472]">Portfolios</span>
             </motion.h2>
           </div>
           <motion.p
@@ -221,7 +209,7 @@ const Categories = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="text-[#8A8A85] font-normal text-sm md:text-base max-w-md leading-relaxed font-sans"
+            className="text-[#5D6472] font-normal text-sm md:text-base max-w-md leading-relaxed font-sans"
           >
             Explore diverse real estate categories tailored for private ownership, long-term capital preservation, and institutional yields.
           </motion.p>
@@ -246,7 +234,7 @@ const Categories = () => {
                 whileHover="hover"
                 viewport={{ once: true, margin: '-40px' }}
                 onClick={() => navigate(cat.link)}
-                className="group relative flex flex-col-reverse md:flex-row bg-white border border-[#E8E4DA] hover:border-[#F5A623] rounded-3xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.06)] cursor-pointer h-full transition-all duration-300"
+                className="group relative flex flex-col-reverse md:flex-row bg-white border border-[rgba(93,100,114,0.15)] hover:border-[#CFB6A8] rounded-xl overflow-hidden shadow-[0_12px_32px_rgba(54,60,70,0.06)] cursor-pointer h-full transition-all duration-300"
               >
                 {/* Left Content Column */}
                 <div className="p-6 md:p-8 flex flex-col justify-between flex-grow w-full md:w-[65%] group-hover:md:w-[58%] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] z-20">
@@ -255,7 +243,7 @@ const Categories = () => {
                       <motion.div
                         variants={iconVariants}
                         initial="default"
-                        className="p-3.5 rounded-2xl flex items-center justify-center shadow-sm"
+                        className="p-3.5 rounded-lg flex items-center justify-center shadow-xs"
                       >
                         <Icon className="w-5 h-5 stroke-[2]" />
                       </motion.div>
@@ -266,25 +254,26 @@ const Categories = () => {
                       <motion.h3
                         variants={titleVariants}
                         initial="default"
-                        className="text-xl font-bold tracking-tight font-sans text-[#1A1A1A]"
+                        className="text-xl font-bold tracking-tight text-[#363C46]"
+                        style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
                       >
                         {cat.title}
                       </motion.h3>
                       <motion.p
                         variants={descVariants}
                         initial="default"
-                        className="text-xs leading-relaxed font-normal font-sans text-[#8A8A85] max-w-[95%]"
+                        className="text-xs leading-relaxed font-normal font-sans text-[#5D6472] max-w-[95%]"
                       >
                         {cat.desc}
                       </motion.p>
                     </div>
                   </div>
 
-                  {/* CTA link with amber line animation */}
-                  <div className="pt-4 flex items-center gap-1.5 text-xs text-[#F5A623] font-bold tracking-wider uppercase font-sans w-fit relative">
+                  {/* CTA link with Dark Vanilla line animation */}
+                  <div className="pt-4 flex items-center gap-1.5 text-xs text-[#CFB6A8] font-bold tracking-wider uppercase font-sans w-fit relative">
                     <span className="relative">
                       DISCOVER
-                      <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#F5A623] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                      <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#CFB6A8] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                     </span>
                     <motion.div
                       variants={arrowVariants}
@@ -295,8 +284,8 @@ const Categories = () => {
                   </div>
                 </div>
 
-                {/* Right Image Panel (stacked at top on mobile) - ALWAYS MOUNTED */}
-                <div className="relative overflow-hidden w-full h-[180px] md:h-auto md:w-[35%] group-hover:md:w-[42%] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] m-4 md:m-3 md:ml-0 rounded-2xl flex-shrink-0 z-10 bg-neutral-950">
+                {/* Right Image Panel */}
+                <div className="relative overflow-hidden w-full h-[180px] md:h-auto md:w-[35%] group-hover:md:w-[42%] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] m-4 md:m-3 md:ml-0 rounded-lg flex-shrink-0 z-10 bg-[#363C46]">
                   <motion.div
                     variants={imageVariants}
                     className="w-full h-full relative"
@@ -308,8 +297,7 @@ const Categories = () => {
                       alt={cat.title}
                       className="w-full h-full object-cover"
                     />
-                    {/* Dark overlay reducing opacity on hover */}
-                    <div className="absolute inset-0 bg-neutral-950/20 group-hover:bg-neutral-950/15 transition-all duration-500 z-10 pointer-events-none" />
+                    <div className="absolute inset-0 bg-[#363C46]/20 group-hover:bg-[#363C46]/10 transition-all duration-500 z-10 pointer-events-none" />
                   </motion.div>
                 </div>
               </motion.div>

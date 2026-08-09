@@ -4,14 +4,10 @@ import { motion, useReducedMotion, useInView, animate } from 'framer-motion';
 import { TrendingUp, ArrowRight, Building } from 'lucide-react';
 import ImageWithSkeleton from '../components/ImageWithSkeleton';
 
-// Small helper to merge classnames (same pattern as the gallery component)
 function cn(...inputs) {
   return inputs.flat().filter(Boolean).join(' ');
 }
 
-// Counts a "+12.4% YoY" style growth figure up from 0 once its card has
-// landed — mount/in-view triggered per card via useInView + imperative
-// animate(), not dependent on deep variant propagation.
 const GrowthBadge = ({ growth, reduceMotion }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.4 });
@@ -44,18 +40,6 @@ const GrowthBadge = ({ growth, reduceMotion }) => {
   );
 };
 
-/**
- * CityCard
- *
- * Desktop (md+): behaves like the ExpandableGallery — every card sits in a
- * flex row at flex-1, and the hovered card grows to flex-[3] while its
- * siblings compress. The entrance animation (fade/slide-in on scroll) and
- * the image micro-zoom / content-reveal logic from the original card are
- * layered on top of that expand behaviour rather than replaced.
- *
- * Mobile (<md): flex-basis expansion is a poor touch UX, so cards fall
- * back to a plain stacked column at a fixed height.
- */
 const CityCard = ({ city, index, shouldReduceMotion, isHovered, onHover, onLeave }) => {
   const navigate = useNavigate();
   const cardRef = useRef(null);
@@ -79,11 +63,9 @@ const CityCard = ({ city, index, shouldReduceMotion, isHovered, onHover, onLeave
       onClick={() => navigate(`/buy?city=${encodeURIComponent(city.name)}`)}
       style={{ willChange: 'transform, opacity, flex-grow' }}
       className={cn(
-        // Shared card chrome
-        'group relative overflow-hidden rounded-3xl border border-[#E8E4DA] hover:border-[#F5A623]',
-        'cursor-pointer bg-white shadow-[0_20px_40px_rgba(0,0,0,0.06)]',
+        'group relative overflow-hidden rounded-xl border border-[rgba(93,100,114,0.15)] hover:border-[#CFB6A8]',
+        'cursor-pointer bg-white shadow-[0_12px_32px_rgba(54,60,70,0.06)]',
         'transition-[flex-grow,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
-        // Fixed identical heights for perfect horizontal baseline alignment
         'w-full h-[420px] md:h-[460px] md:flex-1',
         isHovered ? 'md:flex-[3]' : 'md:flex-[1]'
       )}
@@ -106,11 +88,11 @@ const CityCard = ({ city, index, shouldReduceMotion, isHovered, onHover, onLeave
         </motion.div>
       </div>
 
-      {/* 2. Dark Gradient Overlay for text legibility */}
+      {/* 2. Dark Gradient Overlay */}
       <div
         className="absolute inset-0 z-10 pointer-events-none transition-opacity duration-500 group-hover:opacity-95"
         style={{
-          background: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.18) 35%, rgba(0,0,0,0.6) 70%, rgba(0,0,0,0.92) 100%)'
+          background: 'linear-gradient(180deg, rgba(54,60,70,0) 0%, rgba(54,60,70,0.2) 35%, rgba(54,60,70,0.65) 70%, rgba(54,60,70,0.92) 100%)'
         }}
       />
 
@@ -121,15 +103,15 @@ const CityCard = ({ city, index, shouldReduceMotion, isHovered, onHover, onLeave
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: shouldReduceMotion ? 0 : 8 }}
           transition={{ duration: 0.5, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-          className="pointer-events-auto flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 text-xs font-bold text-[#F5A623] whitespace-nowrap shadow-md font-sans"
+          className="pointer-events-auto flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/95 text-xs font-bold text-[#CFB6A8] whitespace-nowrap shadow-xs font-sans"
         >
           <span className="flex">
             <TrendingUp className="w-3.5 h-3.5" />
           </span>
           <GrowthBadge growth={city.growth} reduceMotion={shouldReduceMotion} />
         </motion.div>
-        <div className="flex items-center gap-1.5 text-white text-xs font-semibold whitespace-nowrap bg-black/50 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 font-sans">
-          <Building className="w-3.5 h-3.5 text-[#F5A623]" />
+        <div className="flex items-center gap-1.5 text-white text-xs font-semibold whitespace-nowrap bg-[#363C46]/60 backdrop-blur-md px-3 py-1 rounded-md border border-white/20 font-sans">
+          <Building className="w-3.5 h-3.5 text-[#CFB6A8]" />
           <span className={cn('transition-opacity duration-300', !isHovered && 'md:opacity-0')}>
             {city.listings}
           </span>
@@ -139,7 +121,10 @@ const CityCard = ({ city, index, shouldReduceMotion, isHovered, onHover, onLeave
       {/* 3. Bottom Content Container */}
       <div className="absolute bottom-[28px] left-[24px] right-[24px] z-20 flex flex-col items-center text-center">
         {/* City Name */}
-        <h3 className="text-xl sm:text-2xl md:text-[24px] lg:text-[26px] font-bold text-white font-sans tracking-tight leading-none whitespace-nowrap group-hover:text-[#F5A623] transition-colors duration-300 text-center w-full">
+        <h3
+          className="text-xl sm:text-2xl md:text-[24px] lg:text-[26px] font-bold text-white font-sans tracking-tight leading-none whitespace-nowrap group-hover:text-[#CFB6A8] transition-colors duration-300 text-center w-full"
+          style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+        >
           {city.name}
         </h3>
 
@@ -159,7 +144,7 @@ const CityCard = ({ city, index, shouldReduceMotion, isHovered, onHover, onLeave
         {/* CTA Explore Trigger */}
         <div
           className={cn(
-            'flex items-center justify-center gap-1.5 text-[11px] text-[#F5A623] font-bold tracking-wider uppercase font-sans',
+            'flex items-center justify-center gap-1.5 text-[11px] text-[#CFB6A8] font-bold tracking-wider uppercase font-sans',
             'transition-all duration-300 ease-in-out',
             !isHovered ? 'opacity-0 max-h-0 overflow-hidden mt-0' : 'opacity-100 max-h-8 mt-2.5'
           )}
@@ -222,7 +207,7 @@ const InvestmentLocations = () => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   return (
-    <section className="py-24 md:py-28 lg:py-32 bg-[#F4F1EA] relative border-t border-[#E8E4DA]">
+    <section className="py-24 md:py-28 lg:py-32 bg-[#E0EEE9] relative border-t border-[rgba(93,100,114,0.15)] font-sans">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
 
         {/* Section Header */}
@@ -233,7 +218,7 @@ const InvestmentLocations = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="text-xs uppercase tracking-[0.25em] text-[#F5A623] font-bold inline-block font-sans"
+              className="text-xs uppercase tracking-[0.25em] text-[#CFB6A8] font-bold inline-block font-sans"
             >
               PRIME TARGETS
             </motion.span>
@@ -242,10 +227,11 @@ const InvestmentLocations = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="text-3xl md:text-5xl font-bold text-[#1A1A1A] leading-tight font-sans tracking-tight"
+              className="text-3xl md:text-5xl font-medium text-[#363C46] leading-tight tracking-tight"
+              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
             >
               High-Growth <br />
-              <span className="font-normal text-[#8A8A85]">Investment Locations</span>
+              <span className="font-normal text-[#5D6472]">Investment Locations</span>
             </motion.h2>
           </div>
           <motion.p
@@ -253,13 +239,13 @@ const InvestmentLocations = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="text-[#8A8A85] font-normal text-sm md:text-base max-w-md leading-relaxed font-sans"
+            className="text-[#5D6472] font-normal text-sm md:text-base max-w-md leading-relaxed font-sans"
           >
             We target micro-markets across metropolitan hubs showcasing premium capital appreciation, infrastructural backbones, and solid developer pipelines.
           </motion.p>
         </div>
 
-        {/* City Cards — stacked column on mobile, expandable flex-row gallery on desktop */}
+        {/* City Cards */}
         <div
           className="flex flex-col gap-6 md:flex-row md:gap-4 md:h-[460px]"
           onMouseLeave={() => setHoveredIndex(null)}

@@ -60,9 +60,9 @@ import { X, Building, Key, ArrowRight } from "lucide-react";
 /* ─────────────────────────────────────────────────────────────────── */
 
 const VIDEO_SRC  = "/hero/hero-arrival.mp4";
-const AMBER      = "#F5A623";
-const AMBER_DEEP = "#D97706";
-const CREAM      = "#F4F1EA";
+const AMBER      = "#CFB6A8";
+const AMBER_DEEP = "#B3998B";
+const CREAM      = "#E0EEE9";
 
 /* ─────────────────────────────────────────────────────────────────── */
 /*  Framer Motion Variants — module-level, never recreated             */
@@ -480,20 +480,23 @@ export default function Hero({ onCtaClick }) {
             >
               <button
                 onClick={() => setShowChoiceModal(false)}
-                className="absolute top-5 right-5 p-2 rounded-full hover:bg-stone-100 text-[#8A8A85] hover:text-[#1A1A1A] transition-colors cursor-pointer"
+                className="absolute top-5 right-5 p-2 rounded-full hover:bg-[#E0EEE9] text-[#5D6472] hover:text-[#363C46] transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
 
               <div className="space-y-6">
-                <div className="space-y-1.5 border-b border-[#E8E4DA] pb-4">
-                  <span className="text-[10px] uppercase tracking-[0.25em] text-[#F5A623] font-bold block">
+                <div className="space-y-1.5 border-b border-[rgba(93,100,114,0.15)] pb-4">
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-[#CFB6A8] font-bold block">
                     IMPERIA PRIVATE CONCIERGE
                   </span>
-                  <h3 className="text-2xl font-bold text-[#1A1A1A] tracking-tight">
+                  <h3
+                    className="text-2xl font-medium text-[#363C46] tracking-tight"
+                    style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                  >
                     Choose Your Estate Goal
                   </h3>
-                  <p className="text-xs text-[#8A8A85] font-normal leading-relaxed">
+                  <p className="text-xs text-[#5D6472] font-normal leading-relaxed">
                     Select your preference to explore our curated listings and schedule a private site visit.
                   </p>
                 </div>
@@ -505,22 +508,22 @@ export default function Hero({ onCtaClick }) {
                       setShowChoiceModal(false);
                       navigate('/buy');
                     }}
-                    className="w-full p-4 rounded-2xl border border-[#E8E4DA] hover:border-[#F5A623] bg-[#F4F1EA]/60 hover:bg-amber-50/60 transition-all flex items-center justify-between group cursor-pointer text-left"
+                    className="w-full p-4 rounded-xl border border-[rgba(93,100,114,0.15)] hover:border-[#CFB6A8] bg-[#E0EEE9]/40 transition-all flex items-center justify-between group cursor-pointer text-left"
                   >
                     <div className="flex items-center gap-3.5">
-                      <div className="w-11 h-11 rounded-xl bg-[#1A1A1A] text-[#F5A623] flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                      <div className="w-11 h-11 rounded-lg bg-[#363C46] text-[#CFB6A8] flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
                         <Building className="w-5 h-5" />
                       </div>
                       <div>
-                        <h4 className="text-sm font-extrabold text-[#1A1A1A] group-hover:text-[#F5A623] transition-colors">
+                        <h4 className="text-sm font-bold text-[#363C46] group-hover:text-[#CFB6A8] transition-colors">
                           BUY LUXURY PROPERTIES
                         </h4>
-                        <p className="text-[11px] text-[#8A8A85]">
+                        <p className="text-[11px] text-[#5D6472]">
                           Explore villas, penthouses & prime land for sale
                         </p>
                       </div>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-[#8A8A85] group-hover:text-[#F5A623] group-hover:translate-x-1 transition-all shrink-0" />
+                    <ArrowRight className="w-4 h-4 text-[#5D6472] group-hover:text-[#CFB6A8] group-hover:translate-x-1 transition-all shrink-0" />
                   </button>
 
                   {/* RENT Option */}
@@ -529,22 +532,22 @@ export default function Hero({ onCtaClick }) {
                       setShowChoiceModal(false);
                       navigate('/rent');
                     }}
-                    className="w-full p-4 rounded-2xl border border-[#E8E4DA] hover:border-[#F5A623] bg-[#F4F1EA]/60 hover:bg-amber-50/60 transition-all flex items-center justify-between group cursor-pointer text-left"
+                    className="w-full p-4 rounded-xl border border-[rgba(93,100,114,0.15)] hover:border-[#CFB6A8] bg-[#E0EEE9]/40 transition-all flex items-center justify-between group cursor-pointer text-left"
                   >
                     <div className="flex items-center gap-3.5">
-                      <div className="w-11 h-11 rounded-xl bg-[#1A1A1A] text-[#F5A623] flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                      <div className="w-11 h-11 rounded-lg bg-[#363C46] text-[#CFB6A8] flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
                         <Key className="w-5 h-5" />
                       </div>
                       <div>
-                        <h4 className="text-sm font-extrabold text-[#1A1A1A] group-hover:text-[#F5A623] transition-colors">
+                        <h4 className="text-sm font-bold text-[#363C46] group-hover:text-[#CFB6A8] transition-colors">
                           RENT LUXURY RESIDENCES
                         </h4>
-                        <p className="text-[11px] text-[#8A8A85]">
+                        <p className="text-[11px] text-[#5D6472]">
                           High-end rental estates & bespoke furnished suites
                         </p>
                       </div>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-[#8A8A85] group-hover:text-[#F5A623] group-hover:translate-x-1 transition-all shrink-0" />
+                    <ArrowRight className="w-4 h-4 text-[#5D6472] group-hover:text-[#CFB6A8] group-hover:translate-x-1 transition-all shrink-0" />
                   </button>
                 </div>
               </div>

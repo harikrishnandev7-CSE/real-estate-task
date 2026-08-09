@@ -46,28 +46,31 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="pt-32 pb-24 min-h-screen bg-[#F4F1EA] text-[#1A1A1A] flex items-center justify-center font-sans">
+    <div className="pt-32 pb-24 min-h-screen bg-[#E0EEE9] text-[#363C46] flex items-center justify-center font-sans">
       <div className="max-w-md w-full mx-auto px-6 space-y-8">
         
         {/* Header */}
         <div className="text-center space-y-2">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-[#F5A623] font-bold block">
+          <span className="text-[10px] uppercase tracking-[0.25em] text-[#CFB6A8] font-bold block">
             VIP LOGIN
           </span>
-          <h1 className="text-3xl font-bold text-[#1A1A1A] tracking-tight">
+          <h1
+            className="text-3xl sm:text-4xl font-medium text-[#363C46] tracking-tight"
+            style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+          >
             Welcome Back
           </h1>
-          <p className="text-xs text-[#8A8A85] font-normal">
+          <p className="text-xs text-[#5D6472] font-normal">
             Sign in to access your curated portfolio and saved properties.
           </p>
         </div>
 
         {/* Card Form */}
-        <form onSubmit={handleSubmit} className="p-8 sm:p-10 rounded-3xl bg-white border border-[#E8E4DA] shadow-[0_20px_40px_rgba(0,0,0,0.06)] space-y-6">
+        <form onSubmit={handleSubmit} className="p-8 sm:p-10 rounded-xl bg-white border border-[rgba(93,100,114,0.15)] shadow-[0_12px_32px_rgba(54,60,70,0.06)] space-y-6">
           
           {/* Email */}
           <div className="space-y-1.5">
-            <label className="text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold block">
+            <label className="text-[10px] uppercase tracking-wider text-[#5D6472] font-bold block">
               Email Address *
             </label>
             <div className="relative">
@@ -76,32 +79,32 @@ const LoginPage = () => {
                 placeholder="name@domain.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={`w-full bg-[#F4F1EA] border ${errors.email ? 'border-red-500' : 'border-[#E8E4DA]'} rounded-xl pl-10 pr-4 py-3 text-xs text-[#1A1A1A] font-medium placeholder-[#8A8A85] outline-none focus:border-[#F5A623]`}
+                className={`w-full bg-[#E0EEE9]/50 border ${errors.email ? 'border-red-500' : 'border-[rgba(93,100,114,0.20)]'} rounded-lg pl-10 pr-4 py-3 text-xs text-[#363C46] font-medium placeholder-[#5D6472]/60 outline-none focus:border-[#CFB6A8] transition-all`}
               />
-              <Mail className="w-4 h-4 text-[#F5A623] absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Mail className="w-4 h-4 text-[#CFB6A8] absolute left-3.5 top-1/2 -translate-y-1/2" />
             </div>
             {errors.email && <p className="text-[10px] text-red-500 font-bold">{errors.email}</p>}
           </div>
 
           {/* Password */}
           <div className="space-y-1.5">
-            <label className="text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold block">Password *</label>
+            <label className="text-[10px] uppercase tracking-wider text-[#5D6472] font-bold block">Password *</label>
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className={`w-full bg-[#F4F1EA] border ${errors.password ? 'border-red-500' : 'border-[#E8E4DA]'} rounded-xl pl-10 pr-10 py-3 text-xs text-[#1A1A1A] font-medium placeholder-[#8A8A85] outline-none focus:border-[#F5A623]`}
+                className={`w-full bg-[#E0EEE9]/50 border ${errors.password ? 'border-red-500' : 'border-[rgba(93,100,114,0.20)]'} rounded-lg pl-10 pr-10 py-3 text-xs text-[#363C46] font-medium placeholder-[#5D6472]/60 outline-none focus:border-[#CFB6A8] transition-all`}
               />
-              <Lock className="w-4 h-4 text-[#F5A623] absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Lock className="w-4 h-4 text-[#CFB6A8] absolute left-3.5 top-1/2 -translate-y-1/2" />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8A8A85] hover:text-[#1A1A1A] focus:outline-none cursor-pointer"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#5D6472] hover:text-[#363C46] focus:outline-none cursor-pointer"
                 title={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? <EyeOff className="w-4 h-4 text-[#F5A623]" /> : <Eye className="w-4 h-4" />}
+                {showPassword ? <EyeOff className="w-4 h-4 text-[#CFB6A8]" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
             {errors.password && <p className="text-[10px] text-red-500 font-bold">{errors.password}</p>}
@@ -109,19 +112,19 @@ const LoginPage = () => {
 
           {/* Remember Me & Forgot Password */}
           <div className="flex items-center justify-between text-xs font-sans">
-            <label className="flex items-center gap-2 cursor-pointer text-[#8A8A85] hover:text-[#1A1A1A] font-medium">
+            <label className="flex items-center gap-2 cursor-pointer text-[#5D6472] hover:text-[#363C46] font-medium">
               <input
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="accent-[#F5A623] cursor-pointer"
+                className="accent-[#CFB6A8] cursor-pointer"
               />
               Remember Me
             </label>
             <button
               type="button"
               onClick={handleForgotPassword}
-              className="text-[#F5A623] hover:underline text-xs cursor-pointer font-bold"
+              className="text-[#CFB6A8] hover:underline text-xs cursor-pointer font-bold"
             >
               Forgot Password?
             </button>
@@ -131,15 +134,15 @@ const LoginPage = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-4 bg-[#1A1A1A] hover:bg-black text-white font-bold text-xs tracking-[0.2em] uppercase rounded-full shadow-md cursor-pointer flex items-center justify-center gap-2 transition-all duration-300"
+            className="w-full py-3.5 bg-[#363C46] hover:bg-[#1A1A1A] text-white font-bold text-xs tracking-[0.2em] uppercase rounded-lg shadow-sm cursor-pointer flex items-center justify-center gap-2 transition-all duration-300"
           >
             <span>{isSubmitting ? 'VERIFYING CREDENTIALS...' : 'LOGIN'}</span>
-            <ArrowRight className="w-4 h-4 text-[#F5A623]" />
+            <ArrowRight className="w-4 h-4 text-[#CFB6A8]" />
           </button>
 
-          <p className="text-center text-xs text-[#8A8A85] font-normal">
+          <p className="text-center text-xs text-[#5D6472] font-normal">
             Don't have an account?{' '}
-            <Link to="/signup" className="text-[#F5A623] hover:underline font-bold">Create Account</Link>
+            <Link to="/signup" className="text-[#CFB6A8] hover:underline font-bold">Create Account</Link>
           </p>
         </form>
 

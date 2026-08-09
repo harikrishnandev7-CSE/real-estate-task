@@ -3,7 +3,6 @@ import { motion, useReducedMotion } from 'framer-motion';
 
 const EASE_OUT = [0.16, 1, 0.3, 1];
 
-// 5 Architectural Tiers representing a luxury rising tower
 const BUILDING_TIERS = [
   { id: 'podium', label: 'Plaza Podium', width: 140, height: 18, strokeWidth: 2, rx: 3 },
   { id: 'base', label: 'Lower Residences', width: 116, height: 26, strokeWidth: 1.8, rx: 2 },
@@ -29,17 +28,14 @@ const Preloader = ({ onComplete }) => {
       return () => clearTimeout(t);
     }
 
-    // Phase 1 -> Phase 2 (Building built, reveal logo at 1.1s)
     const t1 = setTimeout(() => {
       setPhase('logo');
     }, 1100);
 
-    // Phase 2 -> Phase 3 (Reverse collapse & exit curtain at 1.9s)
     const t2 = setTimeout(() => {
       setPhase('exit');
     }, 1900);
 
-    // Final completion trigger at 2.5s
     const t3 = setTimeout(() => {
       onCompleteRef.current?.();
     }, 2500);
@@ -51,140 +47,95 @@ const Preloader = ({ onComplete }) => {
     };
   }, [shouldReduceMotion]);
 
-  // Reduced motion accessible fallback
   if (shouldReduceMotion) {
     return (
       <motion.div
         key="preloader-overlay"
         initial={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
-        className="fixed inset-0 bg-[#F4F1EA] z-[9999] flex flex-col items-center justify-center font-sans"
+        transition={{ duration: 0.3 }}
+        className="fixed inset-0 z-[9999] bg-[#E0EEE9] flex items-center justify-center font-sans"
       >
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="flex flex-col items-center gap-3"
-        >
-          <span className="font-bold text-3xl md:text-4xl text-[#1A1A1A] tracking-[0.3em]">
+        <div className="text-center space-y-2">
+          <span
+            className="text-2xl font-bold text-[#363C46] tracking-[0.25em]"
+            style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+          >
             IMPERIA ESTATES
           </span>
-          <div className="h-[2px] w-12 bg-[#F5A623]" />
-          <span className="text-[10px] uppercase tracking-[0.35em] text-[#8A8A85] font-semibold">
-            LUXURY REAL ESTATE & INVESTMENTS
-          </span>
-        </motion.div>
+          <div className="h-0.5 w-12 bg-[#CFB6A8] mx-auto rounded-full" />
+        </div>
       </motion.div>
     );
   }
 
   return (
     <motion.div
-      key="preloader-overlay"
-      initial={{ y: '0%' }}
-      animate={{ y: 0 }}
-      exit={{ y: '-100%' }}
-      transition={{ duration: 0.65, ease: [0.76, 0, 0.24, 1] }}
-      className="fixed inset-0 bg-[#F4F1EA] z-[9999] flex flex-col items-center justify-center overflow-hidden font-sans select-none"
+      key="preloader-curtain"
+      initial={{ opacity: 1 }}
+      animate={phase === 'exit' ? { opacity: 0 } : { opacity: 1 }}
+      transition={{ duration: 0.55, ease: EASE_OUT }}
+      className="fixed inset-0 z-[9999] bg-[#E0EEE9] flex flex-col items-center justify-center font-sans overflow-hidden select-none pointer-events-auto"
     >
-      <div className="relative flex flex-col items-center justify-center p-6">
+      <div className="relative flex flex-col items-center justify-center w-full max-w-sm px-6">
         
-        {/* 3D Perspective Scene Container */}
-        <div
-          className="relative w-64 h-56 flex flex-col items-center justify-end pb-2"
-          style={{
-            perspective: 900,
-            perspectiveOrigin: '50% 85%',
-          }}
-        >
-          {/* 3D Rotated Isometric Building Assembly Frame */}
-          <div
-            className="relative flex flex-col-reverse items-center justify-start gap-1.5"
-            style={{
-              transformStyle: 'preserve-3d',
-              transform: 'rotateX(20deg) rotateY(-12deg)',
-            }}
-          >
-            {BUILDING_TIERS.map((tier, idx) => {
-              const isExit = phase === 'exit';
+        {/* Architectural Tower Blueprint Drawing Animation */}
+        <div className="relative w-48 h-44 flex flex-col-reverse items-center justify-start pb-2">
+          {BUILDING_TIERS.map((tier, idx) => {
+            const delayTime = idx * 0.12;
+            return (
+              <motion.div
+                key={tier.id}
+                initial={{ scaleX: 0, opacity: 0, y: 10 }}
+                animate={
+                  phase === 'exit'
+                    ? { scaleX: 0, opacity: 0, y: -10 }
+                    : { scaleX: 1, opacity: 1, y: 0 }
+                }
+                transition={{
+                  duration: 0.5,
+                  delay: phase === 'exit' ? (4 - idx) * 0.05 : delayTime,
+                  ease: EASE_OUT,
+                }}
+                style={{
+                  width: `${tier.width}px`,
+                  height: `${tier.height}px`,
+                  borderRadius: `${tier.rx}px`,
+                }}
+                className="my-[1.5px] border border-[#363C46]/40 bg-white/70 shadow-xs relative flex items-center justify-center overflow-hidden"
+              >
+                {/* Inner architectural grid line */}
+                <div className="absolute inset-0 border-t border-[rgba(93,100,114,0.15)] pointer-events-none" />
 
-              return (
+                {/* Micro laser scan pulse line */}
                 <motion.div
-                  key={tier.id}
-                  initial={{ opacity: 0, rotateX: -30, y: 24, scale: 0.85 }}
-                  animate={
-                    isExit
-                      ? { opacity: 0, scale: 0.8, y: 12 }
-                      : { opacity: 1, rotateX: 0, y: 0, scale: 1 }
-                  }
+                  initial={{ x: '-100%' }}
+                  animate={{ x: '100%' }}
                   transition={{
-                    duration: isExit ? 0.35 : 0.65,
-                    delay: isExit ? (BUILDING_TIERS.length - 1 - idx) * 0.05 : idx * 0.12,
-                    ease: EASE_OUT,
+                    repeat: Infinity,
+                    duration: 1.2,
+                    ease: 'linear',
+                    delay: delayTime + 0.3,
                   }}
-                  className="relative flex items-center justify-center"
-                  style={{ transformStyle: 'preserve-3d' }}
-                >
-                  <svg
-                    width={tier.width}
-                    height={tier.height}
-                    viewBox={`0 0 ${tier.width} ${tier.height}`}
-                    className="overflow-visible"
-                  >
-                    {/* Outer Floor Plate Border */}
-                    <rect
-                      x="1"
-                      y="1"
-                      width={tier.width - 2}
-                      height={tier.height - 2}
-                      rx={tier.rx}
-                      fill="rgba(255, 255, 255, 0.95)"
-                      stroke="#1A1A1A"
-                      strokeWidth={tier.strokeWidth}
-                      className="shadow-xs"
-                    />
-                    {/* Internal Architectural Façade Grid Lines */}
-                    <line
-                      x1={tier.width * 0.33}
-                      y1="2"
-                      x2={tier.width * 0.33}
-                      y2={tier.height - 2}
-                      stroke="#8A8A85"
-                      strokeWidth="0.8"
-                      strokeDasharray="2 2"
-                      opacity="0.5"
-                    />
-                    <line
-                      x1={tier.width * 0.66}
-                      y1="2"
-                      x2={tier.width * 0.66}
-                      y2={tier.height - 2}
-                      stroke="#8A8A85"
-                      strokeWidth="0.8"
-                      strokeDasharray="2 2"
-                      opacity="0.5"
-                    />
-                  </svg>
-                </motion.div>
-              );
-            })}
+                  className="absolute inset-y-0 w-8 bg-gradient-to-r from-transparent via-[#CFB6A8]/40 to-transparent pointer-events-none"
+                />
+              </motion.div>
+            );
+          })}
 
-            {/* Amber Blueprint Tracer Guideline Drawing Upward */}
-            <svg
-              className="absolute inset-0 w-full h-full pointer-events-none overflow-visible z-20"
-              style={{ transform: 'translateZ(12px)' }}
-            >
+          {/* Vertical axis blueprint tracer line */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
               <motion.line
-                x1="12%"
+                x1="50%"
                 y1="100%"
-                x2="12%"
+                x2="50%"
                 y2="0%"
-                stroke="#F5A623"
-                strokeWidth="2"
-                strokeLinecap="round"
+                stroke="#CFB6A8"
+                strokeWidth="1.5"
+                strokeDasharray="3 3"
                 initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: [0, 1, 1, 0] }}
+                animate={{ pathLength: 1, opacity: [0, 0.8, 0.8, 0] }}
                 transition={{ duration: 1.1, ease: 'easeInOut' }}
               />
             </svg>
@@ -203,21 +154,24 @@ const Preloader = ({ onComplete }) => {
                 : { opacity: 0, y: 12, scale: 0.96 }
             }
             transition={{ duration: 0.45, ease: EASE_OUT }}
-            className="flex flex-col items-center gap-2"
+            className="flex flex-col items-center gap-2 text-center"
           >
-            <span className="font-extrabold text-2xl sm:text-3xl md:text-4xl text-[#1A1A1A] tracking-[0.3em] font-sans">
+            <span
+              className="font-semibold text-2xl sm:text-3xl text-[#363C46] tracking-[0.25em]"
+              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+            >
               IMPERIA ESTATES
             </span>
             
-            {/* Amber Underline Drawing Left-To-Right */}
+            {/* Underline Drawing Left-To-Right */}
             <motion.div
               initial={{ scaleX: 0 }}
               animate={phase === 'logo' || phase === 'exit' ? { scaleX: 1 } : { scaleX: 0 }}
               transition={{ duration: 0.5, delay: 0.12, ease: EASE_OUT }}
-              className="h-[2.5px] w-20 bg-[#F5A623] origin-center rounded-full"
+              className="h-[2px] w-16 bg-[#CFB6A8] origin-center rounded-full"
             />
 
-            <span className="text-[10px] uppercase tracking-[0.35em] text-[#8A8A85] font-extrabold font-sans mt-0.5">
+            <span className="text-[10px] uppercase tracking-[0.3em] text-[#5D6472] font-bold font-sans mt-0.5">
               LUXURY REAL ESTATE & INVESTMENTS
             </span>
           </motion.div>

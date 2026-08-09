@@ -30,7 +30,6 @@ const MeetExperts = () => {
 
   const shouldReduceMotion = useReducedMotion();
 
-  // Motion variants for Meet Experts Section
   const containerVariants = {
     hidden: {},
     visible: {
@@ -57,8 +56,8 @@ const MeetExperts = () => {
     },
     hover: {
       y: shouldReduceMotion ? 0 : -8,
-      borderColor: "#F5A623",
-      boxShadow: "0 25px 50px rgba(0, 0, 0, 0.1)",
+      borderColor: "#CFB6A8",
+      boxShadow: "0 20px 40px rgba(54, 60, 70, 0.1)",
       transition: {
         duration: 0.45,
         ease: [0.16, 1, 0.3, 1]
@@ -92,19 +91,22 @@ const MeetExperts = () => {
   };
 
   return (
-    <section className="py-24 md:py-28 lg:py-32 bg-[#F4F1EA] relative border-t border-[#E8E4DA]">
+    <section className="py-24 md:py-28 lg:py-32 bg-[#E0EEE9] relative border-t border-[rgba(93,100,114,0.15)] font-sans">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div className="space-y-4">
-            <span className="text-xs uppercase tracking-[0.25em] text-[#F5A623] font-bold block font-sans">PARTNERS DIRECTORY</span>
-            <h2 className="text-3xl md:text-5xl font-bold text-[#1A1A1A] leading-tight font-sans tracking-tight">
+            <span className="text-xs uppercase tracking-[0.25em] text-[#CFB6A8] font-bold block font-sans">PARTNERS DIRECTORY</span>
+            <h2
+              className="text-3xl md:text-5xl font-medium text-[#363C46] leading-tight tracking-tight"
+              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+            >
               Meet Our Private <br />
-              <span className="font-normal text-[#8A8A85]">Wealth Advisors</span>
+              <span className="font-normal text-[#5D6472]">Wealth Advisors</span>
             </h2>
           </div>
-          <p className="text-[#8A8A85] font-normal text-sm md:text-base max-w-md leading-relaxed font-sans">
+          <p className="text-[#5D6472] font-normal text-sm md:text-base max-w-md leading-relaxed font-sans">
             Our firm is led by senior advisors who integrate investment banking principles, property taxation experts, and top real estate attorneys.
           </p>
         </div>
@@ -122,10 +124,10 @@ const MeetExperts = () => {
               key={idx}
               variants={cardVariants}
               whileHover="hover"
-              className="group relative flex flex-col bg-white border border-[#E8E4DA] rounded-3xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.06)] cursor-pointer transition-all duration-300"
+              className="group relative flex flex-col bg-white border border-[rgba(93,100,114,0.15)] rounded-xl overflow-hidden shadow-[0_12px_32px_rgba(54,60,70,0.06)] cursor-pointer transition-all duration-300"
             >
               {/* Profile Image & Overlay */}
-              <div className="relative h-[360px] overflow-hidden bg-stone-100">
+              <div className="relative h-[360px] overflow-hidden bg-[#E0EEE9]">
                 <ImageWithSkeleton 
                   variants={imageVariants}
                   src={exp.image} 
@@ -139,13 +141,13 @@ const MeetExperts = () => {
                 {/* Floating Contact Icons on Hover */}
                 <motion.div 
                   variants={overlayVariants}
-                  className="absolute inset-0 flex items-center justify-center gap-4 bg-black/20 backdrop-blur-[2px] z-20"
+                  className="absolute inset-0 flex items-center justify-center gap-4 bg-[#363C46]/20 backdrop-blur-[2px] z-20"
                 >
                   <motion.a 
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     href={`mailto:${exp.email}`}
-                    className="p-3.5 rounded-full bg-white text-[#1A1A1A] hover:bg-[#F5A623] hover:text-white transition-all duration-300 flex items-center justify-center shadow-md"
+                    className="p-3.5 rounded-full bg-white text-[#363C46] hover:bg-[#CFB6A8] hover:text-white transition-all duration-300 flex items-center justify-center shadow-xs"
                     aria-label="Email"
                   >
                     <Mail className="w-4.5 h-4.5 stroke-[2]" />
@@ -154,7 +156,7 @@ const MeetExperts = () => {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     href="#" 
-                    className="p-3.5 rounded-full bg-white text-[#1A1A1A] hover:bg-[#F5A623] hover:text-white transition-all duration-300 flex items-center justify-center shadow-md"
+                    className="p-3.5 rounded-full bg-white text-[#363C46] hover:bg-[#CFB6A8] hover:text-white transition-all duration-300 flex items-center justify-center shadow-xs"
                     aria-label="LinkedIn"
                   >
                     <svg className="w-4.5 h-4.5 fill-current" viewBox="0 0 24 24">
@@ -164,7 +166,7 @@ const MeetExperts = () => {
                   <motion.button 
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    className="p-3.5 rounded-full bg-white text-[#1A1A1A] hover:bg-[#F5A623] hover:text-white transition-all duration-300 flex items-center justify-center shadow-md"
+                    className="p-3.5 rounded-full bg-white text-[#363C46] hover:bg-[#CFB6A8] hover:text-white transition-all duration-300 flex items-center justify-center shadow-xs"
                     aria-label="Book Call"
                   >
                     <PhoneCall className="w-4.5 h-4.5 stroke-[2]" />
@@ -173,14 +175,17 @@ const MeetExperts = () => {
               </div>
 
               {/* Card Footer Detail */}
-              <div className="p-6 border-t border-[#E8E4DA] space-y-2 font-sans">
-                <h3 className="text-xl font-bold text-[#1A1A1A] tracking-tight transition-colors duration-300 group-hover:text-[#F5A623]">
+              <div className="p-6 border-t border-[rgba(93,100,114,0.15)] space-y-2 font-sans">
+                <h3
+                  className="text-xl font-bold text-[#363C46] tracking-tight transition-colors duration-300 group-hover:text-[#CFB6A8]"
+                  style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                >
                   {exp.name}
                 </h3>
-                <p className="text-[#F5A623] text-xs font-bold uppercase tracking-wider">
+                <p className="text-[#CFB6A8] text-xs font-bold uppercase tracking-wider">
                   {exp.role}
                 </p>
-                <p className="text-[#8A8A85] text-[11px] font-normal leading-relaxed pt-1">
+                <p className="text-[#5D6472] text-[11px] font-normal leading-relaxed pt-1">
                   {exp.creds}
                 </p>
               </div>

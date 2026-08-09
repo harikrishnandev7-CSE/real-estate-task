@@ -2,18 +2,12 @@ import React, { useRef } from 'react';
 import { motion, useReducedMotion, useMotionValue, useSpring, useInView } from 'framer-motion';
 import { Shield, Scale, Users, CheckCircle, Coins, Compass, ArrowRight } from 'lucide-react';
 
-// Sub-component for premium editorial mosaic cards.
-// Parallax has been removed from all mosaic images — the spec limits
-// parallax to a single hero/featured image. Applying it to all 7 thumbnails
-// was spawning 7 independent useScroll listeners and 14 useTransform hooks
-// that recalculated on every scroll tick across the entire mosaic, which
-// was the primary source of the section-level jank.
 const ImageCard = ({ src, alt, caption, heightClass, variants }) => {
   return (
     <motion.div
       variants={variants}
       whileHover="hover"
-      className={`relative overflow-hidden rounded-2xl bg-[#0B0B0C] group cursor-pointer border border-white/5 hover:border-[#C8A15A]/35 hover:shadow-[0_8px_30px_rgba(200,161,90,0.15)] transition-[border-color,box-shadow] duration-300 w-full ${heightClass} will-change-transform lg:hover:-translate-y-[6px] sm:hover:-translate-y-[3px] hover:-translate-y-0`}
+      className={`relative overflow-hidden rounded-xl bg-[#363C46] group cursor-pointer border border-white/10 hover:border-[#CFB6A8]/40 hover:shadow-[0_12px_32px_rgba(54,60,70,0.12)] transition-[border-color,box-shadow] duration-300 w-full ${heightClass} will-change-transform lg:hover:-translate-y-[6px] sm:hover:-translate-y-[3px] hover:-translate-y-0`}
     >
       <div className="relative w-full h-full overflow-hidden">
         <motion.img
@@ -27,10 +21,8 @@ const ImageCard = ({ src, alt, caption, heightClass, variants }) => {
         />
       </div>
 
-      {/* Editorial Overlay — dark gradient at bottom */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none" />
 
-      {/* Sheen sweep on hover — a single premium light streak, not a looping effect */}
       <motion.div
         initial={{ x: '-120%', opacity: 0 }}
         whileHover={{ x: '120%', opacity: [0, 0.5, 0] }}
@@ -38,12 +30,10 @@ const ImageCard = ({ src, alt, caption, heightClass, variants }) => {
         className="absolute inset-y-0 left-0 w-1/3 z-10 pointer-events-none bg-gradient-to-r from-transparent via-white/25 to-transparent -skew-x-12"
       />
 
-      {/* Thin Gold Border Overlay */}
-      <div className="absolute inset-0 border border-[#C8A15A]/0 group-hover:border-[#C8A15A]/35 rounded-2xl transition-[border-color,box-shadow] duration-300 z-20 pointer-events-none shadow-[inset_0_0_10px_rgba(200,161,90,0.15)]" />
+      <div className="absolute inset-0 border border-[#CFB6A8]/0 group-hover:border-[#CFB6A8]/40 rounded-xl transition-[border-color,box-shadow] duration-300 z-20 pointer-events-none" />
 
-      {/* Caption details — slide-up on hover, hidden on mobile */}
       <div className="absolute bottom-4 left-4 right-4 z-20 opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition-[opacity,transform] duration-300 pointer-events-none hidden sm:block">
-        <p className="font-serif text-[12px] tracking-widest text-[#C8A15A] uppercase font-semibold leading-relaxed">
+        <p className="font-sans text-[11px] tracking-widest text-[#CFB6A8] uppercase font-bold leading-relaxed">
           {caption}
         </p>
       </div>
@@ -51,10 +41,6 @@ const ImageCard = ({ src, alt, caption, heightClass, variants }) => {
   );
 };
 
-// Sub-component for feature cards — subtle pointer-driven tilt so each card
-// feels like a physical plaque catching light. The card owns its own scroll
-// entry trigger (useInView once:true) and caches the bounding rect on
-// mouseenter rather than on every mousemove to avoid layout-thrash jank.
 const FeatureCard = ({ feat, index, reduceMotion }) => {
   const Icon = feat.icon;
   const cardRef = useRef(null);
@@ -116,7 +102,7 @@ const FeatureCard = ({ feat, index, reduceMotion }) => {
         transformPerspective: 900,
         willChange: 'transform',
       }}
-      className="group relative flex flex-col justify-between p-8 bg-white border border-[#E8E4DA] hover:border-[#F5A623] rounded-3xl shadow-[0_20px_40px_rgba(0,0,0,0.06)] cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-[0_25px_50px_rgba(0,0,0,0.1)]"
+      className="group relative flex flex-col justify-between p-8 bg-white border border-[rgba(93,100,114,0.15)] hover:border-[#CFB6A8] rounded-xl shadow-[0_12px_32px_rgba(54,60,70,0.06)] cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-[0_20px_40px_rgba(54,60,70,0.1)]"
     >
       {/* Faint index numeral */}
       <motion.span
@@ -124,12 +110,12 @@ const FeatureCard = ({ feat, index, reduceMotion }) => {
         initial={{ opacity: 0, x: reduceMotion ? 0 : 10 }}
         animate={isInView ? { opacity: 0.12, x: 0 } : { opacity: 0, x: reduceMotion ? 0 : 10 }}
         transition={{ duration: 0.8, delay: delay + 0.15, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute -top-3 right-3 text-[88px] leading-none font-sans font-black text-stone-300 select-none pointer-events-none"
+        className="absolute -top-3 right-3 text-[88px] leading-none font-sans font-black text-[#5D6472] select-none pointer-events-none"
       >
         {feat.num}
       </motion.span>
 
-      {/* Amber cursor glow */}
+      {/* Dark Vanilla cursor glow */}
       {!reduceMotion && (
         <motion.div
           style={{
@@ -139,19 +125,19 @@ const FeatureCard = ({ feat, index, reduceMotion }) => {
             height: GLOW_SIZE,
             willChange: 'transform',
           }}
-          className="absolute top-0 left-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-[radial-gradient(circle,rgba(245,166,35,0.15),transparent_70%)]"
+          className="absolute top-0 left-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-[radial-gradient(circle,rgba(207,182,168,0.2),transparent_70%)]"
         />
       )}
 
       <div className="space-y-6 relative z-10 font-sans">
-        {/* Amber Circular Icon Badge with Spring Bounce */}
+        {/* Dark Vanilla Circular Icon Badge */}
         <motion.div
           initial={{ opacity: 0, scale: 0, rotate: reduceMotion ? 0 : -14 }}
           animate={isInView ? { opacity: 1, scale: 1, rotate: 0 } : { opacity: 0, scale: 0, rotate: reduceMotion ? 0 : -14 }}
           transition={{ type: 'spring', stiffness: 300, damping: 18, delay: delay + 0.2 }}
           whileHover={reduceMotion ? {} : { scale: 1.1 }}
           style={{ willChange: 'transform' }}
-          className="w-12 h-12 rounded-full flex items-center justify-center bg-[#F5A623] text-white shadow-md transition-transform duration-300"
+          className="w-12 h-12 rounded-lg flex items-center justify-center bg-[#CFB6A8] text-white shadow-xs transition-transform duration-300"
         >
           <Icon className="w-5 h-5 stroke-[2]" />
         </motion.div>
@@ -163,10 +149,13 @@ const FeatureCard = ({ feat, index, reduceMotion }) => {
           transition={{ duration: 0.6, delay: delay + 0.28, ease: [0.16, 1, 0.3, 1] }}
           className="space-y-2.5"
         >
-          <h3 className="text-xl font-bold font-sans text-[#1A1A1A] tracking-tight transition-colors duration-300 group-hover:text-[#F5A623]">
+          <h3
+            className="text-xl font-bold text-[#363C46] tracking-tight transition-colors duration-300 group-hover:text-[#CFB6A8]"
+            style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+          >
             {feat.title}
           </h3>
-          <p className="text-[#8A8A85] text-xs leading-relaxed font-normal font-sans">
+          <p className="text-[#5D6472] text-xs leading-relaxed font-normal font-sans">
             {feat.desc}
           </p>
         </motion.div>
@@ -177,10 +166,10 @@ const FeatureCard = ({ feat, index, reduceMotion }) => {
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.5, delay: delay + 0.4 }}
-        className="pt-6 flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider text-[#8A8A85] font-sans group-hover:text-[#1A1A1A] transition-colors relative z-10"
+        className="pt-6 flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider text-[#5D6472] font-sans group-hover:text-[#363C46] transition-colors relative z-10"
       >
         <span>LEARN MORE</span>
-        <ArrowRight className="w-4 h-4 text-[#F5A623] transition-transform duration-300 group-hover:translate-x-1.5" />
+        <ArrowRight className="w-4 h-4 text-[#CFB6A8] transition-transform duration-300 group-hover:translate-x-1.5" />
       </motion.div>
     </motion.div>
   );
@@ -228,7 +217,6 @@ const WhyChooseUs = () => {
 
   const shouldReduceMotion = useReducedMotion();
 
-  // Mosaic stagger container — feature cards manage their own scroll triggers
   const containerVariants = {
     hidden: {},
     visible: {
@@ -238,8 +226,6 @@ const WhyChooseUs = () => {
     }
   };
 
-  // Entrance: opacity + y only. Scale has been removed — scale on 7 mosaic
-  // items all firing simultaneously added unnecessary compositor overhead.
   const mosaicItemVariants = {
     hidden: {
       opacity: 0,
@@ -256,16 +242,13 @@ const WhyChooseUs = () => {
   };
 
   return (
-    <section className="py-24 md:py-28 lg:py-32 bg-[#F4F1EA] text-[#1A1A1A] relative border-t border-[#E8E4DA]">
-      {/* Ambient atmosphere — fades in once on mount. The previous version
-          oscillated x/y infinitely (repeat: Infinity), keeping the compositor
-          active for the entire time the section was in the DOM. */}
+    <section className="py-24 md:py-28 lg:py-32 bg-[#E0EEE9] text-[#363C46] relative border-t border-[rgba(93,100,114,0.15)] font-sans">
       {!shouldReduceMotion && (
         <motion.div
           aria-hidden="true"
           className="absolute -top-1/3 left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full pointer-events-none"
           style={{
-            background: 'radial-gradient(circle, rgba(245,166,35,0.06) 0%, transparent 65%)',
+            background: 'radial-gradient(circle, rgba(207,182,168,0.08) 0%, transparent 65%)',
           }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -283,7 +266,7 @@ const WhyChooseUs = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="text-xs uppercase tracking-[0.25em] text-[#F5A623] font-bold inline-block font-sans"
+              className="text-xs uppercase tracking-[0.25em] text-[#CFB6A8] font-bold inline-block font-sans"
             >
               VALUE PROPOSITION
             </motion.span>
@@ -292,17 +275,18 @@ const WhyChooseUs = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="text-3xl md:text-5xl font-bold text-[#1A1A1A] leading-tight font-sans tracking-tight"
+              className="text-3xl md:text-5xl font-medium text-[#363C46] leading-tight tracking-tight"
+              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
             >
               Why Discerning Clients <br />
-              <span className="relative inline-block font-normal text-[#8A8A85]">
+              <span className="relative inline-block font-normal text-[#5D6472]">
                 Choose IMPERIA ESTATES
                 <motion.span
                   initial={{ scaleX: 0 }}
                   whileInView={{ scaleX: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.9, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute left-0 -bottom-1 h-[2px] w-full origin-left bg-[#F5A623]"
+                  className="absolute left-0 -bottom-1 h-[2px] w-full origin-left bg-[#CFB6A8]"
                 />
               </span>
             </motion.h2>
@@ -312,13 +296,13 @@ const WhyChooseUs = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="text-[#8A8A85] font-normal text-sm md:text-base max-w-md leading-relaxed font-sans"
+            className="text-[#5D6472] font-normal text-sm md:text-base max-w-md leading-relaxed font-sans"
           >
             We bridge the gap between architectural ambition and secure asset ownership, delivering institutional security with a personalized luxury touch.
           </motion.p>
         </div>
 
-        {/* Luxury Image Mosaic — stagger-revealed via variants, no per-image scroll listeners */}
+        {/* Luxury Image Mosaic */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -403,7 +387,7 @@ const WhyChooseUs = () => {
           </div>
         </motion.div>
 
-        {/* Feature Cards Grid — each card owns its own scroll-entry trigger */}
+        {/* Feature Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-20 lg:-mt-16">
           {features.map((feat, idx) => (
             <FeatureCard

@@ -18,39 +18,44 @@ const LandAreaConverter = ({ numericArea = 2400 }) => {
   const acres = (sqft / 43560).toFixed(4);
 
   return (
-    <div className="bg-white border border-[#E8E4DA] rounded-3xl p-6 space-y-4 shadow-sm">
+    <div className="bg-white border border-[rgba(93,100,114,0.15)] rounded-xl p-6 space-y-4 shadow-xs">
       <div className="flex items-center gap-3">
-        <Calculator className="w-5 h-5 text-[#F5A623]" />
+        <Calculator className="w-5 h-5 text-[#CFB6A8]" />
         <div>
-          <h4 className="text-sm font-bold text-[#1A1A1A]">Land Area Unit Converter</h4>
-          <p className="text-[11px] text-[#8A8A85]">Enter square footage to convert into South Indian land units</p>
+          <h4
+            className="text-sm font-bold text-[#363C46]"
+            style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+          >
+            Land Area Unit Converter
+          </h4>
+          <p className="text-[11px] text-[#5D6472]">Enter square footage to convert into South Indian land units</p>
         </div>
       </div>
 
-      <div className="space-y-1.5">
-        <label className="text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold block">
+      <div className="space-y-1.5 font-sans">
+        <label className="text-[10px] uppercase tracking-wider text-[#5D6472] font-bold block">
           Area in Sq.Ft.
         </label>
         <input
           type="number"
           value={sqft}
           onChange={(e) => setSqft(Number(e.target.value) || 0)}
-          className="w-full bg-[#F4F1EA] border border-[#E8E4DA] rounded-xl px-4 py-2.5 text-xs text-[#1A1A1A] font-bold outline-none focus:border-[#F5A623]"
+          className="w-full bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] rounded-lg px-4 py-2.5 text-xs text-[#363C46] font-bold outline-none focus:border-[#CFB6A8]"
         />
       </div>
 
-      <div className="grid grid-cols-3 gap-3 text-center">
-        <div className="p-3 bg-[#F4F1EA]/60 border border-[#E8E4DA] rounded-xl">
-          <p className="text-[10px] uppercase text-[#8A8A85] font-bold">Cents</p>
-          <p className="text-sm font-extrabold text-[#F5A623]">{cents}</p>
+      <div className="grid grid-cols-3 gap-3 text-center font-sans">
+        <div className="p-3 bg-[#E0EEE9]/40 border border-[rgba(93,100,114,0.15)] rounded-lg">
+          <p className="text-[10px] uppercase text-[#5D6472] font-bold">Cents</p>
+          <p className="text-sm font-bold text-[#CFB6A8]">{cents}</p>
         </div>
-        <div className="p-3 bg-[#F4F1EA]/60 border border-[#E8E4DA] rounded-xl">
-          <p className="text-[10px] uppercase text-[#8A8A85] font-bold">Sq. Meters</p>
-          <p className="text-sm font-extrabold text-[#1A1A1A]">{sqMeters}</p>
+        <div className="p-3 bg-[#E0EEE9]/40 border border-[rgba(93,100,114,0.15)] rounded-lg">
+          <p className="text-[10px] uppercase text-[#5D6472] font-bold">Sq. Meters</p>
+          <p className="text-sm font-bold text-[#363C46]">{sqMeters}</p>
         </div>
-        <div className="p-3 bg-[#F4F1EA]/60 border border-[#E8E4DA] rounded-xl">
-          <p className="text-[10px] uppercase text-[#8A8A85] font-bold">Acres</p>
-          <p className="text-sm font-extrabold text-[#1A1A1A]">{acres}</p>
+        <div className="p-3 bg-[#E0EEE9]/40 border border-[rgba(93,100,114,0.15)] rounded-lg">
+          <p className="text-[10px] uppercase text-[#5D6472] font-bold">Acres</p>
+          <p className="text-sm font-bold text-[#363C46]">{acres}</p>
         </div>
       </div>
     </div>
@@ -196,14 +201,14 @@ const PropertyDetails = () => {
 
   return (
     <>
-    <div className="pt-24 pb-28 md:pb-36 min-h-screen bg-[#F4F1EA] text-[#1A1A1A]">
+    <div className="pt-24 pb-28 md:pb-36 min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
       {/* Back Link */}
       <div className="max-w-7xl mx-auto px-6 md:px-12 pt-6">
         <button 
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-xs text-[#8A8A85] hover:text-[#1A1A1A] transition-colors uppercase font-bold tracking-wider font-sans cursor-pointer mb-6"
+          className="flex items-center gap-2 text-xs text-[#5D6472] hover:text-[#363C46] transition-colors uppercase font-bold tracking-wider font-sans cursor-pointer mb-6"
         >
-          <ArrowLeft className="w-4 h-4 text-[#F5A623]" />
+          <ArrowLeft className="w-4 h-4 text-[#CFB6A8]" />
           Back to Discovery
         </button>
       </div>

@@ -32,11 +32,10 @@ const Testimonials = () => {
   ];
 
   const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState(0); // -1 for left, 1 for right
+  const [direction, setDirection] = useState(0);
 
   const shouldReduceMotion = useReducedMotion();
 
-  // Motion variants for Testimonials Section Reveal
   const sectionVariants = {
     hidden: { 
       opacity: 0, 
@@ -54,10 +53,9 @@ const Testimonials = () => {
     }
   };
 
-  // Carousel slider variants with crossfade and horizontal offset
   const testimonialVariants = {
     enter: (dir) => ({
-      x: shouldReduceMotion ? 0 : (dir > 0 ? 20 : -20), // Small horizontal offset 20px
+      x: shouldReduceMotion ? 0 : (dir > 0 ? 20 : -20),
       opacity: 0,
       scale: 0.99
     }),
@@ -85,8 +83,8 @@ const Testimonials = () => {
     hover: {
       y: shouldReduceMotion ? 0 : -6,
       scale: 1.01,
-      borderColor: "rgba(197, 168, 111, 0.25)",
-      boxShadow: "0 20px 40px rgba(0, 0, 0, 0.5)",
+      borderColor: "#CFB6A8",
+      boxShadow: "0 20px 40px rgba(54, 60, 70, 0.08)",
       transition: {
         duration: 0.4,
         ease: [0.16, 1, 0.3, 1]
@@ -105,19 +103,22 @@ const Testimonials = () => {
   };
 
   return (
-    <section className="py-24 md:py-28 lg:py-32 bg-white relative border-t border-[#E8E4DA] overflow-hidden">
+    <section className="py-24 md:py-28 lg:py-32 bg-[#E0EEE9] relative border-t border-[rgba(93,100,114,0.15)] overflow-hidden font-sans">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div className="space-y-4">
-            <span className="text-xs uppercase tracking-[0.25em] text-[#F5A623] font-bold block font-sans">TESTIMONIALS</span>
-            <h2 className="text-3xl md:text-5xl font-bold text-[#1A1A1A] leading-tight font-sans tracking-tight">
+            <span className="text-xs uppercase tracking-[0.25em] text-[#CFB6A8] font-bold block font-sans">TESTIMONIALS</span>
+            <h2
+              className="text-3xl md:text-5xl font-medium text-[#363C46] leading-tight tracking-tight"
+              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+            >
               Trusted By Global <br />
-              <span className="font-normal text-[#8A8A85]">Leaders &amp; Creators</span>
+              <span className="font-normal text-[#5D6472]">Leaders &amp; Creators</span>
             </h2>
           </div>
-          <p className="text-[#8A8A85] font-normal text-sm md:text-base max-w-md leading-relaxed font-sans">
+          <p className="text-[#5D6472] font-normal text-sm md:text-base max-w-md leading-relaxed font-sans">
             Hear from our elite clients who have acquired architectural assets, custom villas, and high-capital office structures through our private office.
           </p>
         </div>
@@ -139,16 +140,16 @@ const Testimonials = () => {
               animate="center"
               exit="exit"
               whileHover="hover"
-              className="group w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center bg-[#F4F1EA] border border-[#E8E4DA] p-8 lg:p-12 rounded-3xl shadow-[0_20px_40px_rgba(0,0,0,0.06)] relative cursor-default transition-all duration-300"
+              className="group w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center bg-white border border-[rgba(93,100,114,0.15)] p-8 lg:p-12 rounded-xl shadow-[0_12px_32px_rgba(54,60,70,0.06)] relative cursor-default transition-all duration-300"
             >
               {/* Quote Graphic Icon */}
-              <div className="absolute top-8 right-8 text-stone-300 opacity-40 pointer-events-none select-none">
+              <div className="absolute top-8 right-8 text-[#5D6472] opacity-20 pointer-events-none select-none">
                 <Quote className="w-16 h-16 stroke-[1]" />
               </div>
 
               {/* Photo & acquired details */}
               <div className="lg:col-span-4 flex flex-col items-center text-center space-y-4 font-sans">
-                <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-[#F5A623] p-1 bg-white shadow-sm">
+                <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-[#CFB6A8] p-1 bg-white shadow-xs">
                   <ImageWithSkeleton 
                     src={testimonials[index].image} 
                     alt={testimonials[index].name} 
@@ -156,13 +157,16 @@ const Testimonials = () => {
                   />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-[#1A1A1A] tracking-tight">
+                  <h3
+                    className="text-lg font-bold text-[#363C46] tracking-tight"
+                    style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                  >
                     {testimonials[index].name}
                   </h3>
-                  <p className="text-[#8A8A85] text-xs font-normal mt-0.5">
+                  <p className="text-[#5D6472] text-xs font-normal mt-0.5">
                     {testimonials[index].role}
                   </p>
-                  <p className="text-[10px] uppercase tracking-wider text-[#F5A623] font-bold mt-3">
+                  <p className="text-[10px] uppercase tracking-wider text-[#CFB6A8] font-bold mt-3">
                     {testimonials[index].acquired}
                   </p>
                 </div>
@@ -171,19 +175,19 @@ const Testimonials = () => {
               {/* Text review detail */}
               <div className="lg:col-span-8 space-y-6 flex flex-col justify-between h-full font-sans">
                 {/* Rating stars */}
-                <div className="flex gap-1 text-[#F5A623]">
+                <div className="flex gap-1 text-[#CFB6A8]">
                   {Array.from({ length: testimonials[index].stars }).map((_, sIdx) => (
                     <Star key={sIdx} className="w-4 h-4 fill-current stroke-none" />
                   ))}
                 </div>
 
                 {/* Review Statement */}
-                <blockquote className="text-[#1A1A1A] text-base md:text-lg font-medium leading-relaxed">
+                <blockquote className="text-[#363C46] text-base md:text-lg font-medium leading-relaxed">
                   "{testimonials[index].quote}"
                 </blockquote>
 
                 {/* Micro divider line */}
-                <div className="w-12 h-[2px] bg-[#F5A623]" />
+                <div className="w-12 h-[2px] bg-[#CFB6A8]" />
               </div>
             </motion.div>
           </AnimatePresence>
@@ -194,19 +198,19 @@ const Testimonials = () => {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={handlePrev}
-              className="p-3.5 rounded-full border border-[#E8E4DA] bg-white hover:bg-[#F5A623] hover:text-white text-[#1A1A1A] transition-all duration-300 shadow-md cursor-pointer"
+              className="p-3.5 rounded-full border border-[rgba(93,100,114,0.15)] bg-white hover:bg-[#CFB6A8] hover:text-white text-[#363C46] transition-all duration-300 shadow-xs cursor-pointer"
               aria-label="Previous Testimonial"
             >
               <ChevronLeft className="w-5 h-5 stroke-[2]" />
             </motion.button>
-            <span className="text-[#8A8A85] text-xs font-bold tracking-widest font-mono">
+            <span className="text-[#5D6472] text-xs font-bold tracking-widest font-mono">
               0{index + 1} / 0{testimonials.length}
             </span>
             <motion.button 
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleNext}
-              className="p-3.5 rounded-full border border-[#E8E4DA] bg-white hover:bg-[#F5A623] hover:text-white text-[#1A1A1A] transition-all duration-300 shadow-md cursor-pointer"
+              className="p-3.5 rounded-full border border-[rgba(93,100,114,0.15)] bg-white hover:bg-[#CFB6A8] hover:text-white text-[#363C46] transition-all duration-300 shadow-xs cursor-pointer"
               aria-label="Next Testimonial"
             >
               <ChevronRight className="w-5 h-5 stroke-[2]" />

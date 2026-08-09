@@ -30,7 +30,6 @@ const LatestArticles = () => {
 
   const shouldReduceMotion = useReducedMotion();
 
-  // Motion variants with stagger and access checks
   const containerVariants = {
     hidden: {},
     visible: {
@@ -57,8 +56,8 @@ const LatestArticles = () => {
     },
     hover: {
       y: shouldReduceMotion ? 0 : -8,
-      borderColor: "#F5A623",
-      boxShadow: "0 25px 50px rgba(0, 0, 0, 0.1)",
+      borderColor: "#CFB6A8",
+      boxShadow: "0 20px 40px rgba(54, 60, 70, 0.1)",
       transition: {
         duration: 0.45,
         ease: [0.16, 1, 0.3, 1]
@@ -79,21 +78,21 @@ const LatestArticles = () => {
   };
 
   const ctaTextVariants = {
-    hidden: { color: "#8A8A85" },
-    visible: { color: "#8A8A85" },
+    hidden: { color: "#5D6472" },
+    visible: { color: "#5D6472" },
     hover: {
-      color: "#1A1A1A",
+      color: "#363C46",
       transition: { duration: 0.3 }
     }
   };
 
   const ctaIconVariants = {
-    hidden: { x: 0, backgroundColor: "rgba(0, 0, 0, 0)", borderColor: "#E8E4DA", color: "#1A1A1A" },
-    visible: { x: 0, backgroundColor: "rgba(0, 0, 0, 0)", borderColor: "#E8E4DA", color: "#1A1A1A" },
+    hidden: { x: 0, backgroundColor: "rgba(0, 0, 0, 0)", borderColor: "rgba(93,100,114,0.20)", color: "#363C46" },
+    visible: { x: 0, backgroundColor: "rgba(0, 0, 0, 0)", borderColor: "rgba(93,100,114,0.20)", color: "#363C46" },
     hover: {
       x: 6,
-      backgroundColor: "#1A1A1A",
-      borderColor: "#1A1A1A",
+      backgroundColor: "#363C46",
+      borderColor: "#363C46",
       color: "#ffffff",
       transition: {
         duration: 0.35,
@@ -103,19 +102,22 @@ const LatestArticles = () => {
   };
 
   return (
-    <section className="py-24 md:py-28 lg:py-32 bg-[#F4F1EA] relative border-t border-[#E8E4DA]">
+    <section className="py-24 md:py-28 lg:py-32 bg-[#E0EEE9] relative border-t border-[rgba(93,100,114,0.15)] font-sans">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div className="space-y-4">
-            <span className="text-xs uppercase tracking-[0.25em] text-[#F5A623] font-bold block font-sans">IMPERIA ESTATES INSIGHTS</span>
-            <h2 className="text-3xl md:text-5xl font-bold text-[#1A1A1A] leading-tight font-sans tracking-tight">
+            <span className="text-xs uppercase tracking-[0.25em] text-[#CFB6A8] font-bold block font-sans">IMPERIA ESTATES INSIGHTS</span>
+            <h2
+              className="text-3xl md:text-5xl font-medium text-[#363C46] leading-tight tracking-tight"
+              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+            >
               Latest Market <br />
-              <span className="font-normal text-[#8A8A85]">Intelligence</span>
+              <span className="font-normal text-[#5D6472]">Intelligence</span>
             </h2>
           </div>
-          <p className="text-[#8A8A85] font-normal text-sm md:text-base max-w-md leading-relaxed font-sans">
+          <p className="text-[#5D6472] font-normal text-sm md:text-base max-w-md leading-relaxed font-sans">
             Stay informed with research reports, legal compliance briefs, and capital growth projections written by our internal wealth advisory team.
           </p>
         </div>
@@ -133,10 +135,10 @@ const LatestArticles = () => {
               key={idx}
               variants={cardVariants}
               whileHover="hover"
-              className="group relative flex flex-col bg-white border border-[#E8E4DA] rounded-3xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.06)] cursor-pointer transition-all duration-300"
+              className="group relative flex flex-col bg-white border border-[rgba(93,100,114,0.15)] rounded-xl overflow-hidden shadow-[0_12px_32px_rgba(54,60,70,0.06)] cursor-pointer transition-all duration-300"
             >
               {/* Cover Image */}
-              <div className="relative h-[240px] overflow-hidden bg-stone-100">
+              <div className="relative h-[240px] overflow-hidden bg-[#E0EEE9]">
                 <ImageWithSkeleton 
                   variants={imageVariants}
                   src={art.image} 
@@ -150,34 +152,37 @@ const LatestArticles = () => {
               <div className="p-6 flex-1 flex flex-col justify-between font-sans">
                 <div className="space-y-4">
                   {/* Article Metadata */}
-                  <div className="flex items-center gap-4 text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold">
+                  <div className="flex items-center gap-4 text-[10px] uppercase tracking-wider text-[#5D6472] font-bold">
                     <div className="flex items-center gap-1.5 font-sans">
-                      <Calendar className="w-3.5 h-3.5 text-[#F5A623]" />
+                      <Calendar className="w-3.5 h-3.5 text-[#CFB6A8]" />
                       <span>{art.date}</span>
                     </div>
                     <div className="flex items-center gap-1.5 font-sans">
-                      <Clock className="w-3.5 h-3.5 text-[#F5A623]" />
+                      <Clock className="w-3.5 h-3.5 text-[#CFB6A8]" />
                       <span>{art.readTime}</span>
                     </div>
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-xl font-bold text-[#1A1A1A] tracking-tight transition-colors duration-300 group-hover:text-[#F5A623]">
+                  <h3
+                    className="text-xl font-bold text-[#363C46] tracking-tight transition-colors duration-300 group-hover:text-[#CFB6A8]"
+                    style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                  >
                     {art.title}
                   </h3>
 
                   {/* Excerpt */}
-                  <p className="text-[#8A8A85] text-xs font-normal leading-relaxed">
+                  <p className="text-[#5D6472] text-xs font-normal leading-relaxed">
                     {art.excerpt}
                   </p>
                 </div>
 
                 {/* Footer Read Action Trigger */}
-                <div className="mt-6 pt-4 border-t border-[#E8E4DA] flex items-center justify-between text-xs font-bold tracking-wider uppercase font-sans">
+                <div className="mt-6 pt-4 border-t border-[rgba(93,100,114,0.15)] flex items-center justify-between text-xs font-bold tracking-wider uppercase font-sans">
                   <motion.span variants={ctaTextVariants}>READ INTELLIGENCE</motion.span>
                   <motion.div 
                     variants={ctaIconVariants}
-                    className="p-1 rounded-full border border-[#E8E4DA] flex items-center justify-center"
+                    className="p-1 rounded-full border border-[rgba(93,100,114,0.15)] flex items-center justify-center"
                   >
                     <ArrowRight className="w-4 h-4" />
                   </motion.div>

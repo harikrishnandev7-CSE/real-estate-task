@@ -1,6 +1,6 @@
 import React from 'react';
 import { ShieldCheck, Target, Eye, Users, Trophy, Award } from 'lucide-react';
-import { SectionHeader, AnimatedButton } from '../components/common/InteractiveWidgets';
+import { SectionHeader } from '../components/common/InteractiveWidgets';
 import PageHero from '../components/PageHero';
 
 const About = () => {
@@ -24,7 +24,7 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F4F1EA] text-[#1A1A1A]">
+    <div className="min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
       {/* HERO SECTION */}
       <div className="pt-[64px] lg:pt-[72px]">
         <PageHero
@@ -35,7 +35,7 @@ const About = () => {
           ]}
           eyebrow="ABOUT US"
           heading={
-            <>Curators of the <span className="font-normal text-[#8A8A85]">Exceptional</span></>
+            <>Curators of the <span className="font-normal text-[#5D6472]">Exceptional</span></>
           }
           description="IMPERIA ESTATES is a premier real estate concierge, specializing in sourcing, managing, and structuring high-capital acquisitions for discerning private clients, NRIs, and family offices."
         />
@@ -47,159 +47,114 @@ const About = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-6 space-y-6">
             <SectionHeader tag="OUR HERITAGE" title="The Story of IMPERIA ESTATES" />
-            <p className="text-[#8A8A85] text-xs font-normal leading-relaxed">
+            <p className="text-[#5D6472] text-xs font-normal leading-relaxed">
               Founded over a decade ago as a private advisory group, IMPERIA ESTATES has grown to become the benchmark for ultra-luxury residential listings. We do not aggregate listings; we curate them. Every villa, penthouse, and corporate workspace is vetted for construction standards, title histories, and neighborhood connectivity.
             </p>
-            <p className="text-[#8A8A85] text-xs font-normal leading-relaxed">
+            <p className="text-[#5D6472] text-xs font-normal leading-relaxed">
               Today, IMPERIA ESTATES stands as a designated partner for leading developers. We structure acquisitions from negotiation to sub-registrar registration, providing complete capital and transaction security.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              <div className="border border-[#E8E4DA] bg-white p-6 rounded-3xl space-y-3 shadow-xs">
-                <div className="w-10 h-10 rounded-full bg-[#F5A623] text-white flex items-center justify-center shadow-xs">
+              <div className="border border-[rgba(93,100,114,0.15)] bg-white p-6 rounded-xl space-y-3 shadow-xs">
+                <div className="w-10 h-10 rounded-lg bg-[#CFB6A8] text-white flex items-center justify-center shadow-xs">
                   <Target className="w-5 h-5 stroke-[2]" />
                 </div>
-                <h4 className="text-sm font-bold text-[#1A1A1A] uppercase tracking-wider">Our Mission</h4>
-                <p className="text-[#8A8A85] text-xs font-normal leading-relaxed">
-                  To simplify the discovery of premium real estate, providing clean titles, structural guarantees, and private banking debt placement under one concierge hub.
-                </p>
+                <h4
+                  className="text-sm font-bold text-[#363C46]"
+                  style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                >
+                  Our Mission
+                </h4>
+                <p className="text-[#5D6472] text-xs font-normal leading-relaxed">To elevate real estate transactions into seamless, institutional-grade experiences of private wealth creation.</p>
               </div>
 
-              <div className="border border-[#E8E4DA] bg-white p-6 rounded-3xl space-y-3 shadow-xs">
-                <div className="w-10 h-10 rounded-full bg-[#F5A623] text-white flex items-center justify-center shadow-xs">
+              <div className="border border-[rgba(93,100,114,0.15)] bg-white p-6 rounded-xl space-y-3 shadow-xs">
+                <div className="w-10 h-10 rounded-lg bg-[#CFB6A8] text-white flex items-center justify-center shadow-xs">
                   <Eye className="w-5 h-5 stroke-[2]" />
                 </div>
-                <h4 className="text-sm font-bold text-[#1A1A1A] uppercase tracking-wider">Our Vision</h4>
-                <p className="text-[#8A8A85] text-xs font-normal leading-relaxed">
-                  To become the most trusted private asset allocator in luxury residential and yielding commercial corridors, linking global wealth to exceptional architecture.
-                </p>
+                <h4
+                  className="text-sm font-bold text-[#363C46]"
+                  style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                >
+                  Our Vision
+                </h4>
+                <p className="text-[#5D6472] text-xs font-normal leading-relaxed">To remain the most trusted private real estate desk across India's top metropolitan hubs and international markets.</p>
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-6 h-[480px] rounded-3xl overflow-hidden relative border border-[#E8E4DA] shadow-[0_20px_40px_rgba(0,0,0,0.06)]">
-            <img 
-              src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" 
-              alt="IMPERIA ESTATES Heritage" 
-              className="w-full h-full object-cover"
-            />
+          <div className="lg:col-span-6 relative">
+            <div className="relative h-[480px] rounded-xl overflow-hidden shadow-[0_12px_32px_rgba(54,60,70,0.06)] border border-[rgba(93,100,114,0.15)]">
+              <img
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
+                alt="IMPERIA Corporate Headquarters"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#363C46]/60 via-transparent to-transparent" />
+            </div>
           </div>
         </div>
 
         {/* CORE VALUES */}
         <div className="space-y-12">
-          <div className="text-center max-w-xl mx-auto space-y-3 font-sans">
-            <span className="text-xs uppercase tracking-[0.25em] text-[#F5A623] font-bold">CONSTITUTION</span>
-            <h2 className="text-3xl font-bold text-[#1A1A1A] tracking-tight">Our Core Values</h2>
-            <p className="text-[#8A8A85] text-xs font-normal leading-relaxed">
-              We govern all transactional and consultancy operations by three foundational principles.
-            </p>
-          </div>
+          <SectionHeader tag="GUIDING PRINCIPLES" title="Core Values That Define Us" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {coreValues.map((val, idx) => {
               const Icon = val.icon;
               return (
-                <div key={idx} className="border border-[#E8E4DA] bg-white p-8 rounded-3xl space-y-4 text-center shadow-[0_20px_40px_rgba(0,0,0,0.06)] hover:border-[#F5A623] transition-all duration-300">
-                  <div className="w-12 h-12 rounded-full bg-[#F5A623] text-white flex items-center justify-center mx-auto shadow-xs">
+                <div key={idx} className="p-8 bg-white border border-[rgba(93,100,114,0.15)] rounded-xl space-y-4 shadow-xs">
+                  <div className="w-12 h-12 rounded-lg bg-[rgba(207,182,168,0.15)] text-[#CFB6A8] flex items-center justify-center">
                     <Icon className="w-6 h-6 stroke-[2]" />
                   </div>
-                  <h4 className="text-base font-bold text-[#1A1A1A] tracking-tight">{val.title}</h4>
-                  <p className="text-[#8A8A85] text-xs font-normal leading-relaxed">
-                    {val.desc}
-                  </p>
+                  <h4
+                    className="text-lg font-bold text-[#363C46]"
+                    style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                  >
+                    {val.title}
+                  </h4>
+                  <p className="text-[#5D6472] text-xs leading-relaxed">{val.desc}</p>
                 </div>
               );
             })}
           </div>
         </div>
 
-        {/* STATISTICS */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center border-t border-b border-[#E8E4DA] py-12 font-sans">
-          <div>
-            <p className="text-3xl md:text-4xl font-extrabold text-[#1A1A1A]">₹8,500+ Cr</p>
-            <p className="text-[10px] text-[#8A8A85] uppercase tracking-widest font-bold mt-1">Transaction Value</p>
-          </div>
-          <div>
-            <p className="text-3xl md:text-4xl font-extrabold text-[#1A1A1A]">350+</p>
-            <p className="text-[10px] text-[#8A8A85] uppercase tracking-widest font-bold mt-1">HNIs Serviced</p>
-          </div>
-          <div>
-            <p className="text-3xl md:text-4xl font-extrabold text-[#1A1A1A]">15+</p>
-            <p className="text-[10px] text-[#8A8A85] uppercase tracking-widest font-bold mt-1">Years Experience</p>
-          </div>
-          <div>
-            <p className="text-3xl md:text-4xl font-extrabold text-[#1A1A1A]">100%</p>
-            <p className="text-[10px] text-[#8A8A85] uppercase tracking-widest font-bold mt-1">RERA Vetted</p>
+        {/* LEADERSHIP */}
+        <div className="space-y-12">
+          <SectionHeader tag="LEADERSHIP DESK" title="Senior Advisory Board" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {leadershipTeam.map((member, idx) => (
+              <div key={idx} className="bg-white border border-[rgba(93,100,114,0.15)] rounded-xl overflow-hidden shadow-xs space-y-4 p-6">
+                <div className="h-56 rounded-lg overflow-hidden">
+                  <img src={member.img} alt={member.name} className="w-full h-full object-cover" />
+                </div>
+                <div className="space-y-1">
+                  <h4
+                    className="text-base font-bold text-[#363C46]"
+                    style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                  >
+                    {member.name}
+                  </h4>
+                  <p className="text-[#CFB6A8] text-xs font-bold uppercase">{member.role}</p>
+                  <p className="text-[11px] text-[#5D6472]">Experience: {member.exp}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
         {/* TIMELINE */}
         <div className="space-y-12">
-          <SectionHeader tag="HISTORY" title="Our Journey Timeline" />
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative pt-4">
+          <SectionHeader tag="MILESTONES" title="Our Growth Journey" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {historyTimeline.map((item, idx) => (
-              <div key={idx} className="border border-[#E8E4DA] bg-white p-6 rounded-3xl space-y-3 shadow-xs">
-                <span className="w-10 h-10 rounded-full bg-[#F5A623] text-white flex items-center justify-center font-bold text-xs shadow-2xs">
-                  {item.year}
-                </span>
-                <h5 className="text-sm font-bold text-[#1A1A1A] tracking-tight">{item.title}</h5>
-                <p className="text-[#8A8A85] text-xs font-normal leading-relaxed">
-                  {item.desc}
-                </p>
+              <div key={idx} className="p-6 bg-white border border-[rgba(93,100,114,0.15)] rounded-xl space-y-2">
+                <span className="text-2xl font-bold text-[#CFB6A8]" style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}>{item.year}</span>
+                <h4 className="text-sm font-bold text-[#363C46]">{item.title}</h4>
+                <p className="text-xs text-[#5D6472] leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
-        </div>
-
-        {/* LEADERSHIP */}
-        <div className="space-y-12 font-sans">
-          <SectionHeader tag="THE TEAM" title="Our Leadership Group" />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {leadershipTeam.map((lead, idx) => (
-              <div key={idx} className="border border-[#E8E4DA] bg-white rounded-3xl overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.06)] hover:border-[#F5A623] transition-all duration-300">
-                <div className="h-[220px] bg-stone-100 relative overflow-hidden">
-                  <img src={lead.img} alt={lead.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                </div>
-                <div className="p-6 space-y-1">
-                  <h4 className="text-sm font-bold text-[#1A1A1A]">{lead.name}</h4>
-                  <p className="text-xs text-[#8A8A85] font-normal">{lead.role}</p>
-                  <p className="text-[10px] text-[#F5A623] font-bold uppercase tracking-wider mt-2">{lead.exp} Experience</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* AWARDS */}
-        <div className="border border-[#E8E4DA] bg-white rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-[0_20px_40px_rgba(0,0,0,0.06)] font-sans">
-          <div className="space-y-3 max-w-lg">
-            <div className="w-10 h-10 rounded-full bg-[#F5A623] text-white flex items-center justify-center shadow-xs">
-              <Award className="w-5 h-5 stroke-[2]" />
-            </div>
-            <h4 className="text-xl font-bold text-[#1A1A1A] tracking-tight">Awards & Global Recognition</h4>
-            <p className="text-[#8A8A85] text-xs leading-relaxed font-normal">
-              Recognized as 'Best Luxury Property Sourcing Group' at the southern property awards in 2024, and certified compliant by state RERA registration councils.
-            </p>
-          </div>
-          <div className="flex gap-4 shrink-0 font-sans text-xs">
-            <span className="px-4 py-2 border border-[#E8E4DA] bg-[#F4F1EA] rounded-full text-[#1A1A1A] font-bold">Winner 2024</span>
-            <span className="px-4 py-2 border border-[#E8E4DA] bg-[#F4F1EA] rounded-full text-[#1A1A1A] font-bold">RERA Vetted</span>
-          </div>
-        </div>
-
-        {/* BOOK CONSULTATION CTA */}
-        <div className="border border-stone-800 bg-[#1A1A1A] text-white rounded-3xl p-8 md:p-12 text-center space-y-6 max-w-2xl mx-auto shadow-2xl font-sans">
-          <span className="text-xs uppercase tracking-[0.2em] text-[#F5A623] font-bold">ACQUISITIONS DESK</span>
-          <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Book Private Consultation</h3>
-          <p className="text-stone-300 text-xs leading-relaxed font-normal max-w-md mx-auto">
-            Arrange a secure briefing with our sourcing leads. We coordinate logistics, private banking options, and title registries under complete NDA.
-          </p>
-          <button 
-            onClick={() => window.location.href = '/contact'}
-            className="px-8 py-4 bg-[#F5A623] hover:bg-amber-400 text-[#1A1A1A] font-bold text-xs tracking-wider uppercase rounded-full shadow-md cursor-pointer transition-all duration-300"
-          >
-            Connect with Sourcing Lead
-          </button>
         </div>
 
       </div>

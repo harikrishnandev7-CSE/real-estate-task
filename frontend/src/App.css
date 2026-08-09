@@ -1,1 +1,35 @@
-/* Clean slate for tailwind classes */
+/* ─────────────────────────────────────────────────────────────────────────────
+   IMPERIA · App.css — Phase 1 Global Overrides
+   Supplements index.css design tokens with any app-level global rules.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Selection highlight uses Dark Vanilla accent */
+::selection {
+  background-color: rgba(207, 182, 168, 0.30);   /* Dark Vanilla at 30% */
+  color: #363C46;
+}
+
+/* Focus ring — Arsenic-toned, accessible */
+:focus-visible {
+  outline: 2px solid #CFB6A8;   /* Dark Vanilla */
+  outline-offset: 3px;
+}
+
+/* Smooth scroll globally */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Global link reset — inherit color, add accent underline on hover */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+a:hover {
+  color: inherit;
+}
+
+/* Prevent layout shift from scrollbar appearing */
+html {
+  scrollbar-gutter: stable;
+}

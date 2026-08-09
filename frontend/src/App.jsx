@@ -188,7 +188,7 @@ function AppContent() {
       </AnimatePresence>
 
       {/* Main Application Content Mounted Underneath */}
-      <div className="min-h-screen bg-[#F4F1EA] text-[#1A1A1A] flex flex-col selection:bg-[#F5A623]/25 selection:text-[#1A1A1A]">
+      <div className="min-h-screen flex flex-col" style={{ background: '#E0EEE9', color: '#363C46', userSelect: 'text' }}>
         {/* Header / Sticky Glass Navbar */}
         <Navbar />
         <ScrollToTop />

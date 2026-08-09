@@ -1,62 +1,45 @@
 /**
  * ImperiaLogo — Inline SVG brand mark for IMPERIA Luxury Estates.
  *
- * Renders entirely in SVG with no external image request, so it:
- *   – scales perfectly at any resolution
- *   – is theme-aware (dark / light prop)
- *   – can be coloured / sized via props
- *   – works in the navbar, splash screens, footers, OG images, etc.
+ * Phase 2 update: palette aligned to new design tokens.
+ *   dark  variant: Arsenic #363C46 ink + Dark Vanilla #CFB6A8 accent
+ *   light variant: White #FFFFFF ink + Dark Vanilla #CFB6A8 accent
+ *
+ * Props, layout, and structure unchanged.
  *
  * @param {'dark'|'light'} variant
- *   'dark'  → near-black ink + amber, for cream / white backgrounds (default)
- *   'light' → cream ink + amber, for dark / near-black backgrounds
- *
  * @param {'lockup'|'icon'|'wordmark'} layout
- *   'lockup'   → icon mark + divider + wordmark, horizontal (default)
- *   'icon'     → standalone icon / monogram only (square crop)
- *   'wordmark' → wordmark text only (no icon)
- *
  * @param {number} height
- *   Rendered height in px. Width is set to 'auto' so the SVG scales
- *   proportionally from its intrinsic viewBox aspect ratio.
- *   Defaults: lockup → 36, icon → 32, wordmark → 36
- *
- * @param {string} className   Extra Tailwind / CSS classes on the <svg>
- * @param {object} ...rest     Any other props forwarded to <svg>
+ * @param {string} className
+ * @param {object} ...rest
  */
 
 import React from 'react';
 
-// ─── Design tokens ────────────────────────────────────────────────────────────
+// ─── Design tokens (Phase 2 palette) ────────────────────────────────────────
 
-const INK   = '#1A1A1A';
-const AMBER = '#F5A623';
-const CREAM = '#F4F1EA';
-const RULE  = '#E8E4DA';
-const RULE_LIGHT = 'rgba(255,255,255,0.18)';
+const INK          = '#363C46';   // Arsenic — primary dark ink
+const ACCENT       = '#CFB6A8';   // Dark Vanilla — crown / tagline accent
+const CREAM        = '#E0EEE9';   // Azureish White — light variant ink
+const DIVIDER      = 'rgba(93,100,114,0.20)';        // Black Coral tint
+const DIVIDER_LIGHT = 'rgba(255,255,255,0.22)';
 
-// Font stack — Plus Jakarta Sans is loaded globally via Google Fonts in
-// index.html; the rest of the stack guarantees a clean geometric sans
-// fallback in contexts where that font hasn't loaded yet.
-const FONT  = "'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif";
+// Inter / Plus Jakarta Sans stack (already loaded globally)
+const FONT = "'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif";
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 /**
  * The architectural "I" mark — three axis-aligned rectangles.
- * Proportions derived from a 100 × 100 unit grid; scaled here to
- * fit a 38 × 42 unit slot inside the lockup viewBox (height 50 units).
- *
- * @param {string} ink    Colour for column + plinth
- * @param {string} amber  Colour for crown (always amber in both themes)
+ * Crown → Dark Vanilla accent; column + plinth → themed ink.
  */
-const IconMark = ({ ink, amber }) => (
+const IconMark = ({ ink, accent }) => (
   <>
-    {/* Crown / capital — amber accent, always #F5A623 */}
-    <rect x="0" y="8"    width="38" height="5.5" fill={amber} />
-    {/* Column / stem — themed colour */}
+    {/* Crown / capital — Dark Vanilla accent */}
+    <rect x="0" y="8"    width="38" height="5.5" fill={accent} />
+    {/* Column / stem */}
     <rect x="14" y="13.5" width="10" height="23"  fill={ink}   />
-    {/* Plinth / base — themed colour */}
+    {/* Plinth / base */}
     <rect x="0" y="36.5" width="38" height="5.5" fill={ink}   />
   </>
 );
@@ -72,11 +55,10 @@ const ImperiaLogo = ({
 }) => {
   const isDark = variant === 'dark';
 
-  // Resolved colours for this variant
-  const ink      = isDark ? INK   : CREAM;
-  const amber    = AMBER; // stays amber in both themes by brand spec
-  const textInk  = isDark ? INK   : CREAM;
-  const divider  = isDark ? RULE  : RULE_LIGHT;
+  const ink     = isDark ? INK   : CREAM;
+  const accent  = ACCENT;               // always Dark Vanilla in both themes
+  const textInk = isDark ? INK   : CREAM;
+  const divider = isDark ? DIVIDER : DIVIDER_LIGHT;
 
   // ── Icon-only ──────────────────────────────────────────────────────────────
   if (layout === 'icon') {
@@ -94,7 +76,7 @@ const ImperiaLogo = ({
         {...rest}
       >
         {/* Crown */}
-        <rect x="15" y="13"  width="70" height="10" fill={amber} />
+        <rect x="15" y="13"  width="70" height="10" fill={accent} />
         {/* Column */}
         <rect x="44" y="23"  width="12" height="53" fill={ink}   />
         {/* Plinth */}
@@ -120,7 +102,7 @@ const ImperiaLogo = ({
         <text
           x="0" y="33"
           fontFamily={FONT}
-          fontWeight="800"
+          fontWeight="700"
           fontSize="28"
           letterSpacing="6.5"
           fill={textInk}
@@ -131,7 +113,7 @@ const ImperiaLogo = ({
           fontWeight="500"
           fontSize="7.5"
           letterSpacing="4"
-          fill={amber}
+          fill={accent}
         >LUXURY ESTATES</text>
       </svg>
     );
@@ -151,7 +133,7 @@ const ImperiaLogo = ({
       {...rest}
     >
       {/* Icon mark */}
-      <IconMark ink={ink} amber={amber} />
+      <IconMark ink={ink} accent={accent} />
 
       {/* Hairline vertical divider */}
       <line x1="52" y1="9" x2="52" y2="41" stroke={divider} strokeWidth="1" />
@@ -160,7 +142,7 @@ const ImperiaLogo = ({
       <text
         x="64" y="33"
         fontFamily={FONT}
-        fontWeight="800"
+        fontWeight="700"
         fontSize="21"
         letterSpacing="5"
         fill={textInk}
@@ -173,7 +155,7 @@ const ImperiaLogo = ({
         fontWeight="500"
         fontSize="6"
         letterSpacing="3.2"
-        fill={amber}
+        fill={accent}
       >LUXURY ESTATES</text>
     </svg>
   );

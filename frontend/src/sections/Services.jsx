@@ -1,21 +1,19 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
   Landmark, Users, TrendingUp, ShieldCheck, Palette, FileText,
   Building, Compass, ArrowRight, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
-// ---- Tunables -------------------------------------------------------
 const AUTOPLAY_MS = 4200;
-const VISIBLE_RADIUS = 2;      // how many cards show on each side of center
-const STEP_X = 300;            // horizontal spacing per offset step (px)
-const STEP_Z = -260;           // depth push per offset step (px)
-const STEP_ROTATE = 38;        // Y-axis rotation per offset step (deg)
+const VISIBLE_RADIUS = 2;
+const STEP_X = 300;
+const STEP_Z = -260;
+const STEP_ROTATE = 38;
 const SPRING = { type: 'spring', stiffness: 260, damping: 30, mass: 0.9 };
 
-// Shortest circular distance from `index` to `active` in a ring of `length`
 function circularOffset(index, active, length) {
   let diff = index - active;
   if (diff > length / 2) diff -= length;
@@ -61,8 +59,8 @@ const CarouselCard = ({ service, offset, isActive, onSelect, shouldReduceMotion 
       }}
       transition={SPRING}
       whileHover={!hidden && !isActive ? { scale: target.scale * 1.04 } : {}}
-      className={`group bg-white border rounded-3xl overflow-hidden flex flex-col justify-between min-h-[420px] font-sans
-        ${isActive ? 'border-[#F5A623] shadow-[0_30px_60px_rgba(0,0,0,0.18)] cursor-pointer' : 'border-[#E8E4DA] shadow-[0_15px_35px_rgba(0,0,0,0.1)] cursor-pointer'}`}
+      className={`group bg-white border rounded-xl overflow-hidden flex flex-col justify-between min-h-[420px] font-sans transition-all duration-300
+        ${isActive ? 'border-[#CFB6A8] shadow-[0_20px_40px_rgba(54,60,70,0.12)] cursor-pointer' : 'border-[rgba(93,100,114,0.15)] shadow-[0_12px_32px_rgba(54,60,70,0.06)] cursor-pointer'}`}
     >
       {/* Image */}
       <div className="relative w-full h-[170px] overflow-hidden shrink-0">
@@ -77,12 +75,12 @@ const CarouselCard = ({ service, offset, isActive, onSelect, shouldReduceMotion 
         <div
           className="absolute inset-0 transition-opacity duration-300"
           style={{
-            background: 'linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3))',
+            background: 'linear-gradient(180deg, rgba(54,60,70,0.1), rgba(54,60,70,0.35))',
             opacity: isActive ? 0.35 : 0.55,
           }}
         />
         <div
-          className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#F5A623] origin-left transition-transform duration-500"
+          className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#CFB6A8] origin-left transition-transform duration-500"
           style={{ transform: isActive ? 'scaleX(1)' : 'scaleX(0.3)' }}
         />
       </div>
@@ -91,26 +89,29 @@ const CarouselCard = ({ service, offset, isActive, onSelect, shouldReduceMotion 
       <div className="relative z-10 p-6 flex flex-col justify-between flex-1 gap-5">
         <div className="space-y-3">
           <div
-            className="w-11 h-11 rounded-full flex items-center justify-center bg-[#F5A623] text-white shadow-md transition-transform duration-300"
+            className="w-11 h-11 rounded-lg flex items-center justify-center bg-[#CFB6A8] text-white shadow-xs transition-transform duration-300"
             style={{ transform: isActive ? 'scale(1)' : 'scale(0.9)' }}
           >
             <Icon className="w-5 h-5 stroke-[2]" />
           </div>
           <div className="space-y-2">
-            <h3 className="text-base font-bold font-sans text-[#1A1A1A] tracking-tight transition-colors group-hover:text-[#F5A623]">
+            <h3
+              className="text-base font-bold text-[#363C46] tracking-tight transition-colors group-hover:text-[#CFB6A8]"
+              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+            >
               {service.title}
             </h3>
-            <p className="text-[#8A8A85] text-xs leading-relaxed font-normal font-sans line-clamp-3">
+            <p className="text-[#5D6472] text-xs leading-relaxed font-normal font-sans line-clamp-3">
               {service.desc}
             </p>
           </div>
         </div>
 
         <div className="flex items-center justify-between text-[11px] font-bold tracking-wider uppercase font-sans mt-auto pt-2">
-          <span className="text-[#8A8A85] transition-colors duration-300 group-hover:text-[#1A1A1A]">
+          <span className="text-[#5D6472] transition-colors duration-300 group-hover:text-[#363C46]">
             {isActive ? 'ENGAGE ADVISORY' : 'VIEW'}
           </span>
-          <span className="text-[#8A8A85] group-hover:text-[#F5A623] transition-colors duration-300 flex">
+          <span className="text-[#5D6472] group-hover:text-[#CFB6A8] transition-colors duration-300 flex">
             <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5" />
           </span>
         </div>
@@ -207,7 +208,6 @@ const Services = () => {
 
   const handleSelect = (offset) => {
     if (offset === 0) {
-      // Center card clicked -> route to its destination
       const service = services[active];
       if (service.title.includes('Legal')) {
         navigate('/services/legal-verification');
@@ -225,7 +225,6 @@ const Services = () => {
     }
   };
 
-  // Drag to navigate
   const onPointerDown = (e) => {
     dragging.current = true;
     dragStartX.current = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
@@ -243,7 +242,7 @@ const Services = () => {
 
   return (
     <section
-      className="py-24 md:py-28 lg:py-32 bg-white relative border-t border-[#E8E4DA] overflow-hidden"
+      className="py-24 md:py-28 lg:py-32 bg-[#E0EEE9] relative border-t border-[rgba(93,100,114,0.15)] overflow-hidden"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
@@ -252,13 +251,16 @@ const Services = () => {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div className="space-y-4">
-            <span className="text-xs uppercase tracking-[0.25em] text-[#F5A623] font-bold block font-sans">OUR CAPABILITIES</span>
-            <h2 className="text-3xl md:text-5xl font-bold text-[#1A1A1A] leading-tight font-sans tracking-tight">
+            <span className="text-xs uppercase tracking-[0.25em] text-[#CFB6A8] font-bold block font-sans">OUR CAPABILITIES</span>
+            <h2
+              className="text-3xl md:text-5xl font-medium text-[#363C46] leading-tight tracking-tight"
+              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+            >
               Comprehensive Real <br />
-              <span className="font-normal text-[#8A8A85]">Estate Services</span>
+              <span className="font-normal text-[#5D6472]">Estate Services</span>
             </h2>
           </div>
-          <p className="text-[#8A8A85] font-normal text-sm md:text-base max-w-md leading-relaxed font-sans">
+          <p className="text-[#5D6472] font-normal text-sm md:text-base max-w-md leading-relaxed font-sans">
             From financial structuring and architectural customization to rigorous legal vetting, we streamline every facet of premium acquisitions.
           </p>
         </div>
@@ -295,14 +297,14 @@ const Services = () => {
           <button
             aria-label="Previous service"
             onClick={prev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white border border-[#E8E4DA] flex items-center justify-center text-[#1A1A1A] hover:border-[#F5A623] hover:text-[#F5A623] transition-colors shadow-md"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white border border-[rgba(93,100,114,0.15)] flex items-center justify-center text-[#363C46] hover:border-[#CFB6A8] hover:text-[#CFB6A8] transition-colors shadow-xs"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
           <button
             aria-label="Next service"
             onClick={next}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white border border-[#E8E4DA] flex items-center justify-center text-[#1A1A1A] hover:border-[#F5A623] hover:text-[#F5A623] transition-colors shadow-md"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white border border-[rgba(93,100,114,0.15)] flex items-center justify-center text-[#363C46] hover:border-[#CFB6A8] hover:text-[#CFB6A8] transition-colors shadow-xs"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
@@ -318,7 +320,7 @@ const Services = () => {
               className="h-2 rounded-full transition-all duration-300"
               style={{
                 width: idx === active ? 28 : 8,
-                backgroundColor: idx === active ? '#F5A623' : '#E8E4DA',
+                backgroundColor: idx === active ? '#CFB6A8' : 'rgba(93,100,114,0.25)',
               }}
             />
           ))}

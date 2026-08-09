@@ -64,12 +64,10 @@ const AdminDashboard = () => {
 
   const [chartRange, setChartRange] = useState('30d');
 
-  // Compute active properties count
   const activePropertiesCount = useMemo(() => {
     return properties.filter(p => p.status !== 'Archived').length || 12;
   }, [properties]);
 
-  // Top performing listings mock calculations
   const topListings = useMemo(() => {
     return properties.slice(0, 5).map((p, idx) => ({
       ...p,
@@ -79,7 +77,6 @@ const AdminDashboard = () => {
     }));
   }, [properties]);
 
-  // SVG Trend Chart Path Generator
   const currentChart = chartDataMap[chartRange];
   const renderTrendAreaChart = () => {
     const pts = currentChart.points;
@@ -101,29 +98,24 @@ const AdminDashboard = () => {
     return (
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-44 overflow-visible font-sans">
         <defs>
-          <linearGradient id="amberAreaGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#F5A623" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#F5A623" stopOpacity="0.0" />
+          <linearGradient id="vanillaAreaGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#CFB6A8" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="#CFB6A8" stopOpacity="0.0" />
           </linearGradient>
         </defs>
 
-        {/* Horizontal grid lines */}
-        <line x1="0" y1="30" x2={width} y2="30" stroke="#E8E4DA" strokeDasharray="4 4" />
-        <line x1="0" y1="90" x2={width} y2="90" stroke="#E8E4DA" strokeDasharray="4 4" />
-        <line x1="0" y1="150" x2={width} y2="150" stroke="#E8E4DA" strokeDasharray="4 4" />
+        <line x1="0" y1="30" x2={width} y2="30" stroke="rgba(93,100,114,0.15)" strokeDasharray="4 4" />
+        <line x1="0" y1="90" x2={width} y2="90" stroke="rgba(93,100,114,0.15)" strokeDasharray="4 4" />
+        <line x1="0" y1="150" x2={width} y2="150" stroke="rgba(93,100,114,0.15)" strokeDasharray="4 4" />
 
-        {/* Gradient Area */}
-        <path d={areaPath} fill="url(#amberAreaGrad)" />
+        <path d={areaPath} fill="url(#vanillaAreaGrad)" />
+        <path d={linePath} fill="none" stroke="#CFB6A8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
 
-        {/* Trend Line */}
-        <path d={linePath} fill="none" stroke="#F5A623" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-
-        {/* Dots */}
         {coords.map((coord, idx) => {
           const [cx, cy] = coord.split(',').map(Number);
           return (
             <g key={`dot-${idx}-${coord}`}>
-              <circle cx={cx} cy={cy} r="5" fill="#1A1A1A" stroke="#F5A623" strokeWidth="2.5" />
+              <circle cx={cx} cy={cy} r="5" fill="#363C46" stroke="#CFB6A8" strokeWidth="2.5" />
             </g>
           );
         })}
@@ -140,289 +132,152 @@ const AdminDashboard = () => {
           title="Active Listings"
           value={activePropertiesCount}
           icon={Building}
-          delta={{ value: '+12.4%', positive: true }}
-          sparkline={[8, 9, 10, 11, 10, 12, activePropertiesCount]}
+          delta={{ value: '+12.5%', positive: true }}
+          sparkline={[8, 9, 10, 11, 12, 14]}
         />
         <KPICard
-          title="New Enquiries (7d)"
-          value={currentChart.totalEnquiries}
-          icon={MessageSquare}
-          delta={{ value: '+18.5%', positive: true }}
-          sparkline={[20, 28, 35, 42, 38, 40, currentChart.totalEnquiries]}
+          title="Total Registered Clients"
+          value="1,480"
+          icon={Users}
+          delta={{ value: '+8.2%', positive: true }}
+          sparkline={[1200, 1310, 1380, 1420, 1480]}
         />
         <KPICard
-          title="Site Visits This Week"
-          value={siteVisits.length || 18}
+          title="Pending Site Visits"
+          value={siteVisits.length || 8}
           icon={Calendar}
-          delta={{ value: '+24.1%', positive: true }}
-          sparkline={[10, 12, 14, 16, 18, 20, 24]}
+          delta={{ value: '+4 this week', positive: true }}
+          sparkline={[3, 5, 4, 6, 8]}
         />
         <KPICard
-          title="Conversion Rate"
-          value={currentChart.conversion}
+          title="Portfolio Valuation"
+          value="₹840 Cr"
           icon={TrendingUp}
-          delta={{ value: '+3.8%', positive: true }}
-          sparkline={[10, 11, 12, 13, 14, 14.2, 15]}
+          delta={{ value: '+18.4%', positive: true }}
+          sparkline={[650, 720, 790, 840]}
         />
       </div>
 
-      {/* ── 2. QUICK ACTION TILES ROW ──────────────────────────────── */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <button
-          onClick={() => navigate('/admin/properties/new')}
-          className="bg-white border border-[#E8E4DA] hover:border-[#F5A623] rounded-2xl p-4 flex items-center gap-3 transition-all group cursor-pointer shadow-[0_10px_25px_rgba(0,0,0,0.04)]"
-        >
-          <div className="w-10 h-10 rounded-full bg-amber-50 text-[#F5A623] flex items-center justify-center shrink-0 group-hover:bg-[#1A1A1A] group-hover:text-white transition-colors">
-            <PlusCircle className="w-5 h-5 stroke-[2]" />
-          </div>
-          <div className="text-left font-sans">
-            <span className="text-xs font-extrabold text-[#1A1A1A] block tracking-tight">Add Property</span>
-            <span className="text-[10px] text-[#8A8A85]">New luxury listing</span>
-          </div>
-        </button>
-
-        <button
-          onClick={() => navigate('/admin/site-visits')}
-          className="bg-white border border-[#E8E4DA] hover:border-[#F5A623] rounded-2xl p-4 flex items-center gap-3 transition-all group cursor-pointer shadow-[0_10px_25px_rgba(0,0,0,0.04)]"
-        >
-          <div className="w-10 h-10 rounded-full bg-amber-50 text-[#F5A623] flex items-center justify-center shrink-0 group-hover:bg-[#1A1A1A] group-hover:text-white transition-colors">
-            <Calendar className="w-5 h-5 stroke-[2]" />
-          </div>
-          <div className="text-left font-sans">
-            <span className="text-xs font-extrabold text-[#1A1A1A] block tracking-tight">Log Site Visit</span>
-            <span className="text-[10px] text-[#8A8A85]">Schedule buyer tour</span>
-          </div>
-        </button>
-
-        <button
-          onClick={() => navigate('/admin/blogs')}
-          className="bg-white border border-[#E8E4DA] hover:border-[#F5A623] rounded-2xl p-4 flex items-center gap-3 transition-all group cursor-pointer shadow-[0_10px_25px_rgba(0,0,0,0.04)]"
-        >
-          <div className="w-10 h-10 rounded-full bg-amber-50 text-[#F5A623] flex items-center justify-center shrink-0 group-hover:bg-[#1A1A1A] group-hover:text-white transition-colors">
-            <FileText className="w-5 h-5 stroke-[2]" />
-          </div>
-          <div className="text-left font-sans">
-            <span className="text-xs font-extrabold text-[#1A1A1A] block tracking-tight">New Blog Post</span>
-            <span className="text-[10px] text-[#8A8A85]">Publish market insight</span>
-          </div>
-        </button>
-
-        <button
-          onClick={() => navigate('/admin/customers')}
-          className="bg-white border border-[#E8E4DA] hover:border-[#F5A623] rounded-2xl p-4 flex items-center gap-3 transition-all group cursor-pointer shadow-[0_10px_25px_rgba(0,0,0,0.04)]"
-        >
-          <div className="w-10 h-10 rounded-full bg-amber-50 text-[#F5A623] flex items-center justify-center shrink-0 group-hover:bg-[#1A1A1A] group-hover:text-white transition-colors">
-            <Users className="w-5 h-5 stroke-[2]" />
-          </div>
-          <div className="text-left font-sans">
-            <span className="text-xs font-extrabold text-[#1A1A1A] block tracking-tight">View All Customers</span>
-            <span className="text-[10px] text-[#8A8A85]">VIP buyer roster</span>
-          </div>
-        </button>
-      </div>
-
-      {/* ── 3. TREND AREA CHART + RECENT ACTIVITY FEED ─────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* ── 2. MAIN SECTION: ANALYTICS & RECENT ACTIVITY ──────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
-        {/* Left 2 Cols: Trend Area Chart */}
-        <div className="lg:col-span-2 bg-white border border-[#E8E4DA] rounded-2xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.04)] flex flex-col justify-between space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        {/* Left Column: Analytics Chart */}
+        <div className="lg:col-span-8 bg-white border border-[rgba(93,100,114,0.15)] rounded-xl p-6 sm:p-7 shadow-[0_12px_32px_rgba(54,60,70,0.06)] space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[rgba(93,100,114,0.15)] pb-5">
             <div>
-              <span className="text-[10px] uppercase tracking-wider text-[#8A8A85] font-extrabold block">
-                ANALYTICS TREND
+              <span className="text-[10px] uppercase tracking-[0.25em] text-[#CFB6A8] font-bold block font-sans">
+                PERFORMANCE METRICS
               </span>
-              <h3 className="text-xl font-extrabold text-[#1A1A1A] tracking-tight">
-                Enquiries & Sales Volume Trend
+              <h3
+                className="text-xl font-bold text-[#363C46] tracking-tight"
+                style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+              >
+                Lead Acquisition &amp; Traffic Trends
               </h3>
             </div>
 
-            {/* Segmented Control Range Switcher (30d / 60d / 90d) */}
-            <div className="w-48 shrink-0">
-              <SegmentedControl
-                options={['30d', '60d', '90d']}
-                value={chartRange}
-                onChange={setChartRange}
-              />
+            <SegmentedControl
+              options={[
+                { value: '30d', label: '30 Days' },
+                { value: '60d', label: '60 Days' },
+                { value: '90d', label: '90 Days' }
+              ]}
+              value={chartRange}
+              onChange={setChartRange}
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 bg-[#E0EEE9]/40 p-4 rounded-lg border border-[rgba(93,100,114,0.15)] font-sans">
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-[#5D6472] font-bold">Total Inquiries</p>
+              <p
+                className="text-2xl font-bold text-[#363C46]"
+                style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+              >
+                {currentChart.totalEnquiries}
+              </p>
+            </div>
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-[#5D6472] font-bold">Conversion Rate</p>
+              <p
+                className="text-2xl font-bold text-[#CFB6A8]"
+                style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+              >
+                {currentChart.conversion}
+              </p>
             </div>
           </div>
 
-          {/* Chart Render */}
           <div className="pt-2">
             {renderTrendAreaChart()}
           </div>
-
-          {/* Chart Summary Stats */}
-          <div className="grid grid-cols-3 gap-4 border-t border-[#E8E4DA] pt-4 font-sans text-xs">
-            <div>
-              <span className="text-[#8A8A85] text-[10px] uppercase font-bold block">Period Enquiries</span>
-              <span className="text-[#1A1A1A] font-extrabold text-base">{currentChart.totalEnquiries}</span>
-            </div>
-            <div>
-              <span className="text-[#8A8A85] text-[10px] uppercase font-bold block">Conversion Rate</span>
-              <span className="text-emerald-600 font-extrabold text-base">{currentChart.conversion}</span>
-            </div>
-            <div>
-              <span className="text-[#8A8A85] text-[10px] uppercase font-bold block">Top Location</span>
-              <span className="text-[#1A1A1A] font-extrabold text-base">ECR, Chennai</span>
-            </div>
-          </div>
         </div>
 
-        {/* Right 1 Col: Recent Activity Feed Panel */}
-        <div className="bg-white border border-[#E8E4DA] rounded-2xl p-6 shadow-[0_10px_25px_rgba(0,0,0,0.04)] flex flex-col justify-between space-y-4">
-          <div className="border-b border-[#E8E4DA] pb-3">
-            <span className="text-[10px] uppercase tracking-wider text-[#8A8A85] font-extrabold block">
-              REAL-TIME UPDATES
-            </span>
-            <h3 className="text-lg font-extrabold text-[#1A1A1A] tracking-tight">
-              Recent Admin Activity
-            </h3>
+        {/* Right Column: Quick Actions & Recent Activity */}
+        <div className="lg:col-span-4 space-y-6">
+          
+          {/* Quick Actions Panel */}
+          <div className="bg-white border border-[rgba(93,100,114,0.15)] rounded-xl p-6 shadow-[0_12px_32px_rgba(54,60,70,0.06)] space-y-4">
+            <h4
+              className="text-sm font-bold text-[#363C46] uppercase tracking-wider"
+              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+            >
+              Control Actions
+            </h4>
+
+            <div className="space-y-2.5">
+              <button
+                onClick={() => navigate('/admin/properties/new')}
+                className="w-full py-3 px-4 bg-[#363C46] hover:bg-[#1A1A1A] text-white rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-between transition-all shadow-xs cursor-pointer"
+              >
+                <span className="flex items-center gap-2">
+                  <PlusCircle className="w-4 h-4 text-[#CFB6A8]" />
+                  Add New Property
+                </span>
+                <ArrowRight className="w-4 h-4 text-[#CFB6A8]" />
+              </button>
+
+              <button
+                onClick={() => navigate('/admin/visits')}
+                className="w-full py-3 px-4 bg-white border border-[rgba(93,100,114,0.20)] hover:border-[#363C46] text-[#363C46] rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-between transition-all shadow-xs cursor-pointer"
+              >
+                <span className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-[#CFB6A8]" />
+                  Schedule Site Visit
+                </span>
+                <ArrowRight className="w-4 h-4 text-[#CFB6A8]" />
+              </button>
+            </div>
           </div>
 
-          {/* Activity List */}
-          <div className="space-y-3 flex-1 overflow-y-auto max-h-80 custom-scrollbar pr-1">
-            {mockActivities.map(act => (
-              <div key={act.id} className="flex items-start gap-3 p-3 rounded-xl bg-[#F4F1EA]/60 border border-[#E8E4DA] text-xs">
-                <div className="w-8 h-8 rounded-full bg-amber-50 border border-amber-200 text-[#F5A623] flex items-center justify-center shrink-0 mt-0.5">
-                  <Sparkles className="w-4 h-4" />
+          {/* Activity Log Feed */}
+          <div className="bg-white border border-[rgba(93,100,114,0.15)] rounded-xl p-6 shadow-[0_12px_32px_rgba(54,60,70,0.06)] space-y-4">
+            <div className="flex justify-between items-center border-b border-[rgba(93,100,114,0.15)] pb-3">
+              <h4
+                className="text-xs font-bold text-[#363C46] uppercase tracking-wider"
+                style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+              >
+                Real-Time Activity
+              </h4>
+              <span className="text-[10px] text-[#CFB6A8] font-bold">Live Stream</span>
+            </div>
+
+            <div className="space-y-4 text-xs font-sans">
+              {mockActivities.map(act => (
+                <div key={act.id} className="flex items-start gap-3">
+                  <div className="w-2 h-2 rounded-full bg-[#CFB6A8] mt-1.5 shrink-0" />
+                  <div className="space-y-0.5">
+                    <p className="font-bold text-[#363C46] text-xs">{act.title}</p>
+                    <p className="text-[11px] text-[#5D6472]">{act.desc}</p>
+                    <span className="text-[10px] text-[#5D6472]/70 font-medium block pt-0.5">{act.time}</span>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-bold text-[#1A1A1A]">{act.title}</p>
-                  <p className="text-[11px] text-[#8A8A85] mt-0.5 leading-relaxed">{act.desc}</p>
-                  <span className="text-[9px] text-[#8A8A85] mt-1 block font-medium">{act.time}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <Link
-            to="/admin/notifications"
-            className="text-xs font-bold text-[#1A1A1A] hover:text-[#F5A623] flex items-center justify-center gap-1 border-t border-[#E8E4DA] pt-3 cursor-pointer"
-          >
-            <span>View All Activity Logs</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-      </div>
-
-      {/* ── 4. UPCOMING SITE VISITS MINI-TABLE ─────────────────────── */}
-      <div className="bg-white border border-[#E8E4DA] rounded-2xl overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.04)] font-sans">
-        <div className="p-5 border-b border-[#E8E4DA] flex items-center justify-between bg-[#F4F1EA]/40">
-          <div>
-            <h3 className="text-base font-extrabold text-[#1A1A1A] tracking-tight">Upcoming Site Visits</h3>
-            <p className="text-xs text-[#8A8A85]">Confirmed buyer tours scheduled for today and tomorrow</p>
-          </div>
-          <Link
-            to="/admin/site-visits"
-            className="text-xs font-bold text-[#1A1A1A] hover:text-[#F5A623] flex items-center gap-1 underline"
-          >
-            <span>View all</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-[#F4F1EA] text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold border-b border-[#E8E4DA]">
-                <th className="py-3 px-5">Customer Name</th>
-                <th className="py-3 px-5">Target Estate</th>
-                <th className="py-3 px-5">Scheduled Slot</th>
-                <th className="py-3 px-5">Consultant</th>
-                <th className="py-3 px-5 text-right">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#E8E4DA] text-xs font-medium text-[#1A1A1A]">
-              {mockUpcomingVisits.map((visit, idx) => (
-                <tr key={visit.id || visit._id || `v-${idx}`} className="hover:bg-[#F4F1EA]/50 transition-colors">
-                  <td className="py-3.5 px-5 font-bold">{visit.name}</td>
-                  <td className="py-3.5 px-5 text-[#8A8A85]">{visit.property}</td>
-                  <td className="py-3.5 px-5">{visit.time}</td>
-                  <td className="py-3.5 px-5">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-[#1A1A1A] text-[#F5A623] text-[9px] font-bold flex items-center justify-center">
-                        {visit.consultant.charAt(0)}
-                      </div>
-                      <span>{visit.consultant}</span>
-                    </div>
-                  </td>
-                  <td className="py-3.5 px-5 text-right">
-                    <StatusChip status={visit.status} />
-                  </td>
-                </tr>
               ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* ── 5. TOP PERFORMING LISTINGS MINI-TABLE ─────────────────── */}
-      <div className="bg-white border border-[#E8E4DA] rounded-2xl overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.04)] font-sans">
-        <div className="p-5 border-b border-[#E8E4DA] flex items-center justify-between bg-[#F4F1EA]/40">
-          <div>
-            <h3 className="text-base font-extrabold text-[#1A1A1A] tracking-tight">Top Performing Listings</h3>
-            <p className="text-xs text-[#8A8A85]">Highest customer views, wishlist saves, and active enquiries</p>
+            </div>
           </div>
-          <Link
-            to="/admin/properties"
-            className="text-xs font-bold text-[#1A1A1A] hover:text-[#F5A623] flex items-center gap-1 underline"
-          >
-            <span>View all</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-[#F4F1EA] text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold border-b border-[#E8E4DA]">
-                <th className="py-3 px-5">Property Estate</th>
-                <th className="py-3 px-5">Views</th>
-                <th className="py-3 px-5">Wishlist Saves</th>
-                <th className="py-3 px-5">Enquiries</th>
-                <th className="py-3 px-5 text-right">Asking Price</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#E8E4DA] text-xs font-medium text-[#1A1A1A]">
-              {topListings.map((item, idx) => (
-                <tr key={item.id || item._id || `top-${idx}`} className="hover:bg-[#F4F1EA]/50 transition-colors">
-                  <td className="py-3.5 px-5">
-                    <div className="flex items-center gap-3">
-                      <img 
-                        src={item.image && !item.image.startsWith('blob:') ? item.image : "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=400&q=80"} 
-                        alt={item.title} 
-                        onError={(e) => {
-                          e.currentTarget.src = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=400&q=80";
-                        }}
-                        className="w-10 h-10 rounded-xl object-cover border border-[#E8E4DA]" 
-                      />
-                      <div>
-                        <span className="font-bold text-[#1A1A1A] block">{item.title}</span>
-                        <span className="text-[10px] text-[#8A8A85]">{item.location}</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-3.5 px-5 font-bold">
-                    <div className="flex items-center gap-1 text-[#1A1A1A]">
-                      <Eye className="w-3.5 h-3.5 text-[#8A8A85]" />
-                      <span>{item.views}</span>
-                    </div>
-                  </td>
-                  <td className="py-3.5 px-5">
-                    <div className="flex items-center gap-1 text-[#1A1A1A]">
-                      <Heart className="w-3.5 h-3.5 text-[#F5A623]" />
-                      <span>{item.saves}</span>
-                    </div>
-                  </td>
-                  <td className="py-3.5 px-5 font-bold text-amber-600">{item.enquiries}</td>
-                  <td className="py-3.5 px-5 text-right font-extrabold text-[#1A1A1A]">{item.price}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
       </div>
-
     </div>
   );
 };

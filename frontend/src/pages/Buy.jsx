@@ -183,25 +183,28 @@ const Buy = () => {
   };
 
   return (
-    <div className="pt-20 lg:pt-24 min-h-screen bg-[#F4F1EA] text-[#1A1A1A]">
+    <div className="pt-20 lg:pt-24 min-h-screen bg-[#E0EEE9] text-[#363C46]">
       {/* Page Header / Hero Section */}
       <div className="border-b border-[#E8E4DA] pt-10 pb-8 md:pt-12 md:pb-10 relative overflow-hidden bg-white">
         <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
           {/* Subheading Tag */}
-          <span className="text-[11px] uppercase tracking-[0.3em] text-[#F5A623] font-bold block mb-3 font-sans">
+          <span className="text-[11px] uppercase tracking-[0.25em] text-[#CFB6A8] font-bold block mb-3 font-sans">
             PREMIUM RESIDENCES
           </span>
           
           {/* Title & Search Bar Aligned Row */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 font-sans">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#1A1A1A] tracking-tight leading-tight">
-              Buy Premium <span className="font-normal text-[#8A8A85]">Estates</span>
+            <h1
+              className="text-3xl sm:text-4xl md:text-5xl font-medium text-[#363C46] tracking-tight leading-tight"
+              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+            >
+              Buy Premium <span className="font-normal text-[#5D6472]">Estates</span>
             </h1>
             
             {/* Redesigned Search Bar */}
             <div className="relative w-full md:w-[480px] shrink-0">
-              <div className="relative flex items-center w-full h-[56px] bg-[#F4F1EA] hover:bg-stone-200/50 border border-[#E8E4DA] rounded-full transition-all duration-300 focus-within:bg-white focus-within:border-[#F5A623] focus-within:ring-2 focus-within:ring-[#F5A623]/20 shadow-xs">
-                <Search className="absolute left-5 text-[#F5A623] w-5 h-5 stroke-[2] shrink-0 pointer-events-none" />
+              <div className="relative flex items-center w-full h-[56px] bg-[#E0EEE9]/50 hover:bg-[#E0EEE9] border border-[rgba(93,100,114,0.15)] rounded-lg transition-all duration-300 focus-within:bg-white focus-within:border-[#CFB6A8] focus-within:ring-2 focus-within:ring-[#CFB6A8]/20 shadow-xs">
+                <Search className="absolute left-5 text-[#CFB6A8] w-5 h-5 stroke-[2] shrink-0 pointer-events-none" />
                 <input 
                   type="text" 
                   placeholder="Search by title, location, or builder..." 
@@ -231,7 +234,7 @@ const Buy = () => {
           <aside className="hidden lg:block w-[300px] shrink-0 border border-[#E8E4DA] bg-white rounded-3xl py-8 px-6 space-y-9 sticky top-28 shadow-[0_20px_40px_rgba(0,0,0,0.06)] font-sans">
             <div className="flex items-center justify-between border-b border-[#E8E4DA] pb-4">
               <div className="flex items-center gap-2">
-                <Filter className="w-4 h-4 text-[#F5A623]" />
+                <Filter className="w-4 h-4 text-[#CFB6A8]" />
                 <h2 className="text-lg font-bold tracking-tight text-[#1A1A1A]">Filters</h2>
               </div>
               <button 
@@ -287,19 +290,17 @@ const Buy = () => {
             <div className="space-y-4">
               <div className="flex justify-between text-xs uppercase tracking-wider text-[#8A8A85] font-bold">
                 <span>Max Budget</span>
-                <span className="text-[#F5A623] font-bold">₹{(maxBudget / 10000000).toFixed(1)} Cr</span>
+                <span className="text-[#CFB6A8] font-bold">₹{(maxBudget / 10000000).toFixed(1)} Cr</span>
               </div>
-              <div className="pt-2">
-                <input 
-                  type="range" 
-                  min="5000000" 
-                  max="250000000" 
-                  step="5000000"
-                  value={maxBudget}
-                  onChange={(e) => setMaxBudget(parseInt(e.target.value))}
-                  className="w-full accent-[#F5A623] cursor-pointer"
-                />
-              </div>
+              <input
+                type="range"
+                min={10000000}
+                max={250000000}
+                step={5000000}
+                value={maxBudget}
+                onChange={(e) => setMaxBudget(Number(e.target.value))}
+                className="w-full accent-[#CFB6A8] cursor-pointer"
+              />
               <div className="flex justify-between text-[10px] text-[#8A8A85] font-semibold mt-2">
                 <span>₹50 L</span>
                 <span>₹25 Cr</span>
@@ -508,7 +509,7 @@ const Buy = () => {
                       variants={cardVariants}
                       whileHover="hover"
                       layout
-                      className={`group relative border border-[#E8E4DA] hover:border-[#F5A623] rounded-3xl overflow-hidden bg-white shadow-[0_20px_40px_rgba(0,0,0,0.06)] transition-all duration-300 cursor-pointer ${
+                      className={`group relative border border-[rgba(93,100,114,0.15)] hover:border-[#CFB6A8] rounded-xl overflow-hidden bg-white shadow-[0_12px_32px_rgba(54,60,70,0.06)] transition-all duration-300 cursor-pointer ${
                         viewMode === 'list' ? 'flex flex-col md:flex-row items-stretch' : 'flex flex-col'
                       }`}
                       onClick={() => {

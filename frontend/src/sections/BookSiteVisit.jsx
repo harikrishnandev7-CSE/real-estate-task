@@ -36,7 +36,7 @@ const BookSiteVisit = () => {
   const buttonVariants = {
     hover: { 
       scale: 1.03, 
-      boxShadow: "0 10px 25px rgba(245, 166, 35, 0.3)",
+      boxShadow: "0 10px 25px rgba(207, 182, 168, 0.3)",
       transition: { duration: 0.3, ease: "easeOut" }
     },
     tap: { 
@@ -54,15 +54,15 @@ const BookSiteVisit = () => {
   };
 
   return (
-    <section className="relative py-24 md:py-28 lg:py-32 w-full flex items-center justify-center overflow-hidden border-t border-[#E8E4DA] bg-[#F4F1EA]">
+    <section className="relative py-24 md:py-28 lg:py-32 w-full flex items-center justify-center overflow-hidden border-t border-[rgba(93,100,114,0.15)] bg-[#E0EEE9] font-sans">
       {/* Background cinematic rendering */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <ImageWithSkeleton 
           src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1920&q=80" 
           alt="Signature Luxury Estate Entrance" 
-          className="w-full h-full object-cover opacity-30"
+          className="w-full h-full object-cover opacity-20"
         />
-        <div className="absolute inset-0 bg-[#F4F1EA]/80 z-10" />
+        <div className="absolute inset-0 bg-[#E0EEE9]/85 z-10" />
       </div>
 
       <motion.div 
@@ -74,26 +74,29 @@ const BookSiteVisit = () => {
       >
         {/* Editorial Copy Column */}
         <div className="lg:col-span-6 space-y-6">
-          <span className="text-xs uppercase tracking-[0.25em] text-[#F5A623] font-bold block font-sans">PRIVATE CONCIERGE</span>
-          <h2 className="text-4xl md:text-6xl font-bold text-[#1A1A1A] leading-tight font-sans tracking-tight">
+          <span className="text-xs uppercase tracking-[0.25em] text-[#CFB6A8] font-bold block font-sans">PRIVATE CONCIERGE</span>
+          <h2
+            className="text-4xl md:text-6xl font-medium text-[#363C46] leading-tight tracking-tight"
+            style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+          >
             Begin Your Signature <br />
-            <span className="font-normal text-[#F5A623]">Acquisition</span>
+            <span className="font-normal text-[#CFB6A8]">Acquisition</span>
           </h2>
-          <p className="text-[#8A8A85] text-sm md:text-base font-normal tracking-wide leading-relaxed max-w-lg font-sans">
+          <p className="text-[#5D6472] text-sm md:text-base font-normal tracking-wide leading-relaxed max-w-lg font-sans">
             Schedule a private, chauffeur-driven site visit to our exclusive gated estates. An expert property advisor will accompany you to detail zoning, title due diligence, and capital yields.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-6 pt-4 text-xs text-[#1A1A1A] font-bold font-sans">
+          <div className="flex flex-col sm:flex-row gap-6 pt-4 text-xs text-[#363C46] font-bold font-sans">
             <div className="flex items-center gap-2">
-              <div className="h-2.5 w-2.5 rounded-full bg-[#F5A623]" />
+              <div className="h-2.5 w-2.5 rounded-full bg-[#CFB6A8]" />
               <span>Chauffeur-Driven Transit</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="h-2.5 w-2.5 rounded-full bg-[#F5A623]" />
+              <div className="h-2.5 w-2.5 rounded-full bg-[#CFB6A8]" />
               <span>One-on-One Partner Briefing</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="h-2.5 w-2.5 rounded-full bg-[#F5A623]" />
+              <div className="h-2.5 w-2.5 rounded-full bg-[#CFB6A8]" />
               <span>Confidentiality Guaranteed</span>
             </div>
           </div>
@@ -101,7 +104,7 @@ const BookSiteVisit = () => {
 
         {/* Dynamic Reservation Form Column */}
         <div className="lg:col-span-6">
-          <div className="w-full max-w-md ml-auto bg-white text-[#1A1A1A] p-8 md:p-10 rounded-3xl border border-[#E8E4DA] shadow-[0_20px_40px_rgba(0,0,0,0.06)] relative font-sans">
+          <div className="w-full max-w-md ml-auto bg-white text-[#363C46] p-8 md:p-10 rounded-xl border border-[rgba(93,100,114,0.15)] shadow-[0_12px_32px_rgba(54,60,70,0.06)] relative font-sans">
             <AnimatePresence mode="wait">
               {!submitted ? (
                 <motion.form 
@@ -112,55 +115,58 @@ const BookSiteVisit = () => {
                   onSubmit={handleSubmit}
                   className="space-y-5"
                 >
-                  <h3 className="text-2xl font-bold text-[#1A1A1A] tracking-tight mb-6 font-sans">
+                  <h3
+                    className="text-2xl font-medium text-[#363C46] tracking-tight mb-6"
+                    style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                  >
                     Schedule Private Tour
                   </h3>
 
                   {/* Name Input */}
                   <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#F5A623]" />
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#CFB6A8]" />
                     <input 
                       type="text" 
                       placeholder="Full Name" 
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="w-full bg-[#F4F1EA] border border-[#E8E4DA] focus:border-[#F5A623] outline-none rounded-2xl py-3.5 pl-12 pr-4 text-sm text-[#1A1A1A] placeholder-[#8A8A85] font-sans font-medium transition-all"
+                      className="w-full bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] focus:border-[#CFB6A8] outline-none rounded-lg py-3.5 pl-12 pr-4 text-sm text-[#363C46] placeholder-[#5D6472]/60 font-sans font-medium transition-all"
                       required
                     />
                   </div>
 
                   {/* Phone Input */}
                   <div className="relative">
-                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#F5A623]" />
+                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#CFB6A8]" />
                     <input 
                       type="tel" 
                       placeholder="Contact Number" 
                       value={formData.phone}
                       onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                      className="w-full bg-[#F4F1EA] border border-[#E8E4DA] focus:border-[#F5A623] outline-none rounded-2xl py-3.5 pl-12 pr-4 text-sm text-[#1A1A1A] placeholder-[#8A8A85] font-sans font-medium transition-all"
+                      className="w-full bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] focus:border-[#CFB6A8] outline-none rounded-lg py-3.5 pl-12 pr-4 text-sm text-[#363C46] placeholder-[#5D6472]/60 font-sans font-medium transition-all"
                       required
                     />
                   </div>
 
                   {/* Date Input */}
                   <div className="relative">
-                    <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#F5A623]" />
+                    <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#CFB6A8]" />
                     <input 
                       type="date" 
                       value={formData.date}
                       onChange={(e) => setFormData({...formData, date: e.target.value})}
-                      className="w-full bg-[#F4F1EA] border border-[#E8E4DA] focus:border-[#F5A623] outline-none rounded-2xl py-3.5 pl-12 pr-4 text-sm text-[#1A1A1A] placeholder-[#8A8A85] font-sans font-medium transition-all"
+                      className="w-full bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] focus:border-[#CFB6A8] outline-none rounded-lg py-3.5 pl-12 pr-4 text-sm text-[#363C46] placeholder-[#5D6472]/60 font-sans font-medium transition-all"
                       required
                     />
                   </div>
 
                   {/* Property Type Dropdown */}
                   <div>
-                    <label className="block text-[10px] uppercase tracking-wider text-[#8A8A85] mb-2 font-bold font-sans">Asset Preference</label>
+                    <label className="block text-[10px] uppercase tracking-wider text-[#5D6472] mb-2 font-bold font-sans">Asset Preference</label>
                     <select 
                       value={formData.propertyType}
                       onChange={(e) => setFormData({...formData, propertyType: e.target.value})}
-                      className="w-full bg-[#F4F1EA] border border-[#E8E4DA] focus:border-[#F5A623] outline-none rounded-2xl py-3.5 px-4 text-sm text-[#1A1A1A] font-sans font-bold transition-all cursor-pointer"
+                      className="w-full bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] focus:border-[#CFB6A8] outline-none rounded-lg py-3.5 px-4 text-sm text-[#363C46] font-sans font-bold transition-all cursor-pointer"
                     >
                       <option value="Villa">Architectural Villa</option>
                       <option value="Apartment">Sky Apartment</option>
@@ -176,10 +182,10 @@ const BookSiteVisit = () => {
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"
-                    className="w-full py-4 bg-[#1A1A1A] hover:bg-black text-white font-bold text-sm rounded-full flex items-center justify-center gap-2 shadow-md cursor-pointer pt-3.5 transition-all font-sans"
+                    className="w-full py-4 bg-[#363C46] hover:bg-[#1A1A1A] text-white font-bold text-sm rounded-lg flex items-center justify-center gap-2 shadow-xs cursor-pointer pt-3.5 transition-all font-sans"
                   >
                     CONFIRM BOOKING
-                    <ArrowRight className="w-4 h-4 text-[#F5A623]" />
+                    <ArrowRight className="w-4 h-4 text-[#CFB6A8]" />
                   </motion.button>
                 </motion.form>
               ) : (
@@ -190,13 +196,13 @@ const BookSiteVisit = () => {
                   exit={{ opacity: 0 }}
                   className="text-center py-8 space-y-6 font-sans"
                 >
-                  <div className="mx-auto w-16 h-16 rounded-full bg-[#F5A623]/10 border border-[#F5A623] text-[#F5A623] flex items-center justify-center">
+                  <div className="mx-auto w-16 h-16 rounded-full bg-[rgba(207,182,168,0.15)] border border-[#CFB6A8] text-[#CFB6A8] flex items-center justify-center">
                     <Check className="w-8 h-8 stroke-[2.5]" />
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-bold text-[#1A1A1A] tracking-tight">Tour Reserved</h3>
-                    <p className="text-[#8A8A85] text-xs font-normal leading-relaxed max-w-xs mx-auto">
-                      Thank you, <span className="text-[#1A1A1A] font-bold">{formData.name}</span>. A senior wealth advisor will call you within 15 minutes to coordinate your chauffeur transit.
+                    <h3 className="text-2xl font-bold text-[#363C46] tracking-tight">Tour Reserved</h3>
+                    <p className="text-[#5D6472] text-xs font-normal leading-relaxed max-w-xs mx-auto">
+                      Thank you, <span className="text-[#363C46] font-bold">{formData.name}</span>. A senior wealth advisor will call you within 15 minutes to coordinate your chauffeur transit.
                     </p>
                   </div>
                   <motion.button 
@@ -206,7 +212,7 @@ const BookSiteVisit = () => {
                       setSubmitted(false);
                       setFormData({ name: '', phone: '', date: '', propertyType: 'Villa' });
                     }}
-                    className="px-6 py-2.5 border border-[#E8E4DA] hover:border-[#1A1A1A] text-xs font-bold uppercase tracking-wider text-[#1A1A1A] hover:bg-[#F4F1EA] rounded-full bg-white transition-all duration-300 cursor-pointer shadow-xs"
+                    className="px-6 py-2.5 border border-[rgba(93,100,114,0.20)] hover:border-[#363C46] text-xs font-bold uppercase tracking-wider text-[#363C46] hover:bg-[#E0EEE9] rounded-lg bg-white transition-all duration-300 cursor-pointer shadow-xs"
                   >
                     BOOK ANOTHER TOUR
                   </motion.button>

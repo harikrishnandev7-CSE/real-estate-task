@@ -3,6 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Phone, User, Mail, Building, Clock, Check, X, ArrowRight, Loader2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
+/**
+ * BookSiteVisitModal — Phase 2 restyled
+ * Modal chrome (backdrop, card, border-radius, typography) updated to
+ * Arsenic/Black Coral/Dark Vanilla/Azureish White palette.
+ * All form logic, validation, state, API calls preserved unchanged.
+ */
 const BookSiteVisitModal = () => {
   const {
     isBookModalOpen = false,
@@ -130,6 +136,11 @@ const BookSiteVisitModal = () => {
     '06:00 PM'
   ];
 
+  // ── Shared field style helpers ──────────────────────────────────────────────
+  const fieldBase = 'w-full bg-[#E0EEE9] border focus:border-[#5D6472] outline-none rounded-lg py-3 text-xs text-[#363C46] font-medium placeholder-[#5D6472] transition-all font-sans';
+  const fieldErr  = 'border-red-500';
+  const fieldOk   = 'border-[rgba(93,100,114,0.20)]';
+
   return (
     <AnimatePresence>
       {isBookModalOpen && (
@@ -140,21 +151,30 @@ const BookSiteVisitModal = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={closeBookModal}
-            className="fixed inset-0 bg-black/80 backdrop-blur-md z-[9998]"
+            className="fixed inset-0 z-[9998]"
+            style={{ background: 'rgba(54,60,70,0.75)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}
           />
 
           {/* Modal Card */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            initial={{ opacity: 0, scale: 0.96, y: 18 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92vw] max-w-lg z-[9999] bg-white border border-[#E8E4DA] rounded-3xl p-6 sm:p-8 shadow-[0_25px_50px_rgba(0,0,0,0.15)] max-h-[90vh] overflow-y-auto custom-scrollbar font-sans text-left text-[#1A1A1A]"
+            exit={{ opacity: 0, scale: 0.96, y: 18 }}
+            transition={{ type: 'spring', damping: 28, stiffness: 220 }}
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92vw] max-w-lg z-[9999] max-h-[90vh] overflow-y-auto custom-scrollbar text-left"
+            style={{
+              background: '#FFFFFF',
+              border: '1px solid rgba(93,100,114,0.15)',
+              borderRadius: 12,
+              padding: '2rem',
+              boxShadow: '0 25px 60px rgba(54,60,70,0.14)',
+            }}
           >
             {/* Close Button */}
             <button
               onClick={closeBookModal}
-              className="absolute top-6 right-6 p-2 rounded-full hover:bg-stone-100 text-[#8A8A85] hover:text-[#1A1A1A] transition-colors cursor-pointer outline-none"
+              className="absolute top-5 right-5 p-2 rounded-full transition-colors cursor-pointer outline-none hover:bg-[#E0EEE9]"
+              style={{ color: '#5D6472' }}
               aria-label="Close modal"
             >
               <X className="w-5 h-5" />
@@ -170,42 +190,46 @@ const BookSiteVisitModal = () => {
                   onSubmit={handleSubmit}
                   className="space-y-5"
                 >
-                  <div className="border-b border-[#E8E4DA] pb-4">
-                    <span className="text-[10px] uppercase tracking-[0.25em] text-[#F5A623] font-bold block">
+                  {/* Header */}
+                  <div style={{ borderBottom: '1px solid rgba(93,100,114,0.15)', paddingBottom: '1rem', marginBottom: '0.25rem' }}>
+                    <span className="text-[10px] uppercase tracking-[0.22em] font-bold block" style={{ color: '#CFB6A8' }}>
                       IMPERIA ESTATES PRIVATE CONCIERGE
                     </span>
-                    <h3 className="text-2xl font-bold text-[#1A1A1A] tracking-tight mt-1">
+                    <h3
+                      className="text-xl font-medium tracking-tight mt-1.5"
+                      style={{ fontFamily: "'Fraunces', 'Playfair Display', serif", color: '#363C46' }}
+                    >
                       Book Private Site Visit
                     </h3>
-                    <p className="text-xs text-[#8A8A85] font-normal mt-1">
+                    <p className="text-xs font-normal mt-1 leading-relaxed" style={{ color: '#5D6472' }}>
                       Schedule a chauffeur-driven private estate tour with our senior property advisors.
                     </p>
                   </div>
 
                   {/* Property Name */}
                   <div className="space-y-1.5">
-                    <label className="block text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold">
+                    <label className="block text-[10px] uppercase tracking-wider font-bold" style={{ color: '#5D6472' }}>
                       Selected Estate / Project
                     </label>
                     <div className="relative">
-                      <Building className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#F5A623]" />
+                      <Building className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#CFB6A8' }} />
                       <input
                         type="text"
                         value={formData.property}
                         onChange={(e) => setFormData({ ...formData, property: e.target.value })}
                         placeholder="Enter or select property name"
-                        className="w-full bg-[#F4F1EA] border border-[#E8E4DA] focus:border-[#F5A623] outline-none rounded-xl py-3 pl-11 pr-4 text-xs text-[#1A1A1A] font-medium placeholder-[#8A8A85] transition-all font-sans"
+                        className={`${fieldBase} pl-11 pr-4 ${fieldOk}`}
                       />
                     </div>
                   </div>
 
                   {/* Full Name */}
                   <div className="space-y-1.5">
-                    <label className="block text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold">
+                    <label className="block text-[10px] uppercase tracking-wider font-bold" style={{ color: '#5D6472' }}>
                       Full Name *
                     </label>
                     <div className="relative">
-                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#F5A623]" />
+                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#CFB6A8' }} />
                       <input
                         type="text"
                         placeholder="e.g. Alexander Wright"
@@ -214,7 +238,7 @@ const BookSiteVisitModal = () => {
                           setFormData({ ...formData, name: e.target.value });
                           if (errors.name) setErrors({ ...errors, name: null });
                         }}
-                        className={`w-full bg-[#F4F1EA] border ${errors.name ? 'border-red-500' : 'border-[#E8E4DA]'} focus:border-[#F5A623] outline-none rounded-xl py-3 pl-11 pr-4 text-xs text-[#1A1A1A] font-medium placeholder-[#8A8A85] transition-all font-sans`}
+                        className={`${fieldBase} pl-11 pr-4 ${errors.name ? fieldErr : fieldOk}`}
                       />
                     </div>
                     {errors.name && <p className="text-[10px] text-red-500 font-bold">{errors.name}</p>}
@@ -224,11 +248,11 @@ const BookSiteVisitModal = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {/* Email */}
                     <div className="space-y-1.5">
-                      <label className="block text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold">
+                      <label className="block text-[10px] uppercase tracking-wider font-bold" style={{ color: '#5D6472' }}>
                         Email Address *
                       </label>
                       <div className="relative">
-                        <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#F5A623]" />
+                        <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: '#CFB6A8' }} />
                         <input
                           type="email"
                           placeholder="client@luxury.com"
@@ -237,7 +261,7 @@ const BookSiteVisitModal = () => {
                             setFormData({ ...formData, email: e.target.value });
                             if (errors.email) setErrors({ ...errors, email: null });
                           }}
-                          className={`w-full bg-[#F4F1EA] border ${errors.email ? 'border-red-500' : 'border-[#E8E4DA]'} focus:border-[#F5A623] outline-none rounded-xl py-3 pl-10 pr-3 text-xs text-[#1A1A1A] font-medium placeholder-[#8A8A85] transition-all font-sans`}
+                          className={`${fieldBase} pl-10 pr-3 ${errors.email ? fieldErr : fieldOk}`}
                         />
                       </div>
                       {errors.email && <p className="text-[10px] text-red-500 font-bold">{errors.email}</p>}
@@ -245,11 +269,11 @@ const BookSiteVisitModal = () => {
 
                     {/* Phone */}
                     <div className="space-y-1.5">
-                      <label className="block text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold">
+                      <label className="block text-[10px] uppercase tracking-wider font-bold" style={{ color: '#5D6472' }}>
                         Phone Number *
                       </label>
                       <div className="relative">
-                        <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#F5A623]" />
+                        <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: '#CFB6A8' }} />
                         <input
                           type="tel"
                           maxLength={10}
@@ -260,7 +284,7 @@ const BookSiteVisitModal = () => {
                             setFormData({ ...formData, phone: digitsOnly });
                             if (errors.phone) setErrors({ ...errors, phone: null });
                           }}
-                          className={`w-full bg-[#F4F1EA] border ${errors.phone ? 'border-red-500' : 'border-[#E8E4DA]'} focus:border-[#F5A623] outline-none rounded-xl py-3 pl-10 pr-3 text-xs text-[#1A1A1A] font-medium placeholder-[#8A8A85] transition-all font-sans`}
+                          className={`${fieldBase} pl-10 pr-3 ${errors.phone ? fieldErr : fieldOk}`}
                         />
                       </div>
                       {errors.phone && <p className="text-[10px] text-red-500 font-bold">{errors.phone}</p>}
@@ -271,11 +295,11 @@ const BookSiteVisitModal = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {/* Date */}
                     <div className="space-y-1.5">
-                      <label className="block text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold">
+                      <label className="block text-[10px] uppercase tracking-wider font-bold" style={{ color: '#5D6472' }}>
                         Preferred Date *
                       </label>
                       <div className="relative">
-                        <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#F5A623]" />
+                        <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: '#CFB6A8' }} />
                         <input
                           type="date"
                           value={formData.date}
@@ -283,7 +307,7 @@ const BookSiteVisitModal = () => {
                             setFormData({ ...formData, date: e.target.value });
                             if (errors.date) setErrors({ ...errors, date: null });
                           }}
-                          className={`w-full bg-[#F4F1EA] border ${errors.date ? 'border-red-500' : 'border-[#E8E4DA]'} focus:border-[#F5A623] outline-none rounded-xl py-3 pl-10 pr-3 text-xs text-[#1A1A1A] font-medium transition-all font-sans`}
+                          className={`${fieldBase} pl-10 pr-3 ${errors.date ? fieldErr : fieldOk}`}
                         />
                       </div>
                       {errors.date && <p className="text-[10px] text-red-500 font-bold">{errors.date}</p>}
@@ -291,15 +315,16 @@ const BookSiteVisitModal = () => {
 
                     {/* Time */}
                     <div className="space-y-1.5">
-                      <label className="block text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold">
+                      <label className="block text-[10px] uppercase tracking-wider font-bold" style={{ color: '#5D6472' }}>
                         Preferred Time *
                       </label>
                       <div className="relative">
-                        <Clock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#F5A623]" />
+                        <Clock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: '#CFB6A8' }} />
                         <select
                           value={formData.time}
                           onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                          className="w-full bg-[#F4F1EA] border border-[#E8E4DA] focus:border-[#F5A623] outline-none rounded-xl py-3 pl-10 pr-3 text-xs text-[#1A1A1A] font-bold transition-all cursor-pointer font-sans"
+                          className={`${fieldBase} pl-10 pr-3 cursor-pointer`}
+                          style={{ border: '1px solid rgba(93,100,114,0.20)' }}
                         >
                           {timeSlots.map(t => (
                             <option key={t} value={t}>{t}</option>
@@ -313,19 +338,25 @@ const BookSiteVisitModal = () => {
                   <motion.button
                     type="submit"
                     disabled={isSubmitting}
-                    whileHover={isSubmitting ? {} : { scale: 1.02 }}
+                    whileHover={isSubmitting ? {} : { opacity: 0.88 }}
                     whileTap={isSubmitting ? {} : { scale: 0.98 }}
-                    className="w-full py-4 bg-[#1A1A1A] hover:bg-black text-white font-bold text-xs tracking-wider uppercase rounded-full flex items-center justify-center gap-2 shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all mt-2"
+                    className="w-full py-3.5 font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all mt-2"
+                    style={{
+                      background: '#363C46',
+                      color: '#FFFFFF',
+                      borderRadius: 6,
+                      boxShadow: '0 4px 14px rgba(54,60,70,0.18)',
+                    }}
                   >
                     {isSubmitting ? (
                       <>
-                        <Loader2 className="w-4 h-4 animate-spin text-[#F5A623]" />
+                        <Loader2 className="w-4 h-4 animate-spin" style={{ color: '#CFB6A8' }} />
                         <span>Reserving Chauffeur Transit...</span>
                       </>
                     ) : (
                       <>
                         <span>CONFIRM PRIVATE WALKTHROUGH</span>
-                        <ArrowRight className="w-4 h-4 text-[#F5A623]" />
+                        <ArrowRight className="w-4 h-4" style={{ color: '#CFB6A8' }} />
                       </>
                     )}
                   </motion.button>
@@ -333,31 +364,48 @@ const BookSiteVisitModal = () => {
               ) : (
                 <motion.div
                   key="booking-success"
-                  initial={{ opacity: 0, scale: 0.95 }}
+                  initial={{ opacity: 0, scale: 0.96 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
                   className="text-center py-6 space-y-6"
                 >
-                  <div className="mx-auto w-16 h-16 rounded-full bg-[#F5A623] text-white flex items-center justify-center shadow-md">
-                    <Check className="w-8 h-8 stroke-[3]" />
+                  {/* Success checkmark — Dark Vanilla */}
+                  <div
+                    className="mx-auto w-16 h-16 flex items-center justify-center"
+                    style={{ background: '#CFB6A8', borderRadius: '50%', boxShadow: '0 4px 16px rgba(207,182,168,0.30)' }}
+                  >
+                    <Check className="w-8 h-8 stroke-[2.5]" style={{ color: '#FFFFFF' }} />
                   </div>
 
                   <div className="space-y-2">
-                    <h4 className="text-2xl font-bold text-[#1A1A1A] tracking-tight">
+                    <h4
+                      className="text-xl font-medium tracking-tight"
+                      style={{ fontFamily: "'Fraunces', 'Playfair Display', serif", color: '#363C46' }}
+                    >
                       Private Tour Confirmed
                     </h4>
-                    <p className="text-[#8A8A85] text-xs font-normal leading-relaxed max-w-sm mx-auto">
-                      Thank you, <span className="text-[#1A1A1A] font-bold">{formData.name}</span>. Your private walkthrough for <span className="text-[#F5A623] font-bold">{formData.property}</span> has been registered for <span className="text-[#1A1A1A] font-bold">{formData.date}</span> at <span className="text-[#1A1A1A] font-bold">{formData.time}</span>.
+                    <p className="text-xs font-normal leading-relaxed max-w-sm mx-auto" style={{ color: '#5D6472' }}>
+                      Thank you, <span className="font-bold" style={{ color: '#363C46' }}>{formData.name}</span>. Your private walkthrough for{' '}
+                      <span className="font-bold" style={{ color: '#CFB6A8' }}>{formData.property}</span> has been registered for{' '}
+                      <span className="font-bold" style={{ color: '#363C46' }}>{formData.date}</span> at{' '}
+                      <span className="font-bold" style={{ color: '#363C46' }}>{formData.time}</span>.
                     </p>
-                    <p className="text-[#8A8A85] text-[11px] font-normal pt-2">
-                      Our senior wealth advisory manager will contact you at <span className="text-[#1A1A1A] font-bold">{formData.phone}</span> to coordinate your chauffeur transit.
+                    <p className="text-[11px] font-normal pt-2" style={{ color: '#5D6472' }}>
+                      Our senior wealth advisory manager will contact you at{' '}
+                      <span className="font-bold" style={{ color: '#363C46' }}>{formData.phone}</span> to coordinate your chauffeur transit.
                     </p>
                   </div>
 
                   <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
                     <button
                       onClick={closeBookModal}
-                      className="w-full sm:w-auto px-8 py-3 bg-[#1A1A1A] hover:bg-black text-white font-bold text-xs uppercase tracking-wider rounded-full shadow-md cursor-pointer transition-all"
+                      className="w-full sm:w-auto px-8 py-3 font-bold text-xs uppercase tracking-wider cursor-pointer transition-all"
+                      style={{
+                        background: '#363C46',
+                        color: '#FFFFFF',
+                        borderRadius: 6,
+                        boxShadow: '0 4px 14px rgba(54,60,70,0.16)',
+                      }}
                     >
                       Done
                     </button>

@@ -37,7 +37,7 @@ const Wishlist = () => {
 
   if (!currentUser) {
     return (
-      <div className="min-h-screen bg-[#F4F1EA] text-[#1A1A1A]">
+      <div className="min-h-screen bg-[#E0EEE9] text-[#363C46]">
         <div className="pt-[64px] lg:pt-[72px]">
           <PageHero
             image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
@@ -47,30 +47,35 @@ const Wishlist = () => {
             ]}
             eyebrow="VIP ACCESS REQUIRED"
             heading={
-              <>Private <span className="font-normal text-[#8A8A85]">Saved Collection</span></>
+              <>Private <span className="font-normal text-[#5D6472]">Saved Collection</span></>
             }
             description="Log in to access your saved estates, manage wishlist items, and schedule private chauffeur-driven walkthroughs."
           />
         </div>
         <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 text-center space-y-6 font-sans">
-          <div className="max-w-md mx-auto p-8 sm:p-10 rounded-3xl bg-white border border-[#E8E4DA] shadow-[0_20px_40px_rgba(0,0,0,0.06)] space-y-5">
-            <div className="w-16 h-16 rounded-full bg-amber-50 border border-amber-200 text-[#F5A623] flex items-center justify-center mx-auto shadow-xs">
+          <div className="max-w-md mx-auto p-8 sm:p-10 rounded-xl bg-white border border-[rgba(93,100,114,0.15)] shadow-[0_12px_32px_rgba(54,60,70,0.06)] space-y-5">
+            <div className="w-16 h-16 rounded-full bg-[rgba(207,182,168,0.15)] border border-[#CFB6A8] text-[#CFB6A8] flex items-center justify-center mx-auto shadow-xs">
               <Sparkles className="w-8 h-8" />
             </div>
-            <h3 className="text-2xl font-bold text-[#1A1A1A] tracking-tight">Please Log In to Continue</h3>
-            <p className="text-xs text-[#8A8A85] leading-relaxed font-normal">
+            <h3
+              className="text-2xl font-bold text-[#363C46] tracking-tight"
+              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+            >
+              Please Log In to Continue
+            </h3>
+            <p className="text-xs text-[#5D6472] leading-relaxed font-normal">
               Wishlist features are reserved for registered account holders. Please sign in to view and manage your saved luxury properties.
             </p>
             <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={() => navigate('/login')}
-                className="px-8 py-3 bg-[#1A1A1A] hover:bg-black text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-md transition-all cursor-pointer"
+                className="px-8 py-3 bg-[#363C46] hover:bg-[#1A1A1A] text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow-xs transition-all cursor-pointer"
               >
                 Continue to Login
               </button>
               <button
                 onClick={() => navigate('/signup')}
-                className="px-8 py-3 border border-[#E8E4DA] bg-white text-[#1A1A1A] hover:border-[#F5A623] text-xs font-bold uppercase tracking-wider rounded-full shadow-xs transition-all cursor-pointer"
+                className="px-8 py-3 border border-[rgba(93,100,114,0.20)] bg-white text-[#363C46] hover:border-[#CFB6A8] text-xs font-bold uppercase tracking-wider rounded-lg shadow-xs transition-all cursor-pointer"
               >
                 Create Account
               </button>
@@ -82,7 +87,7 @@ const Wishlist = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F4F1EA] text-[#1A1A1A]">
+    <div className="min-h-screen bg-[#E0EEE9] text-[#363C46]">
       {/* Page Hero */}
       <div className="pt-[64px] lg:pt-[72px]">
         <PageHero
@@ -93,7 +98,7 @@ const Wishlist = () => {
           ]}
           eyebrow="SAVED COLLECTION"
           heading={
-            <>Your Saved <span className="font-normal text-[#8A8A85]">Estates</span></>
+            <>Your Saved <span className="font-normal text-[#5D6472]">Estates</span></>
           }
           description="A curated private portfolio of your saved luxury properties for comparison, private tours, and investment consultations."
         />
@@ -121,12 +126,12 @@ const Wishlist = () => {
                   key={propId}
                   whileHover={{ y: -6 }}
                   transition={{ duration: 0.3 }}
-                  className="group relative border border-[#E8E4DA] rounded-3xl overflow-hidden bg-white shadow-[0_20px_40px_rgba(0,0,0,0.06)] flex flex-col justify-between cursor-pointer transition-all duration-300 hover:border-[#F5A623]"
+                  className="group relative border border-[rgba(93,100,114,0.15)] rounded-xl overflow-hidden bg-white shadow-[0_12px_32px_rgba(54,60,70,0.06)] flex flex-col justify-between cursor-pointer transition-all duration-300 hover:border-[#CFB6A8]"
                   onClick={() => navigate(`/property/${propId}`)}
                 >
                   <div>
                     {/* Image and quick actions */}
-                    <div className="relative h-[220px] overflow-hidden bg-stone-100">
+                    <div className="relative h-[220px] overflow-hidden bg-[#E0EEE9]">
                       <ImageWithSkeleton 
                         src={prop.image} 
                         alt={prop.title} 
@@ -141,7 +146,7 @@ const Wishlist = () => {
                             e.stopPropagation();
                             handleShare(prop.title);
                           }}
-                          className="p-2.5 rounded-full bg-white/90 hover:bg-[#F5A623] hover:text-white text-[#1A1A1A] transition-colors shadow-xs cursor-pointer"
+                          className="p-2.5 rounded-full bg-white/90 hover:bg-[#CFB6A8] hover:text-white text-[#363C46] transition-colors shadow-xs cursor-pointer"
                           aria-label="Share"
                         >
                           <Share2 className="w-3.5 h-3.5" />
@@ -151,7 +156,7 @@ const Wishlist = () => {
                             e.stopPropagation();
                             removeFromWishlist(prop.id);
                           }}
-                          className="p-2.5 rounded-full bg-white/90 hover:bg-red-500 hover:text-white text-[#1A1A1A] transition-colors shadow-xs cursor-pointer"
+                          className="p-2.5 rounded-full bg-white/90 hover:bg-red-500 hover:text-white text-[#363C46] transition-colors shadow-xs cursor-pointer"
                           aria-label="Remove"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -164,30 +169,33 @@ const Wishlist = () => {
                     </div>
 
                     <div className="p-5 space-y-3">
-                      <div className="flex items-center justify-between text-xs text-[#8A8A85] font-sans">
+                      <div className="flex items-center justify-between text-xs text-[#5D6472] font-sans">
                         <div className="flex items-center gap-1 font-medium">
-                          <MapPin className="w-3.5 h-3.5 text-[#F5A623]" />
+                          <MapPin className="w-3.5 h-3.5 text-[#CFB6A8]" />
                           <span className="truncate max-w-[150px]">{prop.location}</span>
                         </div>
                         <PropertyBadge label={prop.type} />
                       </div>
 
-                      <h3 className="text-base font-bold text-[#1A1A1A] font-sans tracking-tight group-hover:text-[#F5A623] transition-colors">
+                      <h3
+                        className="text-base font-bold text-[#363C46] font-sans tracking-tight group-hover:text-[#CFB6A8] transition-colors"
+                        style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                      >
                         {prop.title}
                       </h3>
                     </div>
                   </div>
 
-                  <div className="p-5 border-t border-[#E8E4DA] flex gap-2 text-xs font-sans">
+                  <div className="p-5 border-t border-[rgba(93,100,114,0.15)] flex gap-2 text-xs font-sans">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         handleCompareToggle(prop);
                       }}
-                      className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-full border transition-all cursor-pointer font-bold ${
+                      className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg border transition-all cursor-pointer font-bold ${
                         isCompared 
-                          ? 'bg-[#1A1A1A] border-[#1A1A1A] text-white' 
-                          : 'border-[#E8E4DA] text-[#1A1A1A] hover:border-[#F5A623] hover:text-[#F5A623]'
+                          ? 'bg-[#363C46] border-[#363C46] text-white' 
+                          : 'border-[rgba(93,100,114,0.20)] text-[#363C46] hover:border-[#CFB6A8] hover:text-[#CFB6A8]'
                       }`}
                     >
                       <Scale className="w-3.5 h-3.5" />
@@ -198,17 +206,17 @@ const Wishlist = () => {
                         e.stopPropagation();
                         openBookModal(prop.title);
                       }}
-                      className="flex-1 flex items-center justify-center gap-1 py-2.5 rounded-full border border-[#E8E4DA] hover:bg-amber-50 hover:border-[#F5A623] text-[#1A1A1A] hover:text-[#F5A623] font-bold transition-all cursor-pointer"
+                      className="flex-1 flex items-center justify-center gap-1 py-2.5 rounded-lg border border-[rgba(93,100,114,0.20)] hover:bg-[#E0EEE9] hover:border-[#CFB6A8] text-[#363C46] hover:text-[#CFB6A8] font-bold transition-all cursor-pointer"
                     >
                       <Calendar className="w-3.5 h-3.5" />
                       Book Visit
                     </button>
                     <button
                       onClick={() => navigate(`/property/${propId}`)}
-                      className="flex-1 flex items-center justify-center gap-1 py-2.5 rounded-full bg-[#1A1A1A] hover:bg-black text-white transition-all cursor-pointer font-bold uppercase tracking-wider text-[11px]"
+                      className="flex-1 flex items-center justify-center gap-1 py-2.5 rounded-lg bg-[#363C46] hover:bg-[#1A1A1A] text-white transition-all cursor-pointer font-bold uppercase tracking-wider text-[11px]"
                     >
                       <span>Tour</span>
-                      <ArrowRight className="w-3 h-3 text-[#F5A623]" />
+                      <ArrowRight className="w-3 h-3 text-[#CFB6A8]" />
                     </button>
                   </div>
                 </motion.div>
@@ -219,7 +227,7 @@ const Wishlist = () => {
 
         {/* CAROUSEL: RECENTLY VIEWED PROPERTIES */}
         {recentlyViewed.length > 0 && (
-          <div className="border-t border-[#E8E4DA] pt-16 space-y-8">
+          <div className="border-t border-[rgba(93,100,114,0.15)] pt-16 space-y-8">
             <SectionHeader tag="VIEWING TRACKER" title="Recently Viewed Estates" />
 
             <div className="flex gap-6 overflow-x-auto pb-4 custom-scrollbar">
@@ -229,9 +237,9 @@ const Wishlist = () => {
                   <div
                     key={recId}
                     onClick={() => navigate(`/property/${recId}`)}
-                    className="w-[280px] shrink-0 border border-[#E8E4DA] bg-white rounded-3xl overflow-hidden cursor-pointer group shadow-[0_20px_40px_rgba(0,0,0,0.06)] hover:border-[#F5A623] transition-all"
+                    className="w-[280px] shrink-0 border border-[rgba(93,100,114,0.15)] bg-white rounded-xl overflow-hidden cursor-pointer group shadow-[0_12px_32px_rgba(54,60,70,0.06)] hover:border-[#CFB6A8] transition-all"
                   >
-                    <div className="relative h-[160px] overflow-hidden bg-stone-100">
+                    <div className="relative h-[160px] overflow-hidden bg-[#E0EEE9]">
                       <ImageWithSkeleton 
                         src={prop.image || prop.imageUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80"} 
                         alt={prop.title} 
@@ -243,11 +251,14 @@ const Wishlist = () => {
                       </div>
                     </div>
                     <div className="p-4 space-y-2">
-                      <div className="flex items-center gap-1 text-xs text-[#8A8A85] font-medium font-sans">
-                        <MapPin className="w-3 h-3 text-[#F5A623]" />
+                      <div className="flex items-center gap-1 text-xs text-[#5D6472] font-medium font-sans">
+                        <MapPin className="w-3 h-3 text-[#CFB6A8]" />
                         <span className="truncate">{prop.location}</span>
                       </div>
-                      <h4 className="text-sm font-bold text-[#1A1A1A] font-sans tracking-tight truncate group-hover:text-[#F5A623]">
+                      <h4
+                        className="text-sm font-bold text-[#363C46] font-sans tracking-tight truncate group-hover:text-[#CFB6A8]"
+                        style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                      >
                         {prop.title}
                       </h4>
                     </div>
