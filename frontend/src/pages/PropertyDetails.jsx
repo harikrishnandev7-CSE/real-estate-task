@@ -240,8 +240,13 @@ const PropertyDetails = () => {
           </div>
 
           {/* 3D Virtual Tour Button */}
-          {['villa','apartment','penthouse'].includes(String(property.type || '').toLowerCase()) &&
-           Array.isArray(property.roomImages) && property.roomImages.length > 0 && (
+          {Boolean(
+            (Array.isArray(property.roomImages) && property.roomImages.length > 0) ||
+            (property.images && typeof property.images === 'object') ||
+            (Array.isArray(property.gallery) && property.gallery.length > 0) ||
+            property.image ||
+            property.imageUrl
+          ) && (
             <button
               onClick={() => setShowTour(true)}
               className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-gradient-to-r from-[#1A1A1A] to-[#2A2420] hover:from-[#F5A623] hover:to-[#E8941A] text-white font-bold font-sans text-sm uppercase tracking-widest transition-all duration-300 shadow-lg hover:shadow-amber-500/20 group border border-white/5 hover:border-[#F5A623]/30 cursor-pointer"
@@ -439,6 +444,7 @@ const PropertyDetails = () => {
         <RoomImagesSection
           images={property.images}
           roomImages={property.roomImages || []}
+          gallery={galleryImages}
           furnishing={property.furnishing}
           propertyType={property.type}
         />

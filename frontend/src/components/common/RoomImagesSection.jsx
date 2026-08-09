@@ -224,7 +224,7 @@ const RoomSection = ({ roomType, images }) => {
 };
 
 // ─── Main RoomImagesSection ───────────────────────────────────────────────────
-const RoomImagesSection = ({ roomImages = [], images = null, furnishing = 'full', propertyType = 'Villa' }) => {
+const RoomImagesSection = ({ roomImages = [], images = null, gallery = [], furnishing = 'full', propertyType = 'Villa' }) => {
   const furnLevel = String(furnishing || 'full').toLowerCase();
   const grouped = {};
 
@@ -236,6 +236,7 @@ const RoomImagesSection = ({ roomImages = [], images = null, furnishing = 'full'
     return [];
   };
 
+  // 1. Extract explicitly uploaded categories from images object
   if (images && typeof images === 'object' && !Array.isArray(images)) {
     const ent = extract(images.entrance);
     const hl = extract(images.hall);
@@ -250,30 +251,44 @@ const RoomImagesSection = ({ roomImages = [], images = null, furnishing = 'full'
     if (bd.length > 0) grouped.bedrooms = bd;
     if (bt.length > 0) grouped.bathrooms = bt;
     if (tr.length > 0) grouped.terrace = tr;
-  } else if (Array.isArray(roomImages) && roomImages.length > 0) {
-    const filtered = roomImages.filter(img => {
-      const type = String(img.type || '').toLowerCase();
-      if (type === 'exterior') return true;
-      if (furnLevel === 'full') return img.furnished === true;
-      if (furnLevel === 'none') return img.furnished === false;
-      if (furnLevel === 'semi') {
-        if (type === 'bedroom' || type === 'hall') return img.furnished === true;
-        if (type === 'kitchen' || type === 'bathroom') return img.furnished === false;
-        return true;
-      }
-      return true;
-    });
+  }
 
-    filtered.forEach(img => {
+  // 2. Extract from roomImages array
+  if (Array.isArray(roomImages) && roomImages.length > 0) {
+    roomImages.forEach(img => {
       const t = String(img.type || 'other').toLowerCase();
-      if (t === 'exterior') return;
-      if (!grouped[t]) grouped[t] = [];
-      grouped[t].push(img.url || img);
+      if (t === 'exterior') {
+        if (!grouped.entrance) grouped.entrance = [];
+        grouped.entrance.push(img.url || img);
+        return;
+      }
+      const key = (t === 'bedroom' || t === 'bedrooms') ? 'bedrooms'
+        : (t === 'bathroom' || t === 'bathrooms') ? 'bathrooms'
+        : t;
+      if (!grouped[key]) grouped[key] = [];
+      grouped[key].push(img.url || img);
     });
   }
 
-  const sortedTypes = Object.keys(grouped).sort((a, b) => getRoomOrder(a) - getRoomOrder(b));
-  if (sortedTypes.length === 0) return null;
+  // 3. Fallback defaults so Entrance, Hall, Kitchen, Bedrooms, Bathrooms, Terrace ALWAYS appear for all properties!
+  const defaultFallbacks = {
+    entrance: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80',
+    hall:     'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80',
+    kitchen:  'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=80',
+    bedrooms: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1200&q=80',
+    bathrooms:'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1200&q=80',
+    terrace:  'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80'
+  };
+
+  const categoriesOrder = ['entrance', 'hall', 'kitchen', 'bedrooms', 'bathrooms', 'terrace'];
+
+  categoriesOrder.forEach(cat => {
+    if (!grouped[cat] || grouped[cat].length === 0) {
+      grouped[cat] = [defaultFallbacks[cat]];
+    }
+  });
+
+  const sortedTypes = categoriesOrder.filter(cat => grouped[cat] && grouped[cat].length > 0);
 
   const furnBadge = furnLevel === 'full'
     ? { text: '✔ Fully Furnished Interior', cls: 'text-emerald-700 bg-emerald-50 border-emerald-200' }

@@ -24,106 +24,125 @@ const SCENE_COLORS = {
   stairs:   'from-orange-900/80 to-stone-900/80',
 };
 
-// ─── Build tour scenes from property roomImages ───────────────────────────────
+// ─── Build tour scenes from property roomImages, images, gallery ──────────────
 function buildScenesFromProperty(property, furnishing) {
-  const furnLevel = String(furnishing || 'full').toLowerCase();
-  const roomImages = Array.isArray(property.roomImages) ? property.roomImages : [];
+  if (!property) return [];
 
-  const getImg = (type, wantFurnished) => {
-    const matches = roomImages.filter(r =>
-      String(r.type || '').toLowerCase() === type && r.furnished === wantFurnished
-    );
-    return matches[0]?.url || null;
+  const extractList = (val) => {
+    if (!val) return [];
+    if (Array.isArray(val)) return val.filter(Boolean);
+    if (typeof val === 'object') return Object.values(val).flat().filter(Boolean);
+    if (typeof val === 'string' && val.trim()) return [val];
+    return [];
   };
 
-  // Decide what furnished means per room given furnishing level
-  const isFurnished = (type) => {
-    if (furnLevel === 'full') return true;
-    if (furnLevel === 'none') return false;
-    // semi: bedroom + hall → furnished; kitchen + bathroom → empty
-    if (furnLevel === 'semi') return (type === 'bedroom' || type === 'hall');
-    return true;
+  const getCatImages = (catName) => {
+    const list = [];
+    if (property.images && typeof property.images === 'object') {
+      const target = catName === 'bedroom' ? (property.images.bedrooms || property.images.bedroom)
+        : catName === 'bathroom' ? (property.images.bathrooms || property.images.bathroom)
+        : property.images[catName];
+      list.push(...extractList(target));
+    }
+    if (Array.isArray(property.roomImages)) {
+      const roomMatch = property.roomImages.filter(r => String(r.type || '').toLowerCase() === catName.toLowerCase());
+      roomMatch.forEach(r => { if (r.url || typeof r === 'string') list.push(r.url || r); });
+    }
+    return list.filter(Boolean);
   };
 
-  const exteriorUrls = property.gallery?.length > 0
-    ? property.gallery
-    : [property.image || property.imageUrl].filter(Boolean);
+  const entranceImg = getCatImages('entrance')[0] || (property.gallery && property.gallery[0]) || property.image || property.imageUrl;
+  const hallImg = getCatImages('hall')[0] || (property.gallery && property.gallery[1]);
+  const kitchenImg = getCatImages('kitchen')[0] || (property.gallery && property.gallery[2]);
+  const bedroomImg = getCatImages('bedroom')[0] || (property.gallery && property.gallery[3]);
+  const bathroomImg = getCatImages('bathroom')[0] || (property.gallery && property.gallery[4]);
+  const terraceImg = getCatImages('terrace')[0] || (property.gallery && property.gallery[5]);
 
   const scenes = [];
 
-  // ── Entrance ──
-  scenes.push({
-    id: 'entrance',
-    name: 'Entrance',
-    type: 'entrance',
-    floor: 0,
-    image: exteriorUrls[1] || exteriorUrls[0],
-    hotspots: [{ id: 'h1', label: 'Enter Hall', targetSceneId: 'hall', x: 52, y: 55 }]
-  });
+  // ── Entrance Scene ──
+  if (entranceImg) {
+    scenes.push({
+      id: 'entrance',
+      name: 'Entrance',
+      type: 'entrance',
+      floor: 0,
+      image: entranceImg,
+      hotspots: hallImg ? [{ id: 'h1', label: 'Enter Living Hall', targetSceneId: 'hall', x: 52, y: 55 }] : []
+    });
+  }
 
-  // ── Hall / Living ──
-  const hallFurnished = isFurnished('hall');
-  const hallImg = getImg('hall', hallFurnished);
+  // ── Living Hall Scene ──
   if (hallImg) {
+    const hallHotspots = [{ id: 'h4', label: 'Back to Entrance', targetSceneId: 'entrance', x: 50, y: 78 }];
+    if (kitchenImg) hallHotspots.push({ id: 'h2', label: 'Go to Kitchen', targetSceneId: 'kitchen', x: 22, y: 55 });
+    if (bedroomImg) hallHotspots.push({ id: 'h3', label: 'Go to Bedroom', targetSceneId: 'bedroom', x: 75, y: 55 });
+
     scenes.push({
       id: 'hall',
       name: 'Living Hall',
       type: 'hall',
       floor: 0,
       image: hallImg,
-      hotspots: [
-        { id: 'h2', label: 'Kitchen', targetSceneId: 'kitchen', x: 22, y: 55 },
-        { id: 'h3', label: 'Bedroom', targetSceneId: 'bedroom', x: 75, y: 55 },
-        { id: 'h4', label: 'Back to Entrance', targetSceneId: 'entrance', x: 50, y: 78 },
-      ]
+      hotspots: hallHotspots
     });
   }
 
-  // ── Kitchen ──
-  const kitFurnished = isFurnished('kitchen');
-  const kitImg = getImg('kitchen', kitFurnished);
-  if (kitImg) {
+  // ── Kitchen Scene ──
+  if (kitchenImg) {
     scenes.push({
       id: 'kitchen',
       name: 'Kitchen',
       type: 'kitchen',
       floor: 0,
-      image: kitImg,
+      image: kitchenImg,
       hotspots: [
-        { id: 'h5', label: 'Back to Hall', targetSceneId: 'hall', x: 50, y: 72 },
+        { id: 'h5', label: 'Back to Hall', targetSceneId: hallImg ? 'hall' : 'entrance', x: 50, y: 72 }
       ]
     });
   }
 
-  // ── Bedroom ──
-  const bedFurnished = isFurnished('bedroom');
-  const bedImg = getImg('bedroom', bedFurnished);
-  if (bedImg) {
+  // ── Bedroom Scene ──
+  if (bedroomImg) {
+    const bedHotspots = [
+      { id: 'h7', label: 'Back to Hall', targetSceneId: hallImg ? 'hall' : 'entrance', x: 30, y: 72 }
+    ];
+    if (bathroomImg) bedHotspots.push({ id: 'h6', label: 'Go to Bathroom', targetSceneId: 'bathroom', x: 78, y: 57 });
+
     scenes.push({
       id: 'bedroom',
       name: 'Bedroom',
       type: 'bedroom',
       floor: 1,
-      image: bedImg,
-      hotspots: [
-        { id: 'h6', label: 'Bathroom', targetSceneId: 'bathroom', x: 78, y: 57 },
-        { id: 'h7', label: 'Back to Hall', targetSceneId: 'hall', x: 30, y: 72 },
-      ]
+      image: bedroomImg,
+      hotspots: bedHotspots
     });
   }
 
-  // ── Bathroom ──
-  const bathFurnished = isFurnished('bathroom');
-  const bathImg = getImg('bathroom', bathFurnished);
-  if (bathImg) {
+  // ── Bathroom Scene ──
+  if (bathroomImg) {
     scenes.push({
       id: 'bathroom',
       name: 'Bathroom',
       type: 'bathroom',
       floor: 1,
-      image: bathImg,
+      image: bathroomImg,
       hotspots: [
-        { id: 'h8', label: 'Back to Bedroom', targetSceneId: 'bedroom', x: 50, y: 73 },
+        { id: 'h8', label: 'Back to Bedroom', targetSceneId: bedroomImg ? 'bedroom' : 'entrance', x: 50, y: 73 }
+      ]
+    });
+  }
+
+  // ── Terrace Scene ──
+  if (terraceImg) {
+    scenes.push({
+      id: 'terrace',
+      name: 'Terrace & Balcony',
+      type: 'terrace',
+      floor: 2,
+      image: terraceImg,
+      hotspots: [
+        { id: 'h9', label: 'Back to Main Entrance', targetSceneId: 'entrance', x: 50, y: 75 }
       ]
     });
   }
