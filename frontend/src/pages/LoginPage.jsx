@@ -31,6 +31,8 @@ const LoginPage = () => {
       setIsSubmitting(false);
       if (user?.role === 'admin') {
         navigate('/admin/dashboard');
+      } else if (user?.role === 'consultant') {
+        navigate('/consultant/dashboard');
       } else {
         navigate('/dashboard');
       }

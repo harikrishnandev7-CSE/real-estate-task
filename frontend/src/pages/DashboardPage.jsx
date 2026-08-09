@@ -48,6 +48,25 @@ const DashboardPage = () => {
     ).slice(0, 4);
   }, [properties]);
 
+  // Safe Array Wrappers
+  const safeSiteVisits = useMemo(() => Array.isArray(siteVisits) ? siteVisits : [], [siteVisits]);
+
+  const wishlistProperties = useMemo(() => {
+    const list = Array.isArray(wishlist) ? wishlist : [];
+    return list.map(item => {
+      if (typeof item === 'object' && item !== null) return item;
+      return properties.find(p => p.id === item || p._id === item) || null;
+    }).filter(Boolean);
+  }, [wishlist, properties]);
+
+  const recentlyViewedProperties = useMemo(() => {
+    const list = Array.isArray(recentlyViewed) ? recentlyViewed : [];
+    return list.map(item => {
+      if (typeof item === 'object' && item !== null) return item;
+      return properties.find(p => p.id === item || p._id === item) || null;
+    }).filter(Boolean);
+  }, [recentlyViewed, properties]);
+
   // Conditional rendering placed AFTER all hooks have executed
   if (!currentUser) {
     return (
@@ -177,12 +196,12 @@ const DashboardPage = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {recommendedProperties.map((prop) => (
+              {recommendedProperties.map((prop, idx) => (
                 <div
-                  key={prop.id}
+                  key={prop.id || prop._id || `rec-${idx}`}
                   onClick={() => {
-                    addToRecentlyViewed(prop);
-                    navigate(`/property/${prop.id}`);
+                    addToRecentlyViewed(prop.id || prop._id || prop);
+                    navigate(`/property/${prop.id || prop._id}`);
                   }}
                   className="group relative border border-[#E8E4DA] hover:border-[#F5A623] rounded-3xl overflow-hidden bg-white shadow-[0_20px_40px_rgba(0,0,0,0.06)] transition-all duration-300 cursor-pointer flex flex-col justify-between"
                 >
@@ -230,12 +249,12 @@ const DashboardPage = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {newProjects.map((proj) => (
+            {newProjects.map((proj, idx) => (
               <div
-                key={proj.id}
+                key={proj.id || proj._id || `proj-${idx}`}
                 onClick={() => {
-                  addToRecentlyViewed(proj);
-                  navigate(`/property/${proj.id}`);
+                  addToRecentlyViewed(proj.id || proj._id || proj);
+                  navigate(`/property/${proj.id || proj._id}`);
                 }}
                 className="group relative border border-[#E8E4DA] hover:border-[#F5A623] rounded-3xl overflow-hidden bg-white shadow-[0_20px_40px_rgba(0,0,0,0.06)] transition-all cursor-pointer"
               >
@@ -275,24 +294,39 @@ const DashboardPage = () => {
             </button>
           </div>
 
-          {siteVisits.length === 0 ? (
+          {safeSiteVisits.length === 0 ? (
             <div className="p-8 rounded-3xl bg-white border border-[#E8E4DA] text-center text-xs text-[#8A8A85] space-y-2 shadow-[0_20px_40px_rgba(0,0,0,0.06)] font-normal">
               <p>No site visits currently scheduled.</p>
               <button onClick={() => openBookModal()} className="text-[#F5A623] hover:underline font-bold">Schedule a private chauffeur-driven tour</button>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {siteVisits.map((visit) => (
-                <div key={visit.id} className="p-6 rounded-3xl bg-white border border-[#E8E4DA] flex items-center justify-between gap-4 font-sans shadow-[0_20px_40px_rgba(0,0,0,0.06)]">
-                  <div className="space-y-1">
-                    <span className="text-[10px] text-emerald-800 font-bold uppercase tracking-widest bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                      {visit.status}
-                    </span>
-                    <h4 className="text-base font-bold text-[#1A1A1A] pt-1">{visit.propertyName}</h4>
-                    <p className="text-xs text-[#8A8A85] font-medium">Date: <span className="text-[#1A1A1A] font-bold">{visit.date}</span> at <span className="text-[#1A1A1A] font-bold">{visit.time}</span></p>
-                    <p className="text-xs text-[#8A8A85] font-medium">Senior Advisor: <span className="text-[#F5A623] font-bold">{visit.consultantName}</span></p>
+              {safeSiteVisits.map((visit, idx) => (
+                <div key={visit.id || visit._id || `visit-${idx}`} className="p-6 rounded-3xl bg-white border border-[#E8E4DA] flex flex-col justify-between gap-4 font-sans shadow-[0_20px_40px_rgba(0,0,0,0.06)]">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="space-y-1">
+                      <span className="text-[10px] text-emerald-800 font-bold uppercase tracking-widest bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                        {visit.status || 'Scheduled'}
+                      </span>
+                      <h4 className="text-base font-bold text-[#1A1A1A] pt-1">{visit.propertyName || visit.propertyTitle}</h4>
+                      <p className="text-xs text-[#8A8A85] font-medium">Date: <span className="text-[#1A1A1A] font-bold">{visit.scheduledDate || visit.date}</span> at <span className="text-[#1A1A1A] font-bold">{visit.scheduledTime || visit.time}</span></p>
+                    </div>
+                    <Calendar className="w-8 h-8 text-[#F5A623] shrink-0" />
                   </div>
-                  <Calendar className="w-8 h-8 text-[#F5A623] shrink-0" />
+
+                  {/* My Consultant Card */}
+                  <div className="bg-[#F4F1EA]/80 p-3.5 rounded-2xl border border-[#E8E4DA] flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-amber-100 text-[#F5A623] font-extrabold flex items-center justify-center text-xs shrink-0">
+                      {visit.consultantName ? visit.consultantName.charAt(0) : 'C'}
+                    </div>
+                    <div className="text-xs space-y-0.5">
+                      <p className="text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold">Assigned Consultant</p>
+                      <p className="font-bold text-[#1A1A1A]">{visit.consultantName || 'Auto-Assigning...'}</p>
+                      {visit.consultant?.phone && (
+                        <p className="text-[11px] text-[#4A4A45] font-medium">📞 {visit.consultant.phone}</p>
+                      )}
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -307,7 +341,7 @@ const DashboardPage = () => {
                 WISHLIST PORTFOLIO
               </span>
               <h2 className="text-2xl sm:text-3xl font-bold text-[#1A1A1A] tracking-tight">
-                Saved Properties ({wishlist.length})
+                Saved Properties ({wishlistProperties.length})
               </h2>
             </div>
             <Link to="/wishlist" className="text-xs text-[#1A1A1A] hover:text-[#F5A623] uppercase tracking-wider font-bold">
@@ -315,16 +349,16 @@ const DashboardPage = () => {
             </Link>
           </div>
 
-          {wishlist.length === 0 ? (
+          {wishlistProperties.length === 0 ? (
             <div className="p-8 rounded-3xl bg-white border border-[#E8E4DA] text-center text-xs text-[#8A8A85] shadow-[0_20px_40px_rgba(0,0,0,0.06)] font-normal">
               No saved properties yet. Click the heart icon on any property to save it here.
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {wishlist.map((prop) => (
+              {wishlistProperties.map((prop, idx) => (
                 <div
-                  key={prop.id}
-                  onClick={() => navigate(`/property/${prop.id}`)}
+                  key={prop.id || prop._id || `wish-${idx}`}
+                  onClick={() => navigate(`/property/${prop.id || prop._id}`)}
                   className="group relative border border-[#E8E4DA] hover:border-[#F5A623] rounded-3xl overflow-hidden bg-white cursor-pointer shadow-[0_20px_40px_rgba(0,0,0,0.06)] transition-all"
                 >
                   <div className="relative h-[160px] overflow-hidden bg-stone-100">
@@ -332,7 +366,7 @@ const DashboardPage = () => {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        removeFromWishlist(prop.id);
+                        removeFromWishlist(prop.id || prop._id);
                       }}
                       className="absolute top-2 right-2 p-1.5 rounded-full bg-white/90 text-red-500 hover:bg-red-500 hover:text-white transition-colors shadow-xs"
                     >
@@ -351,7 +385,7 @@ const DashboardPage = () => {
         </section>
 
         {/* 6. RECENTLY VIEWED SECTION */}
-        {recentlyViewed.length > 0 && (
+        {recentlyViewedProperties.length > 0 && (
           <section className="space-y-6 border-t border-[#E8E4DA] pt-10">
             <div className="space-y-1">
               <span className="text-xs uppercase tracking-[0.25em] text-[#F5A623] font-bold block">
@@ -363,10 +397,10 @@ const DashboardPage = () => {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4">
-              {recentlyViewed.map((prop) => (
+              {recentlyViewedProperties.map((prop, idx) => (
                 <div
-                  key={prop.id}
-                  onClick={() => navigate(`/property/${prop.id}`)}
+                  key={prop.id || prop._id || `recent-${idx}`}
+                  onClick={() => navigate(`/property/${prop.id || prop._id}`)}
                   className="group relative border border-[#E8E4DA] hover:border-[#F5A623] rounded-2xl overflow-hidden bg-white cursor-pointer shadow-xs transition-all"
                 >
                   <div className="h-[100px] overflow-hidden bg-stone-100">

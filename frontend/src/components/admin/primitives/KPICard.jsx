@@ -49,7 +49,11 @@ const KPICard = ({
       {/* Top Row: Icon badge + Delta / Sparkline */}
       <div className="flex items-center justify-between">
         <div className="w-9 h-9 rounded-full bg-amber-50 border border-amber-200 text-[#F5A623] flex items-center justify-center shrink-0">
-          {Icon ? <Icon className="w-4 h-4 stroke-[2]" /> : null}
+          {React.isValidElement(Icon) ? (
+            Icon
+          ) : Icon ? (
+            <Icon className="w-4 h-4 stroke-[2]" />
+          ) : null}
         </div>
 
         <div className="flex items-center gap-2">

@@ -39,6 +39,8 @@ const SearchPage = () => {
 
   // Filter listings
   const searchResults = properties.filter(prop => {
+    if (!prop) return false;
+
     // City filter
     if (activeCityFilter !== 'All' && prop.city !== activeCityFilter) return false;
 
@@ -47,12 +49,20 @@ const SearchPage = () => {
 
     // Query filter
     if (queryParam) {
-      const q = queryParam.toLowerCase();
-      const matchTitle = prop.title.toLowerCase().includes(q);
-      const matchLocation = prop.location.toLowerCase().includes(q);
-      const matchBuilder = prop.builder.toLowerCase().includes(q);
-      const matchType = prop.type.toLowerCase().includes(q);
-      return matchTitle || matchLocation || matchBuilder || matchType;
+      const q = queryParam.trim().toLowerCase();
+      if (!q) return true;
+
+      const matchTitle = (prop.title || '').toLowerCase().includes(q);
+      const matchLocation = (prop.location || '').toLowerCase().includes(q);
+      const matchBuilder = (prop.builder || '').toLowerCase().includes(q);
+      const matchType = (prop.type || '').toLowerCase().includes(q);
+      const matchCity = (prop.city || '').toLowerCase().includes(q);
+      const matchDesc = (prop.desc || prop.description || '').toLowerCase().includes(q);
+      const matchTag = (prop.tag || '').toLowerCase().includes(q);
+      const matchAmenities = Array.isArray(prop.amenities) && prop.amenities.some(a => (a || '').toLowerCase().includes(q));
+      const matchId = String(prop.id || prop._id || '').toLowerCase().includes(q);
+
+      return matchTitle || matchLocation || matchBuilder || matchType || matchCity || matchDesc || matchTag || matchAmenities || matchId;
     }
 
     return true;
@@ -148,25 +158,36 @@ const SearchPage = () => {
           <div className="lg:col-span-7 space-y-8">
             <AnimatePresence mode="wait">
               {loading ? (
-                /* Consume global shared Skeleton Loader component */
-                <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <motion.div
+                  key="loading"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="space-y-6"
+                >
                   <SkeletonLoader count={3} />
                 </motion.div>
               ) : searchResults.length === 0 ? (
-                /* Consume global shared Empty State component */
-                <div className="py-12">
+                <motion.div
+                  key="empty"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="py-12"
+                >
                   <EmptyState 
-                    title="No Bespoke Listings Discovered"
-                    message="Your search query did not yield direct results in our signature collection. Try expanding search keywords or selecting different cities."
-                    actionLabel="Reset Discovery"
+                    title="No Matching Estates Found"
+                    message={`No properties matched your criteria "${queryParam}". Try searching for specific property types like "Villa", "Penthouse", or "Apartment", or adjust your city filters.`}
+                    actionLabel="Reset Search Filters"
                     onAction={() => {
                       setSearchVal('');
                       setSearchParams({});
+                      setActiveCityFilter('All');
+                      setActivePurposeFilter('All');
                     }}
                   />
-                </div>
+                </motion.div>
               ) : (
-                /* Search Results Grid */
                 <motion.div
                   key="results"
                   variants={containerVariants}
@@ -175,19 +196,20 @@ const SearchPage = () => {
                   className="space-y-6"
                 >
                   {searchResults.map((prop) => {
-                    const isWishlisted = wishlist.some(item => item.id === prop.id);
+                    const propId = prop.id || prop._id;
+                    const isWishlisted = Array.isArray(wishlist) && wishlist.some(item => item && ((item.id || item._id) === propId || item === propId));
                     return (
                       <motion.div
-                        key={prop.id}
+                        key={propId}
                         variants={itemVariants}
                         whileHover="hover"
                         className="group relative border border-[#E8E4DA] hover:border-[#F5A623] rounded-3xl overflow-hidden bg-white shadow-[0_20px_40px_rgba(0,0,0,0.06)] flex flex-col md:flex-row items-stretch cursor-pointer transition-all duration-300"
-                        onClick={() => navigate(`/property/${prop.id}`)}
+                        onClick={() => navigate(`/property/${propId}`)}
                       >
                         {/* Image */}
                         <div className="relative w-full md:w-[240px] h-[180px] md:h-auto overflow-hidden bg-stone-100 shrink-0">
                           <ImageWithSkeleton 
-                            src={prop.image} 
+                            src={prop.image || prop.imageUrl} 
                             alt={prop.title} 
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
@@ -206,21 +228,21 @@ const SearchPage = () => {
                                 <MapPin className="w-3.5 h-3.5 text-[#F5A623]" />
                                 <span className="truncate">{prop.location}</span>
                               </div>
-                              <span className="text-[#F5A623] font-bold text-base tracking-tight shrink-0">{prop.price}</span>
+                              <span className="text-[#F5A623] font-bold text-base tracking-tight shrink-0">{prop.price || prop.priceDisplay}</span>
                             </div>
 
                             <h3 className="text-lg font-bold text-[#1A1A1A] font-sans tracking-tight group-hover:text-[#F5A623] transition-colors">
                               {prop.title}
                             </h3>
                             <p className="text-[#8A8A85] text-xs font-normal line-clamp-1 leading-relaxed mt-1 font-sans">
-                              {prop.desc}
+                              {prop.desc || prop.description || ''}
                             </p>
                           </div>
 
                           <div className="border-t border-[#E8E4DA] pt-4 mt-4 flex items-center justify-between text-xs text-[#8A8A85] font-sans gap-3">
                             <div className="flex gap-4 font-bold text-[#1A1A1A] shrink-0">
-                              <span>{prop.beds > 0 ? `${prop.beds} BHK` : 'Office'}</span>
-                              <span>{prop.area}</span>
+                              <span>{prop.beds > 0 ? `${prop.beds} BHK` : (prop.type || 'Estate')}</span>
+                              <span>{prop.area || prop.areaDisplay}</span>
                             </div>
                             <button
                               onClick={(e) => {
@@ -257,12 +279,16 @@ const SearchPage = () => {
 
               {/* Pin Coordinates list overlay on mock map */}
               <div className="w-full max-w-[280px] space-y-2.5 pt-4">
-                {searchResults.slice(0, 4).map((item) => (
-                  <div key={item.id} className="flex items-center justify-between text-[11px] font-sans text-[#8A8A85] border border-[#E8E4DA] bg-white px-3.5 py-2.5 rounded-2xl text-left shadow-2xs">
-                    <span className="truncate text-[#1A1A1A] max-w-[150px] font-bold">{item.title}</span>
-                    <span className="text-[#F5A623] font-bold">ID: {item.id.slice(5, 10).toUpperCase()}</span>
-                  </div>
-                ))}
+                {searchResults.slice(0, 4).map((item, idx) => {
+                  const itemIdStr = String(item.id || item._id || `EST-${idx}`);
+                  const displayId = itemIdStr.length >= 8 ? itemIdStr.slice(-5).toUpperCase() : itemIdStr.toUpperCase();
+                  return (
+                    <div key={itemIdStr} className="flex items-center justify-between text-[11px] font-sans text-[#8A8A85] border border-[#E8E4DA] bg-white px-3.5 py-2.5 rounded-2xl text-left shadow-2xs">
+                      <span className="truncate text-[#1A1A1A] max-w-[150px] font-bold">{item.title}</span>
+                      <span className="text-[#F5A623] font-bold">ID: {displayId}</span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </aside>

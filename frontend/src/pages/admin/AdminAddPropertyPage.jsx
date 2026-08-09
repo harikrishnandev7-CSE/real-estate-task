@@ -32,6 +32,7 @@ import {
 } from '../../components/admin/primitives/FormField';
 import StatusChip from '../../components/admin/primitives/StatusChip';
 import AdminModal from '../../components/admin/primitives/AdminModal';
+import { formatPricePreview } from '../../utils/formatters';
 
 const STEPS = [
   { id: 1, label: 'Basics', number: '01' },
@@ -92,7 +93,15 @@ const AdminAddPropertyPage = () => {
     rera: true,
     reraNumber: 'TN/01/Building/0142/2025',
     status: 'Ready to Move',
-    registrationStatus: 'Clear Title & DTCP Approved'
+    registrationStatus: 'Clear Title & DTCP Approved',
+    images: {
+      entrance: '',
+      hall: [],
+      kitchen: [],
+      bedrooms: [],
+      bathrooms: [],
+      terrace: []
+    }
   });
 
   const [newProText, setNewProText] = useState('');
@@ -104,17 +113,9 @@ const AdminAddPropertyPage = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [createdPropId, setCreatedPropId] = useState(null);
 
-  // Format price preview string (e.g. ₹14.5 Cr)
+  // Format price preview string using shared utility
   const formattedPricePreview = useMemo(() => {
-    const val = Number(formData.numericPrice);
-    if (!val || isNaN(val)) return '₹0';
-    if (formData.purpose === 'Rent') {
-      if (val >= 100000) return `₹${(val / 100000).toFixed(1)} L/mo`;
-      return `₹${val.toLocaleString('en-IN')}/mo`;
-    }
-    if (val >= 1000007) return `₹${(val / 10000000).toFixed(2)} Cr`;
-    if (val >= 100000) return `₹${(val / 100000).toFixed(2)} L`;
-    return `₹${val.toLocaleString('en-IN')}`;
+    return formatPricePreview(formData.numericPrice, formData.purpose);
   }, [formData.numericPrice, formData.purpose]);
 
   // Update Field Handler
@@ -123,6 +124,55 @@ const AdminAddPropertyPage = () => {
     if (errors[key]) {
       setErrors(prev => ({ ...prev, [key]: null }));
     }
+  };
+
+  const updateImageCategory = (category, files) => {
+    setFormData(prev => ({
+      ...prev,
+      images: {
+        ...(prev.images || {}),
+        [category]: files
+      }
+    }));
+    if (errors[category]) {
+      setErrors(prev => ({ ...prev, [category]: null }));
+    }
+  };
+
+  const updateBedroomImages = (bedNum, files) => {
+    setFormData(prev => {
+      const currentBedObj = (typeof prev.images?.bedrooms === 'object' && !Array.isArray(prev.images?.bedrooms))
+        ? prev.images.bedrooms
+        : {};
+      return {
+        ...prev,
+        images: {
+          ...(prev.images || {}),
+          bedrooms: {
+            ...currentBedObj,
+            [bedNum]: files
+          }
+        }
+      };
+    });
+  };
+
+  const updateBathroomImages = (bathNum, files) => {
+    setFormData(prev => {
+      const currentBathObj = (typeof prev.images?.bathrooms === 'object' && !Array.isArray(prev.images?.bathrooms))
+        ? prev.images.bathrooms
+        : {};
+      return {
+        ...prev,
+        images: {
+          ...(prev.images || {}),
+          bathrooms: {
+            ...currentBathObj,
+            [bathNum]: files
+          }
+        }
+      };
+    });
   };
 
   // Add Pro / Con Chips
@@ -146,6 +196,55 @@ const AdminAddPropertyPage = () => {
     setFormData(prev => ({ ...prev, cons: prev.cons.filter((_, i) => i !== idx) }));
   };
 
+  // Helper to count total uploaded images across all categories
+  const getTotalUploadedImagesCount = (imagesObj) => {
+    if (!imagesObj || typeof imagesObj !== 'object') return 0;
+    let count = 0;
+    if (imagesObj.entrance) count += 1;
+
+    ['hall', 'kitchen', 'terrace'].forEach(cat => {
+      const list = imagesObj[cat];
+      if (Array.isArray(list)) count += list.length;
+    });
+
+    ['bedrooms', 'bathrooms'].forEach(cat => {
+      const list = imagesObj[cat];
+      if (Array.isArray(list)) {
+        count += list.length;
+      } else if (list && typeof list === 'object') {
+        Object.values(list).forEach(subList => {
+          if (Array.isArray(subList)) count += subList.length;
+        });
+      }
+    });
+
+    return count;
+  };
+
+  // Scroll to first invalid/error field automatically
+  const scrollToFirstError = (errs) => {
+    if (!errs || Object.keys(errs).length === 0) return;
+
+    setTimeout(() => {
+      const firstKey = Object.keys(errs)[0];
+      const errorEl = 
+        document.querySelector(`[name="${firstKey}"]`) ||
+        document.querySelector(`#dropzone-${firstKey}`) ||
+        document.querySelector(`[data-field="${firstKey}"]`) ||
+        document.querySelector(`.border-red-500`) ||
+        document.querySelector(`.text-red-500`);
+
+      if (errorEl) {
+        errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (typeof errorEl.focus === 'function') {
+          errorEl.focus();
+        }
+      } else {
+        window.scrollTo({ top: 150, behavior: 'smooth' });
+      }
+    }, 120);
+  };
+
   // Step Validation Logic
   const validateStep = (step) => {
     const errs = {};
@@ -157,24 +256,33 @@ const AdminAddPropertyPage = () => {
       if (!formData.numericPrice || Number(formData.numericPrice) <= 0) errs.numericPrice = 'Price must be greater than 0';
       if (!formData.area.trim()) errs.area = 'Area value is required';
     }
-    if (step === 3) {
-      if (!formData.image) errs.image = 'Cover image is required before publishing';
+    if (step === 3 || step === 5) {
+      const totalImages = getTotalUploadedImagesCount(formData.images);
+      const hasEntrance = Boolean(formData.images?.entrance);
+      if (!hasEntrance && totalImages === 0 && !formData.image) {
+        errs.entrance = 'At least 1 property image (Entrance photo recommended) is required before proceeding';
+      }
     }
     if (step === 5) {
-      if (!formData.image) errs.image = 'Cover image is required before publishing';
       if (formData.rera && !formData.reraNumber.trim()) errs.reraNumber = 'RERA Registration Number is required when RERA is enabled';
     }
 
     setErrors(errs);
-    return Object.keys(errs).length === 0;
+
+    if (Object.keys(errs).length > 0) {
+      scrollToFirstError(errs);
+      return false;
+    }
+
+    return true;
   };
 
   // Check if step has errors (for red dot on step indicator)
   const stepHasError = (stepNum) => {
     if (stepNum === 1 && (errors.title || errors.location)) return true;
     if (stepNum === 2 && (errors.numericPrice || errors.area)) return true;
-    if (stepNum === 3 && errors.image) return true;
-    if (stepNum === 5 && (errors.image || errors.reraNumber)) return true;
+    if (stepNum === 3 && (errors.entrance || errors.image)) return true;
+    if (stepNum === 5 && (errors.entrance || errors.image || errors.reraNumber)) return true;
     return false;
   };
 
@@ -209,16 +317,64 @@ const AdminAddPropertyPage = () => {
       const parsedArea = parseInt(formData.area, 10) || 0;
       const parsedPrice = Number(formData.numericPrice) || parseInt(formData.price, 10) || 0;
 
-      const newRecord = await addProperty({
-        ...formData,
-        price: formattedPricePreview,
-        numericPrice: parsedPrice,
-        numericArea: parsedArea,
-        status: statusType,
-        image: formData.image || formData.gallery[0] || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
-        isJustPublished: true
+      const payload = new FormData();
+      payload.append('title', formData.title);
+      payload.append('type', formData.type);
+      payload.append('purpose', formData.purpose);
+      payload.append('tag', formData.tag || '');
+      payload.append('builder', formData.builder || '');
+      payload.append('city', formData.city || '');
+      payload.append('location', formData.location || '');
+      payload.append('price', formattedPricePreview);
+      payload.append('numericPrice', parsedPrice);
+      payload.append('area', formData.area || '');
+      payload.append('numericArea', parsedArea);
+      payload.append('beds', formData.beds || 0);
+      payload.append('baths', formData.baths || 0);
+      payload.append('status', statusType);
+      payload.append('furnishing', formData.furnished === 'Fully Furnished' ? 'full' : formData.furnished === 'Semi Furnished' ? 'semi' : 'none');
+      payload.append('desc', formData.desc || '');
+      payload.append('amenities', JSON.stringify(formData.amenities || []));
+      payload.append('pros', JSON.stringify(formData.pros || []));
+      payload.append('cons', JSON.stringify(formData.cons || []));
+
+      // 1. Entrance file or URL
+      if (formData.images?.entrance) {
+        if (formData.images.entrance instanceof File) {
+          payload.append('entrance', formData.images.entrance);
+        } else if (typeof formData.images.entrance === 'string') {
+          payload.append('entranceUrl', formData.images.entrance);
+        }
+      }
+
+      // 2. Structured categories (hall, kitchen, bedrooms, bathrooms, terrace)
+      const categories = ['hall', 'kitchen', 'bedrooms', 'bathrooms', 'terrace'];
+      const stringifiedUrls = {};
+
+      categories.forEach(cat => {
+        const rawData = formData.images?.[cat] || [];
+        let items = [];
+        if (Array.isArray(rawData)) {
+          items = rawData;
+        } else if (rawData && typeof rawData === 'object') {
+          items = Object.values(rawData).flat();
+        }
+
+        const existingUrls = [];
+        items.forEach(item => {
+          if (item instanceof File) {
+            payload.append(cat, item);
+          } else if (typeof item === 'string' && item.trim()) {
+            existingUrls.push(item);
+          }
+        });
+        stringifiedUrls[cat] = existingUrls;
       });
 
+      stringifiedUrls.entrance = typeof formData.images?.entrance === 'string' ? formData.images.entrance : null;
+      payload.append('images', JSON.stringify(stringifiedUrls));
+
+      const newRecord = await addProperty(payload);
       setCreatedPropId(newRecord?.id || newRecord?._id || 'prop-1');
       setShowSuccessModal(true);
     } catch (err) {
@@ -364,12 +520,22 @@ const AdminAddPropertyPage = () => {
                     placeholder="e.g. IMPERIA Developers"
                   />
 
-                  <SelectInput
-                    label="Location City"
-                    value={formData.city}
-                    onChange={(e) => updateField('city', e.target.value)}
-                    options={CITIES}
-                  />
+                  <div className="w-full font-sans">
+                    <FormLabel>Location City</FormLabel>
+                    <input
+                      type="text"
+                      list="city-suggestions-add"
+                      placeholder="e.g. Chennai, Coimbatore, Madurai, Trichy..."
+                      value={formData.city}
+                      onChange={(e) => updateField('city', e.target.value)}
+                      className="w-full bg-[#F4F1EA] border border-[#E8E4DA] focus:border-[#F5A623] rounded-xl px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#8A8A85] font-medium outline-none transition-colors"
+                    />
+                    <datalist id="city-suggestions-add">
+                      {['Chennai', 'Coimbatore', 'Madurai', 'Bangalore', 'Hyderabad', 'Mumbai', 'Trichy', 'Salem', 'Tirunelveli', 'Ooty', 'Pondicherry', 'Kochi'].map(c => (
+                        <option key={c} value={c} />
+                      ))}
+                    </datalist>
+                  </div>
                 </div>
 
                 <TextInput
@@ -534,35 +700,128 @@ const AdminAddPropertyPage = () => {
                 className="space-y-6"
               >
                 <div className="border-b border-[#E8E4DA] pb-4">
-                  <h3 className="text-xl font-extrabold text-[#1A1A1A] tracking-tight">Step 03 — Media & Architectural Assets</h3>
-                  <p className="text-xs text-[#8A8A85] mt-0.5">Upload high-resolution estate cover photo, gallery images, and brochure PDF.</p>
+                  <h3 className="text-xl font-extrabold text-[#1A1A1A] tracking-tight">Step 03 — Structured Media & Room Assets</h3>
+                  <p className="text-xs text-[#8A8A85] mt-0.5">Specify room counts below to generate exact upload dropzones for each bedroom and bathroom in order: Entrance, Hall, Kitchen, Bedrooms, Bathrooms, and Terrace.</p>
                 </div>
 
-                {/* Cover Photo Dropzone */}
+                {/* Room Count Configuration Card */}
+                <div className="p-5 bg-[#F4F1EA] border border-[#E8E4DA] rounded-2xl space-y-4 font-sans">
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#F5A623] block">
+                    ROOM CONFIGURATION SETUP
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <TextInput
+                      label="Number of Bedrooms (BHK Count)"
+                      type="number"
+                      min={1}
+                      max={12}
+                      value={formData.beds}
+                      onChange={(e) => updateField('beds', Math.max(1, parseInt(e.target.value, 10) || 1))}
+                    />
+                    <TextInput
+                      label="Number of Bathrooms"
+                      type="number"
+                      min={1}
+                      max={12}
+                      value={formData.baths}
+                      onChange={(e) => updateField('baths', Math.max(1, parseInt(e.target.value, 10) || 1))}
+                    />
+                  </div>
+                </div>
+
+                {/* 1. Entrance Image (Single file) */}
                 <div className="space-y-2">
-                  <FormLabel required>Main Cover Photo</FormLabel>
+                  <FormLabel required>1. ENTRANCE IMAGE (Single Photo)</FormLabel>
                   <ImageDropzone
-                    images={formData.image ? [formData.image] : []}
-                    onChange={(imgs) => updateField('image', imgs[0] || '')}
+                    id="dropzone-entrance"
+                    images={formData.images?.entrance ? [formData.images.entrance] : []}
+                    onChange={(imgs) => updateImageCategory('entrance', imgs[0] || '')}
                     maxFiles={1}
                   />
-                  {errors.image && <FormError message={errors.image} />}
+                  {errors.entrance && <FormError message={errors.entrance} />}
                 </div>
 
-                {/* Gallery Dropzone */}
+                {/* 2. Hall Images (Multiple files) */}
                 <div className="space-y-2">
-                  <FormLabel>Estate Gallery Images (Min 3 recommended)</FormLabel>
+                  <FormLabel>2. HALL IMAGES (LIVING ROOM)</FormLabel>
                   <ImageDropzone
-                    images={formData.gallery}
-                    onChange={(imgs) => updateField('gallery', imgs)}
-                    maxFiles={8}
+                    id="dropzone-hall"
+                    images={formData.images?.hall || []}
+                    onChange={(imgs) => updateImageCategory('hall', imgs)}
+                    maxFiles={10}
                   />
-                  {formData.gallery.length < 3 && (
-                    <p className="text-[10px] text-amber-600 font-bold flex items-center gap-1 mt-1">
-                      <AlertCircle className="w-3 h-3" />
-                      <span>Fewer than 3 gallery images uploaded. Adding more photos enhances buyer engagement.</span>
-                    </p>
-                  )}
+                </div>
+
+                {/* 3. Kitchen Images (Multiple files) */}
+                <div className="space-y-2">
+                  <FormLabel>3. KITCHEN IMAGES</FormLabel>
+                  <ImageDropzone
+                    id="dropzone-kitchen"
+                    images={formData.images?.kitchen || []}
+                    onChange={(imgs) => updateImageCategory('kitchen', imgs)}
+                    maxFiles={10}
+                  />
+                </div>
+
+                {/* 4. Per-Bedroom Images (Generated dynamically based on beds count) */}
+                <div className="space-y-4 pt-2 border-t border-[#E8E4DA]">
+                  <FormLabel>4. BEDROOM IMAGES ({formData.beds || 1} Bedrooms Configured)</FormLabel>
+                  <div className="space-y-4 pl-2 border-l-2 border-[#F5A623]">
+                    {Array.from({ length: Math.max(1, formData.beds || 1) }).map((_, idx) => {
+                      const bedNum = idx + 1;
+                      const currentImgs = (typeof formData.images?.bedrooms === 'object' && !Array.isArray(formData.images?.bedrooms))
+                        ? (formData.images.bedrooms[bedNum] || [])
+                        : (Array.isArray(formData.images?.bedrooms) ? formData.images.bedrooms : []);
+
+                      return (
+                        <div key={`bed-${bedNum}`} className="space-y-1.5 bg-stone-50 p-4 rounded-2xl border border-[#E8E4DA]">
+                          <span className="text-xs font-bold text-[#1A1A1A] block">🛏️ Bedroom {bedNum} Photos</span>
+                          <ImageDropzone
+                            id={`dropzone-bedroom-${bedNum}`}
+                            images={currentImgs}
+                            onChange={(imgs) => updateBedroomImages(bedNum, imgs)}
+                            maxFiles={6}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 5. Per-Bathroom Images (Generated dynamically based on baths count) */}
+                <div className="space-y-4 pt-2 border-t border-[#E8E4DA]">
+                  <FormLabel>5. BATHROOM IMAGES ({formData.baths || 1} Bathrooms Configured)</FormLabel>
+                  <div className="space-y-4 pl-2 border-l-2 border-teal-500">
+                    {Array.from({ length: Math.max(1, formData.baths || 1) }).map((_, idx) => {
+                      const bathNum = idx + 1;
+                      const currentImgs = (typeof formData.images?.bathrooms === 'object' && !Array.isArray(formData.images?.bathrooms))
+                        ? (formData.images.bathrooms[bathNum] || [])
+                        : (Array.isArray(formData.images?.bathrooms) ? formData.images.bathrooms : []);
+
+                      return (
+                        <div key={`bath-${bathNum}`} className="space-y-1.5 bg-stone-50 p-4 rounded-2xl border border-[#E8E4DA]">
+                          <span className="text-xs font-bold text-[#1A1A1A] block">🚿 Bathroom {bathNum} Photos</span>
+                          <ImageDropzone
+                            id={`dropzone-bathroom-${bathNum}`}
+                            images={currentImgs}
+                            onChange={(imgs) => updateBathroomImages(bathNum, imgs)}
+                            maxFiles={6}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 6. Terrace Images (Multiple files) */}
+                <div className="space-y-2 pt-2 border-t border-[#E8E4DA]">
+                  <FormLabel>6. TERRACE & BALCONY IMAGES</FormLabel>
+                  <ImageDropzone
+                    id="dropzone-terrace"
+                    images={formData.images?.terrace || []}
+                    onChange={(imgs) => updateImageCategory('terrace', imgs)}
+                    maxFiles={10}
+                  />
                 </div>
 
                 {/* PDF Brochure Link */}

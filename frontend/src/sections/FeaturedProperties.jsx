@@ -166,7 +166,7 @@ const PropertyCard = ({ prop, cardVariants, badgeVariants, ctaTextVariants, ctaI
   const propId = prop.id || prop._id;
   const propImg = prop.image || prop.imageUrl || (Array.isArray(prop.galleryUrls) && prop.galleryUrls[0]) || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80";
 
-  const isLiked = wishlist.some(item => (item.id || item._id) === propId || item === propId);
+  const isLiked = Array.isArray(wishlist) && wishlist.some(item => item && ((item.id || item._id) === propId || item === propId));
 
   const revealRef = useRef(null);
   const isInView = useInView(revealRef, { once: true, amount: 0.15 });
@@ -196,11 +196,7 @@ const PropertyCard = ({ prop, cardVariants, badgeVariants, ctaTextVariants, ctaI
 
   const handleHeartClick = (e) => {
     e.stopPropagation();
-    if (isLiked) {
-      removeFromWishlist(propId);
-    } else {
-      addToWishlist(prop);
-    }
+    addToWishlist(prop);
   };
 
   return (

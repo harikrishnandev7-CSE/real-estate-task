@@ -29,6 +29,7 @@ import OnboardingWelcomePage from './pages/OnboardingWelcomePage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import ProfilePage from './pages/ProfilePage';
+import MyBookings from './pages/MyBookings';
 import NotificationsPage from './pages/NotificationsPage';
 import Blog from './pages/Blog';
 import About from './pages/About';
@@ -52,7 +53,10 @@ import AdminBlogsPage from './pages/admin/AdminBlogsPage';
 import AdminBlogEditorPage from './pages/admin/AdminBlogEditorPage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage';
 import AdminLoginPage from './pages/admin/AdminLoginPage';
-import AdminPlaceholderPage from './pages/admin/AdminPlaceholderPage';
+import ConsultantDashboardPage from './pages/ConsultantDashboardPage';
+import ConsultantsPage from './pages/ConsultantsPage';
+import AdminConsultantsPage from './pages/admin/AdminConsultantsPage';
+import AdminVisitCalendarPage from './pages/admin/AdminVisitCalendarPage';
 
 import './App.css';
 
@@ -82,6 +86,7 @@ function AppRoutes() {
           <Route path="/services/legal-verification" element={<LegalVerificationPage />} />
           <Route path="/services/home-financing" element={<HomeFinancingPage />} />
           <Route path="/services/interior-design" element={<InteriorDesignPage />} />
+          <Route path="/consultants" element={<ConsultantsPage />} />
           <Route path="/premium-plots" element={<CollectionPage collectionSlug="premium-plots" />} />
           <Route path="/architectural-villas" element={<CollectionPage collectionSlug="architectural-villas" />} />
           <Route path="/sky-apartments" element={<CollectionPage collectionSlug="sky-apartments" />} />
@@ -93,6 +98,8 @@ function AppRoutes() {
           <Route path="/welcome" element={<OnboardingWelcomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/my-bookings" element={<MyBookings />} />
+          <Route path="/consultant/dashboard" element={<ConsultantDashboardPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/blog" element={<Blog />} />
@@ -116,7 +123,9 @@ function AppContent() {
     setLoading(false);
   }, []);
 
-  const { toast, hideToast } = useApp();
+  const appContext = useApp() || {};
+  const toast = appContext.toast || { show: false, message: '' };
+  const hideToast = appContext.hideToast || (() => {});
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   if (isAdminRoute) {
@@ -144,6 +153,8 @@ function AppContent() {
             <Route path="properties/:id/edit" element={<AdminEditPropertyPage />} />
             <Route path="construction" element={<AdminConstructionUpdatesPage />} />
             <Route path="customers" element={<AdminCustomersPage />} />
+            <Route path="consultants" element={<AdminConsultantsPage />} />
+            <Route path="visit-calendar" element={<AdminVisitCalendarPage />} />
             <Route path="site-visits" element={<AdminSiteVisitsPage />} />
             <Route path="notifications" element={<AdminNotificationsPage />} />
             <Route path="blogs" element={<AdminBlogsPage />} />

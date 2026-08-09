@@ -3,24 +3,83 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react';
 import ImageWithSkeleton from '../ImageWithSkeleton';
 
-const LuxuryGallery = ({ images = [], alt = "Luxury Estate" }) => {
+const LuxuryGallery = ({ images = [], roomImages = [], alt = "Luxury Estate" }) => {
+  const [selectedRoomType, setSelectedRoomType] = useState('all');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  if (!images || images.length === 0) return null;
+  // Compute active image list based on selected room tab
+  const activeImages = React.useMemo(() => {
+    if (Array.isArray(roomImages) && roomImages.length > 0) {
+      if (selectedRoomType === 'all') {
+        return roomImages.map(r => r.url || r);
+      }
+      const filtered = roomImages.filter(r => String(r.type || '').toLowerCase() === selectedRoomType.toLowerCase());
+      if (filtered.length > 0) return filtered.map(r => r.url || r);
+    }
+    return Array.isArray(images) ? images : [];
+  }, [roomImages, images, selectedRoomType]);
+
+  if (!activeImages || activeImages.length === 0) return null;
+
+  const displayImages = activeImages;
 
   const handleNext = (e) => {
     e.stopPropagation();
-    setCurrentIndex((prev) => (prev + 1) % images.length);
+    setCurrentIndex((prev) => (prev + 1) % displayImages.length);
   };
 
   const handlePrev = (e) => {
     e.stopPropagation();
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+    setCurrentIndex((prev) => (prev - 1 + displayImages.length) % displayImages.length);
+  };
+
+  const roomTypesAvailable = React.useMemo(() => {
+    if (!Array.isArray(roomImages) || roomImages.length === 0) return [];
+    const typesSet = new Set(roomImages.map(r => String(r.type || '').toLowerCase()));
+    return Array.from(typesSet);
+  }, [roomImages]);
+
+  const roomTabLabels = {
+    all: 'All Views',
+    bedroom: 'Bedrooms',
+    hall: 'Living Hall',
+    kitchen: 'Kitchen',
+    bathroom: 'Bathrooms',
+    exterior: 'Exterior'
   };
 
   return (
     <div className="space-y-4 w-full">
+      {/* Room Category Filter Tabs (Optional Room-Wise Display) */}
+      {roomTypesAvailable.length > 0 && (
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar">
+          <button
+            onClick={() => { setSelectedRoomType('all'); setCurrentIndex(0); }}
+            className={`px-3 py-1.5 rounded-full text-xs font-bold font-sans uppercase tracking-wider transition-all cursor-pointer ${
+              selectedRoomType === 'all'
+                ? 'bg-[#1A1A1A] text-white shadow-sm'
+                : 'bg-white text-[#8A8A85] border border-[#E8E4DA] hover:text-[#1A1A1A]'
+            }`}
+          >
+            All Views ({roomImages.length})
+          </button>
+          {roomTypesAvailable.map((rt) => (
+            <button
+              key={rt}
+              onClick={() => { setSelectedRoomType(rt); setCurrentIndex(0); }}
+              className={`px-3 py-1.5 rounded-full text-xs font-bold font-sans uppercase tracking-wider transition-all cursor-pointer ${
+                selectedRoomType === rt
+                  ? 'bg-[#F5A623] text-white shadow-sm'
+                  : 'bg-white text-[#8A8A85] border border-[#E8E4DA] hover:text-[#1A1A1A]'
+              }`}
+            >
+              {roomTabLabels[rt] || rt}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Primary Display Viewport */}
       <div 
         className="relative h-[360px] md:h-[500px] rounded-3xl overflow-hidden bg-neutral-950 group cursor-zoom-in"
@@ -37,7 +96,7 @@ const LuxuryGallery = ({ images = [], alt = "Luxury Estate" }) => {
           >
             {/* Zoom on hover styling */}
             <ImageWithSkeleton 
-              src={images[currentIndex]} 
+              src={displayImages[currentIndex % displayImages.length]} 
               alt={`${alt} - View ${currentIndex + 1}`}
               className="w-full h-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
             />
@@ -49,7 +108,7 @@ const LuxuryGallery = ({ images = [], alt = "Luxury Estate" }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/80 via-transparent to-transparent pointer-events-none z-10" />
 
         {/* Carousel Navigation Arrows */}
-        {images.length > 1 && (
+        {displayImages.length > 1 && (
           <>
             <button
               onClick={handlePrev}
@@ -82,9 +141,9 @@ const LuxuryGallery = ({ images = [], alt = "Luxury Estate" }) => {
       </div>
 
       {/* Thumbnail Nav Slider */}
-      {images.length > 1 && (
+      {displayImages.length > 1 && (
         <div className="flex gap-4 overflow-x-auto pb-2 custom-scrollbar">
-          {images.map((img, index) => (
+          {displayImages.map((img, index) => (
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}

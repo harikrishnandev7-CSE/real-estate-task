@@ -3,7 +3,7 @@ import api, { getToken, setToken } from '../services/api';
 
 const AppContext = createContext();
 
-export const useApp = () => useContext(AppContext);
+export const useApp = () => useContext(AppContext) || {};
 
 // High-resolution premium luxury property images
 const luxuryImages = {
@@ -156,14 +156,17 @@ export const AppProvider = ({ children }) => {
   // Global Site Visit Booking Modal
   const [isBookModalOpen, setIsBookModalOpen] = useState(false);
   const [bookModalProperty, setBookModalProperty] = useState(null);
+  const [bookModalCallback, setBookModalCallback] = useState(null);
 
-  const openBookModal = (property = null) => {
+  const openBookModal = (property = null, callback = null) => {
     setBookModalProperty(property);
+    setBookModalCallback(() => (typeof callback === 'function' ? callback : null));
     setIsBookModalOpen(true);
   };
   const closeBookModal = () => {
     setIsBookModalOpen(false);
     setBookModalProperty(null);
+    setBookModalCallback(null);
   };
 
   // Global WhatsApp Drawer State
@@ -247,6 +250,40 @@ export const AppProvider = ({ children }) => {
     }
   };
 
+  // --- FETCH REAL PROPERTIES FROM API ---
+  const fetchProperties = async () => {
+    try {
+      const propData = await api.getProperties({ limit: 100 });
+      if (propData?.properties?.length > 0) {
+        const cleaned = propData.properties.map(p => {
+          const fallback = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80";
+          const fixImg = (url) => (url && typeof url === 'string' && !url.startsWith('blob:')) ? url : null;
+
+          const exteriorFromRoomImages = Array.isArray(p.roomImages)
+            ? p.roomImages.find(r => String(r.type || '').toLowerCase() === 'exterior')?.url
+            : null;
+          const cardImage =
+            fixImg(p.image) ||
+            fixImg(p.imageUrl) ||
+            (Array.isArray(p.gallery) && p.gallery.length > 0 ? fixImg(p.gallery[0]) : null) ||
+            (Array.isArray(p.galleryUrls) && p.galleryUrls.length > 0 ? fixImg(p.galleryUrls[0]) : null) ||
+            fixImg(exteriorFromRoomImages) ||
+            fallback;
+
+          return {
+            ...p,
+            image: cardImage,
+            imageUrl: cardImage
+          };
+        });
+        setProperties(cleaned);
+        return cleaned;
+      }
+    } catch (err) {
+      console.warn("API properties fetch error:", err.message);
+    }
+  };
+
   // --- INITIAL BACKEND DATA SYNC ---
   useEffect(() => {
     const initApp = async () => {
@@ -261,20 +298,14 @@ export const AppProvider = ({ children }) => {
           user = formatUserObject(rawUser);
           setCurrentUser(user);
         } catch (err) {
-          console.warn("Session token expired or invalid:", err.message);
           setToken(null);
+          setCurrentUser(null);
+          user = null;
         }
       }
 
       // 2. Fetch Real Properties from API
-      try {
-        const propData = await api.getProperties({ limit: 100 });
-        if (propData?.properties?.length > 0) {
-          setProperties(propData.properties);
-        }
-      } catch (err) {
-        console.warn("API properties fetch error, using local dataset fallback:", err.message);
-      }
+      await fetchProperties();
 
       // 3. Fetch Real Blogs from API
       try {
@@ -286,21 +317,33 @@ export const AppProvider = ({ children }) => {
         console.warn("API blogs fetch error:", err.message);
       }
 
-      // 4. Fetch User Wishlist, Compare, Site Visits if logged in
-      if (token) {
+      // Helper to safely extract array from API response
+      const safeArray = (res, key) => {
+        if (!res) return null;
+        const target = res.data || res;
+        if (key && Array.isArray(target[key])) return target[key];
+        if (Array.isArray(target)) return target;
+        return null;
+      };
+
+      // 4. Fetch User Wishlist, Compare, Site Visits ONLY if user is authenticated
+      if (user && getToken()) {
         try {
           const visitsData = await api.getUserSiteVisits();
-          if (visitsData?.siteVisits) setSiteVisits(visitsData.siteVisits);
+          const list = safeArray(visitsData, 'siteVisits');
+          if (list) setSiteVisits(list);
         } catch (err) {}
 
         try {
           const wishData = await api.getWishlist();
-          if (wishData?.wishlist) setWishlist(wishData.wishlist);
+          const list = safeArray(wishData, 'wishlist');
+          if (list) setWishlist(list.filter(Boolean));
         } catch (err) {}
 
         try {
-          const compData = await api.getCompare();
-          if (compData?.compare) setCompareList(compData.compare);
+          const notifData = await api.getUserNotifications();
+          const list = safeArray(notifData, 'notifications');
+          if (list) setNotifications(list);
         } catch (err) {}
       }
 
@@ -308,15 +351,18 @@ export const AppProvider = ({ children }) => {
       if (user?.role === 'admin') {
         try {
           const custData = await api.getAdminCustomers();
-          if (custData?.customers) setCustomers(custData.customers);
+          const list = safeArray(custData, 'customers');
+          if (list) setCustomers(list);
         } catch (err) {}
         try {
           const adminVisits = await api.getAdminSiteVisits();
-          if (adminVisits?.siteVisits) setSiteVisits(adminVisits.siteVisits);
+          const list = safeArray(adminVisits, 'siteVisits');
+          if (list) setSiteVisits(list);
         } catch (err) {}
         try {
           const bcastData = await api.getBroadcasts();
-          if (bcastData?.broadcasts) setBroadcasts(bcastData.broadcasts);
+          const list = safeArray(bcastData, 'broadcasts');
+          if (list) setBroadcasts(list);
         } catch (err) {}
       }
     };
@@ -336,15 +382,22 @@ export const AppProvider = ({ children }) => {
       setCurrentUser(user);
       showToast(`Welcome back, ${user.fullName || user.name || 'Client'}!`);
 
+      const safeArray = (res, key) => {
+        if (!res) return null;
+        if (key && Array.isArray(res[key])) return res[key];
+        if (Array.isArray(res)) return res;
+        return null;
+      };
+
       // Sync backend user state
       if (user.role === 'admin') {
-        api.getAdminCustomers().then(res => res?.customers && setCustomers(res.customers)).catch(()=>{});
-        api.getAdminSiteVisits().then(res => res?.siteVisits && setSiteVisits(res.siteVisits)).catch(()=>{});
-        api.getBroadcasts().then(res => res?.broadcasts && setBroadcasts(res.broadcasts)).catch(()=>{});
+        api.getAdminCustomers().then(res => { const l = safeArray(res, 'customers'); if (l) setCustomers(l); }).catch(()=>{});
+        api.getAdminSiteVisits().then(res => { const l = safeArray(res, 'siteVisits'); if (l) setSiteVisits(l); }).catch(()=>{});
+        api.getBroadcasts().then(res => { const l = safeArray(res, 'broadcasts'); if (l) setBroadcasts(l); }).catch(()=>{});
       } else {
-        api.getUserSiteVisits().then(res => res?.siteVisits && setSiteVisits(res.siteVisits)).catch(()=>{});
-        api.getWishlist().then(res => res?.wishlist && setWishlist(res.wishlist)).catch(()=>{});
-        api.getCompare().then(res => res?.compare && setCompareList(res.compare)).catch(()=>{});
+        api.getUserSiteVisits().then(res => { const l = safeArray(res, 'siteVisits'); if (l) setSiteVisits(l); }).catch(()=>{});
+        api.getWishlist().then(res => { const l = safeArray(res, 'wishlist'); if (l) setWishlist(l); }).catch(()=>{});
+        api.getUserNotifications().then(res => { const l = safeArray(res, 'notifications'); if (l) setNotifications(l); }).catch(()=>{});
       }
 
       return user;
@@ -377,6 +430,11 @@ export const AppProvider = ({ children }) => {
     } catch (err) {}
     setToken(null);
     setCurrentUser(null);
+    setSiteVisits([]);
+    setWishlist([]);
+    setCompareList([]);
+    setCustomers([]);
+    setBroadcasts([]);
     showToast("Logged out successfully.");
   };
 
@@ -398,8 +456,8 @@ export const AppProvider = ({ children }) => {
     try {
       const data = await api.createProperty(newProp);
       const created = data.property || data;
-      setProperties(prev => [created, ...prev]);
       showToast(`Property "${created.title || 'New Property'}" created successfully!`);
+      await fetchProperties();
       return created;
     } catch (err) {
       showToast(err.message || "Failed to create property.", "error");
@@ -411,8 +469,8 @@ export const AppProvider = ({ children }) => {
     try {
       const data = await api.updateProperty(id, updatedFields);
       const updated = data.property || data;
-      setProperties(prev => prev.map(p => (p.id === id || p._id === id) ? { ...p, ...updated } : p));
       showToast("Property updated successfully!");
+      await fetchProperties();
       return updated;
     } catch (err) {
       showToast(err.message || "Failed to update property.", "error");
@@ -420,11 +478,15 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  const deleteProperty = async (id) => {
+  const deleteProperty = async (idOrProp) => {
     try {
-      await api.deleteProperty(id);
-      setProperties(prev => prev.filter(p => p.id !== id && p._id !== id));
-      showToast("Property deleted.");
+      const targetId = typeof idOrProp === 'object' ? (idOrProp?.id || idOrProp?._id) : idOrProp;
+      if (!targetId || targetId === 'undefined') {
+        throw new Error('Invalid property ID provided for deletion');
+      }
+      await api.deleteProperty(targetId);
+      showToast("Property deleted successfully.");
+      await fetchProperties();
     } catch (err) {
       showToast(err.message || "Failed to delete property.", "error");
       throw err;
@@ -435,12 +497,11 @@ export const AppProvider = ({ children }) => {
     if (!ids || ids.length === 0) return;
     try {
       await api.bulkPropertiesAction(ids, action);
+      await fetchProperties();
       if (action === 'Delete') {
-        setProperties(prev => prev.filter(p => !ids.includes(p.id) && !ids.includes(p._id)));
         showToast(`${ids.length} properties deleted successfully.`);
       } else if (action === 'Publish' || action === 'Archive') {
         const targetStatus = action === 'Publish' ? 'Published' : 'Archived';
-        setProperties(prev => prev.map(p => (ids.includes(p.id) || ids.includes(p._id)) ? { ...p, status: targetStatus } : p));
         showToast(`${ids.length} properties updated to ${targetStatus}.`);
       }
     } catch (err) {
@@ -472,16 +533,27 @@ export const AppProvider = ({ children }) => {
         scheduledDate: dateVal,
         time: timeVal,
         scheduledTime: timeVal,
+        city: visit.city || visit.cityName || 'Chennai',
         notes: visit.notes || visit.specialRequest,
-        consultantName: visit.consultantName || "Vikram Malhotra",
       };
 
       const data = await api.createSiteVisit(payload);
       const createdVisit = data.siteVisit || data;
+      const assignedConsultant = data.assignedConsultant || null;
+
+      if (createdVisit) {
+        createdVisit.assignedConsultant = assignedConsultant;
+      }
+
       setSiteVisits(prev => [createdVisit, ...prev]);
       showToast("Site visit booked successfully!");
+
+      if (bookModalCallback && assignedConsultant) {
+        bookModalCallback(assignedConsultant);
+      }
+
       closeBookModal();
-      return createdVisit;
+      return { siteVisit: createdVisit, assignedConsultant };
     } catch (err) {
       // Fallback local addition if API call fails
       const fallbackVisit = {
@@ -493,7 +565,7 @@ export const AppProvider = ({ children }) => {
       setSiteVisits(prev => [fallbackVisit, ...prev]);
       showToast("Site visit requested!");
       closeBookModal();
-      return fallbackVisit;
+      return { siteVisit: fallbackVisit, assignedConsultant: null };
     }
   };
 
@@ -502,21 +574,13 @@ export const AppProvider = ({ children }) => {
       const data = await api.confirmSiteVisit(id);
       const updated = data.siteVisit || data;
       setSiteVisits(prev => prev.map(v => (v.id === id || v._id === id) ? { ...v, ...updated, status: 'Confirmed' } : v));
-      showToast("Site visit confirmed by Admin!");
+      showToast("Site visit confirmed & consultant assigned!");
 
-      // Add a notification for confirmed visit
-      setNotifications(prev => [
-        {
-          id: `notif-${Date.now()}`,
-          type: 'visit',
-          category: 'Site Visit',
-          title: 'Site Visit Confirmed! ✅',
-          desc: `Your site visit has been confirmed by Admin!`,
-          time: 'Just now',
-          read: false,
-        },
-        ...prev
-      ]);
+      // Refresh admin site visits to keep dashboard in sync
+      api.getAdminSiteVisits().then(res => {
+        const l = res?.siteVisits || (Array.isArray(res) ? res : null);
+        if (l) setSiteVisits(l);
+      }).catch(() => {});
     } catch (err) {
       setSiteVisits(prev => prev.map(v => (v.id === id || v._id === id) ? { ...v, status: 'Confirmed' } : v));
       showToast("Site visit marked as Confirmed.");
@@ -673,53 +737,139 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  // --- WISHLIST & COMPARE TOGGLES ---
+  const getPropId = (p) => {
+    if (!p) return '';
+    if (typeof p === 'string') return p;
+    if (p.id) return String(p.id);
+    if (p._id) return String(p._id);
+    if (p.slug) return String(p.slug);
+    if (p.title) return String(p.title).toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    return '';
+  };
+
   const addToWishlist = async (propertyId) => {
-    if (!wishlist.includes(propertyId)) {
-      setWishlist(prev => [...prev, propertyId]);
-      showToast("Added to Wishlist");
-      if (currentUser) {
-        try { await api.addToWishlist(propertyId); } catch (err) {}
-      }
+    if (!currentUser) {
+      showToast("Please log in to add properties to your Wishlist.", "warning");
+      return false;
     }
+
+    const id = getPropId(propertyId);
+    if (!id) {
+      showToast("Invalid property selection.", "error");
+      return false;
+    }
+
+    const propObj = typeof propertyId === 'object' && propertyId !== null ? propertyId : properties.find(p => getPropId(p) === id);
+
+    const isAlreadyIn = Array.isArray(wishlist) && wishlist.some(item => {
+      if (!item) return false;
+      return getPropId(item) === id;
+    });
+
+    if (isAlreadyIn) {
+      showToast("Already added to your Wishlist!", "info");
+      return true;
+    }
+
+    const itemToAdd = propObj || id;
+    setWishlist(prev => [...(Array.isArray(prev) ? prev.filter(Boolean) : []), itemToAdd]);
+    showToast("Added to Wishlist!", "success");
+
+    try {
+      await api.addToWishlist(id);
+    } catch (err) {
+      console.warn("API addToWishlist error:", err.message);
+    }
+
+    return true;
   };
 
   const removeFromWishlist = async (propertyId) => {
-    setWishlist(prev => prev.filter(id => id !== propertyId));
-    showToast("Removed from Wishlist");
-    if (currentUser) {
-      try { await api.removeFromWishlist(propertyId); } catch (err) {}
+    if (!currentUser) {
+      showToast("Please log in to manage your Wishlist.", "warning");
+      return false;
     }
+    const id = getPropId(propertyId);
+    setWishlist(prev => (Array.isArray(prev) ? prev : []).filter(item => {
+      if (!item) return false;
+      return getPropId(item) !== id;
+    }));
+    showToast("Removed from Wishlist");
+    try { await api.removeFromWishlist(id); } catch (err) {}
+    return true;
   };
 
   const addToCompare = async (propertyId) => {
-    if (compareList.length >= 4) {
-      showToast("You can compare up to 4 properties.", "warning");
-      return;
+    if (!currentUser) {
+      showToast("Please log in to compare properties.", "warning");
+      return false;
     }
-    if (!compareList.includes(propertyId)) {
-      setCompareList(prev => [...prev, propertyId]);
-      showToast("Added to Compare");
-      if (currentUser) {
-        try { await api.addToCompare(propertyId); } catch (err) {}
+
+    const inputId = getPropId(propertyId);
+    const newPropObj = (typeof propertyId === 'object' && propertyId !== null)
+      ? propertyId
+      : properties.find(p => getPropId(p) === inputId);
+
+    const id = getPropId(newPropObj) || inputId;
+    if (!id) {
+      showToast("Invalid property selection", "error");
+      return false;
+    }
+
+    const newType = normalizeType(newPropObj?.type);
+
+    const isAlreadyAdded = Array.isArray(compareList) && compareList.some(item => item && getPropId(item) === id);
+    if (isAlreadyAdded) {
+      showToast("Property is already added to compare list.", "info");
+      return false;
+    }
+
+    if (compareList.length >= 3) {
+      showToast("Maximum 3 properties allowed", "error");
+      return false;
+    }
+
+    if (compareList.length > 0) {
+      const firstItem = compareList[0];
+      const firstPropObj = (typeof firstItem === 'object' && firstItem !== null)
+        ? firstItem
+        : properties.find(p => getPropId(p) === getPropId(firstItem));
+
+      const firstType = normalizeType(firstPropObj?.type);
+
+      if (firstType !== newType) {
+        showToast(`❌ ${firstType || 'Property'} and ${newType || 'Property'} cannot be compared. Only same property types allowed.`, "error");
+        return false;
       }
     }
+
+    setCompareList(prev => [...prev, id]);
+    showToast("Added to Compare");
+    return true;
   };
 
   const removeFromCompare = async (propertyId) => {
-    setCompareList(prev => prev.filter(id => id !== propertyId));
-    showToast("Removed from Compare");
-    if (currentUser) {
-      try { await api.removeFromCompare(propertyId); } catch (err) {}
+    if (!currentUser) {
+      showToast("Please log in to manage Compare list.", "warning");
+      return false;
     }
+    const targetId = getPropId(propertyId);
+    setCompareList(prev => prev.filter(item => getPropId(item) !== targetId));
+    showToast("Removed from Compare");
+    return true;
   };
 
-  const addToRecentlyViewed = (propertyId) => {
-    if (!recentlyViewed.includes(propertyId)) {
-      setRecentlyViewed(prev => [propertyId, ...prev.filter(id => id !== propertyId)].slice(0, 10));
-      if (currentUser) {
-        try { api.addRecentlyViewed(propertyId); } catch (err) {}
-      }
+  const addToRecentlyViewed = (propertyOrId) => {
+    if (!propertyOrId) return;
+    const propId = typeof propertyOrId === 'string' ? propertyOrId : getPropId(propertyOrId);
+    if (!propId || typeof propId !== 'string') return;
+
+    setRecentlyViewed(prev => [propId, ...prev.filter(id => id !== propId)].slice(0, 10));
+
+    if (currentUser && getToken()) {
+      try {
+        api.addRecentlyViewed(propId);
+      } catch (err) {}
     }
   };
 
@@ -727,6 +877,7 @@ export const AppProvider = ({ children }) => {
     <AppContext.Provider value={{
       properties,
       setProperties,
+      fetchProperties,
       addProperty,
       updateProperty,
       deleteProperty,

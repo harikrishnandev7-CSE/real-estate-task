@@ -29,7 +29,14 @@ const AdminLoginPage = () => {
     try {
       const user = await loginUser({ email, password });
       setIsSubmitting(false);
-      showToast("Authorized into IMPERIA Admin Control Panel");
+
+      // Role check — only admin can access this panel
+      if (user?.role !== 'admin') {
+        showToast('Access denied. Admin credentials required.', 'error');
+        return;
+      }
+
+      showToast('Authorized into IMPERIA Admin Control Panel');
       navigate('/admin/dashboard');
     } catch (err) {
       setIsSubmitting(false);
@@ -62,7 +69,7 @@ const AdminLoginPage = () => {
           <div className="flex items-center gap-2.5 p-3 rounded-2xl bg-amber-50 border border-amber-200 text-[#1A1A1A]">
             <ShieldCheck className="w-5 h-5 text-[#F5A623] shrink-0" />
             <p className="text-xs font-bold leading-tight">
-              Admin Portal Gateway <span className="text-[10px] text-[#8A8A85] font-normal block">Use credentials admin@imperiaestates.com / Admin@123456</span>
+              Admin Portal Gateway <span className="text-[10px] text-[#8A8A85] font-normal block">Use credentials admin@imperiaestates.com / admin1234</span>
             </p>
           </div>
 

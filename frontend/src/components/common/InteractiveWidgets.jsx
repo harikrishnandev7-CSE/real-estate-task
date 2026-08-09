@@ -90,7 +90,7 @@ export const EMICard = ({ initialPrincipal = 50000000 }) => {
 };
 
 // Booking Card: Concierge visit scheduler
-export const BookingCard = ({ propertyTitle }) => {
+export const BookingCard = ({ propertyTitle, propertyCity, propertyId, onConsultantAssigned }) => {
   const { showToast, addSiteVisit } = useApp();
   const [bookingName, setBookingName] = useState('');
   const [bookingPhone, setBookingPhone] = useState('');
@@ -108,16 +108,21 @@ export const BookingCard = ({ propertyTitle }) => {
 
     try {
       if (addSiteVisit) {
-        await addSiteVisit({
+        const res = await addSiteVisit({
+          propertyId,
           propertyName: propertyTitle || 'IMPERIA Residence',
+          city: propertyCity || 'Chennai',
           date: bookingDate,
           time: bookingTime,
-          consultantName: 'Vikram Malhotra',
           status: 'Scheduled',
           name: bookingName,
           phone: bookingPhone,
           email: clientEmail,
         });
+
+        if (res?.assignedConsultant && typeof onConsultantAssigned === 'function') {
+          onConsultantAssigned(res.assignedConsultant);
+        }
       }
 
       setIsSubmitting(false);

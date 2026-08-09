@@ -46,7 +46,7 @@ async function request(endpoint, options = {}, isRetry = false) {
     data = null;
   }
 
-  if (response.status === 401 && !isRetry && !endpoint.startsWith('/auth/')) {
+  if (response.status === 401 && !isRetry && endpoint !== '/auth/login' && endpoint !== '/auth/signup' && endpoint !== '/auth/refresh-token') {
     if (!isRefreshingToken) {
       isRefreshingToken = true;
       try {
@@ -106,9 +106,6 @@ export const api = {
   getWishlist: () => request('/user/wishlist', { method: 'GET' }),
   addToWishlist: (propertyId) => request('/user/wishlist', { method: 'POST', body: { propertyId } }),
   removeFromWishlist: (propertyId) => request(`/user/wishlist/${propertyId}`, { method: 'DELETE' }),
-  getCompare: () => request('/user/compare', { method: 'GET' }),
-  addToCompare: (propertyId) => request('/user/compare', { method: 'POST', body: { propertyId } }),
-  removeFromCompare: (propertyId) => request(`/user/compare/${propertyId}`, { method: 'DELETE' }),
   getRecentlyViewed: () => request('/user/recently-viewed', { method: 'GET' }),
   addRecentlyViewed: (propertyId) => request('/user/recently-viewed', { method: 'POST', body: { propertyId } }),
 
@@ -124,8 +121,17 @@ export const api = {
 
   // --- SITE VISITS ---
   createSiteVisit: (visitData) => request('/site-visits', { method: 'POST', body: visitData }),
+  getMyBookings: () => request('/site-visits/my', { method: 'GET' }),
   getUserSiteVisits: () => request('/site-visits/my-visits', { method: 'GET' }),
   getAdminSiteVisits: () => request('/admin/site-visits', { method: 'GET' }),
+  getCalendarMonthData: (params = {}) => {
+    const query = new URLSearchParams(params).toString();
+    return request(`/site-visits/calendar?${query}`, { method: 'GET' });
+  },
+  getSiteVisitsByDate: (params = {}) => {
+    const query = new URLSearchParams(params).toString();
+    return request(`/site-visits/by-date?${query}`, { method: 'GET' });
+  },
   updateSiteVisitStatus: (id, updateData) => request(`/admin/site-visits/${id}`, { method: 'PUT', body: updateData }),
   confirmSiteVisit: (id) => request(`/site-visits/admin/site-visits/${id}/confirm`, { method: 'PATCH' }),
   rescheduleSiteVisit: (id, updateData) => request(`/site-visits/admin/site-visits/${id}/reschedule`, { method: 'PATCH', body: updateData }),
@@ -157,6 +163,32 @@ export const api = {
   markNotificationRead: (id) => request(`/user/notifications/${id}/read`, { method: 'PATCH' }),
   markAllNotificationsRead: () => request('/user/notifications/read-all', { method: 'PATCH' }),
   deleteNotification: (id) => request(`/user/notifications/${id}`, { method: 'DELETE' }),
+
+  // --- CONSULTANTS (ADMIN) ---
+  getAdminConsultants: (filters = {}) => request(`/admin/consultants${buildQueryString(filters)}`, { method: 'GET' }),
+  getConsultantAllocations: (id) => request(`/admin/consultants/${id}/allocations`, { method: 'GET' }),
+  createConsultant: (data) => request('/admin/consultants', { method: 'POST', body: data }),
+  updateConsultant: (id, data) => request(`/admin/consultants/${id}`, { method: 'PATCH', body: data }),
+  activateConsultant: (id) => request(`/admin/consultants/${id}/activate`, { method: 'PATCH' }),
+  deactivateConsultant: (id) => request(`/admin/consultants/${id}/deactivate`, { method: 'PATCH' }),
+  deleteConsultant: (id) => request(`/admin/consultants/${id}`, { method: 'DELETE' }),
+
+  // --- ADMIN VISIT CALENDAR ---
+  getVisitCalendar: (filters = {}) => request(`/admin/visit-calendar${buildQueryString(filters)}`, { method: 'GET' }),
+  reassignVisit: (assignmentId, newConsultantId) => request(`/admin/site-visits/${assignmentId}/reassign`, { method: 'PATCH', body: { newConsultantId } }),
+
+  // --- CONSULTANT DASHBOARD ---
+  getConsultantProfile: () => request('/consultant/profile', { method: 'GET' }),
+  getConsultantVisitsToday: () => request('/consultant/visits/today', { method: 'GET' }),
+  getConsultantVisitsUpcoming: () => request('/consultant/visits/upcoming', { method: 'GET' }),
+  getConsultantVisitsCompleted: () => request('/consultant/visits/completed', { method: 'GET' }),
+  updateConsultantVisitStatus: (id, status) => request(`/consultant/visits/${id}/status`, { method: 'PATCH', body: { status } }),
+
+  // --- PUBLIC CONSULTANTS ---
+  getPublicConsultants: (filters = {}) => request(`/consultants${buildQueryString(filters)}`, { method: 'GET' }),
+
+  // --- BANKS / HOME LOAN ---
+  getBanks: () => request('/banks', { method: 'GET' }),
 };
 
 export default api;

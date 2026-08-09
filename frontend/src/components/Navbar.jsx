@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Search, Heart, Bell, Menu, X, ChevronDown, User, Sparkles, Building, MapPin, Scale, Calendar, TrendingUp, Trash2, Settings, ShieldCheck } from 'lucide-react';
+import { Search, Heart, Bell, Menu, X, ChevronDown, User, Users, Sparkles, Building, MapPin, Scale, Calendar, TrendingUp, Trash2, Settings, ShieldCheck } from 'lucide-react';
 import ImageWithSkeleton from './ImageWithSkeleton';
 import { useApp } from '../context/AppContext';
 import ImperiaLogo from './ImperiaLogo';
@@ -257,7 +257,7 @@ const Navbar = () => {
     { name: 'Buy', href: '/buy' },
     { name: 'Rent', href: '/rent' },
     { name: 'Projects', href: '/projects', type: 'projects' },
-    { name: 'Compare', href: '/compare' },
+    ...(currentUser ? [{ name: 'Compare', href: '/compare' }] : []),
     { name: 'Services', href: '/services', type: 'services' },
     { name: 'Insights', href: '/blog' }
   ];
@@ -489,6 +489,20 @@ const Navbar = () => {
                               <p className="text-xs text-[#8A8A85] font-normal mt-0.5 leading-relaxed">Italian marble & smart home automation</p>
                             </div>
                           </Link>
+
+                          <Link 
+                            to="/consultants" 
+                            onClick={() => setActiveMegaMenu(null)}
+                            className="p-3.5 rounded-xl bg-[#F4F1EA] hover:bg-amber-50/60 border border-[#E8E4DA] hover:border-[#F5A623] transition-all duration-200 group flex items-start gap-3"
+                          >
+                            <div className="p-2 rounded-lg bg-amber-100 text-[#F5A623] shrink-0">
+                              <Users className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-bold text-[#1A1A1A] group-hover:text-[#F5A623] transition-colors">Our Consultants</p>
+                              <p className="text-xs text-[#8A8A85] font-normal mt-0.5 leading-relaxed">City-specialist luxury property advisors</p>
+                            </div>
+                          </Link>
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -537,19 +551,37 @@ const Navbar = () => {
               </motion.button>
             </div>
 
+            {/* Wishlist Trigger (Logged in only) */}
+            {currentUser && (
+              <div className="relative flex items-center shrink-0">
+                <Link
+                  to="/wishlist"
+                  className="text-[#2B2926] hover:text-[#F5A623] transition-colors duration-300 cursor-pointer outline-none p-1.5 rounded-full flex items-center justify-center font-bold"
+                  aria-label="View Wishlist"
+                >
+                  <Heart className="w-5 h-5 stroke-[2]" />
+                </Link>
+              </div>
+            )}
+
             {/* Account Trigger & Dropdown */}
             <div className="relative" ref={accountRef}>
               <motion.button
-                onClick={() => setAccountOpen(!accountOpen)}
+                onClick={() => {
+                  if (!currentUser) {
+                    navigate('/login');
+                  } else {
+                    setAccountOpen(!accountOpen);
+                  }
+                }}
                 whileHover={{ opacity: 0.8 }}
                 whileTap={{ scale: 0.95 }}
                 className="text-[#2B2926] hover:text-[#F5A623] transition-colors duration-300 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#F5A623]/50 p-1.5 rounded-full flex items-center justify-center gap-1.5 font-bold"
-                aria-label="Account menu"
+                aria-label={currentUser ? "Account menu" : "Log in"}
               >
                 <User className="w-5 h-5 stroke-[2] text-[#F5A623]" />
-                {/* Show name only at xl+ so it doesn't compete for space at lg */}
                 <span className="hidden xl:inline font-sans text-[11px] font-extrabold tracking-[0.1em] uppercase text-[#1A1A1A]">
-                  {currentUser ? (currentUser.name || currentUser.fullName || 'Member').split(' ')[0] : 'ACCOUNT'}
+                  {currentUser ? (currentUser.name || currentUser.fullName || 'Member').split(' ')[0] : 'LOGIN'}
                 </span>
               </motion.button>
 
@@ -592,6 +624,16 @@ const Navbar = () => {
                             >
                               <Sparkles className="w-4 h-4 text-[#F5A623] shrink-0" />
                               <span>Portfolio Dashboard</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              to="/my-bookings"
+                              onClick={() => setAccountOpen(false)}
+                              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#F4F1EA] hover:text-[#1A1A1A] transition-colors text-left"
+                            >
+                              <Calendar className="w-4 h-4 text-[#F5A623] shrink-0" />
+                              <span>My Bookings</span>
                             </Link>
                           </li>
                           <li>
@@ -1021,23 +1063,27 @@ const Navbar = () => {
 
               <div className="space-y-4 border-t border-[#E8E4DA] pt-6 font-sans">
                 <div className="flex items-center gap-4 justify-around mb-2">
-                  <Link 
-                    to="/wishlist" 
-                    onClick={() => setMobileMenuOpen(false)} 
-                    className="text-[#8A8A85] hover:text-[#1A1A1A] transition-colors relative p-2 rounded-full hover:bg-white outline-none focus-visible:ring-2 focus-visible:ring-[#F5A623]/50"
-                    aria-label="View wishlist"
-                  >
-                    <Heart className="w-5 h-5" />
-                    <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#F5A623]"></span>
-                  </Link>
-                  <Link 
-                    to="/compare" 
-                    onClick={() => setMobileMenuOpen(false)} 
-                    className="text-[#8A8A85] hover:text-[#1A1A1A] transition-colors relative p-2 rounded-full hover:bg-white outline-none focus-visible:ring-2 focus-visible:ring-[#F5A623]/50"
-                    aria-label="Compare properties"
-                  >
-                    <Scale className="w-5 h-5" />
-                  </Link>
+                  {currentUser && (
+                    <>
+                      <Link 
+                        to="/wishlist" 
+                        onClick={() => setMobileMenuOpen(false)} 
+                        className="text-[#8A8A85] hover:text-[#1A1A1A] transition-colors relative p-2 rounded-full hover:bg-white outline-none focus-visible:ring-2 focus-visible:ring-[#F5A623]/50"
+                        aria-label="View wishlist"
+                      >
+                        <Heart className="w-5 h-5" />
+                        <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#F5A623]"></span>
+                      </Link>
+                      <Link 
+                        to="/compare" 
+                        onClick={() => setMobileMenuOpen(false)} 
+                        className="text-[#8A8A85] hover:text-[#1A1A1A] transition-colors relative p-2 rounded-full hover:bg-white outline-none focus-visible:ring-2 focus-visible:ring-[#F5A623]/50"
+                        aria-label="Compare properties"
+                      >
+                        <Scale className="w-5 h-5" />
+                      </Link>
+                    </>
+                  )}
                   <button 
                     onClick={() => {
                       setMobileMenuOpen(false);

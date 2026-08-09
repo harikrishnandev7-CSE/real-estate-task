@@ -4,7 +4,15 @@ import { Calendar, Phone, User, Mail, Building, Clock, Check, X, ArrowRight, Loa
 import { useApp } from '../../context/AppContext';
 
 const BookSiteVisitModal = () => {
-  const { isBookModalOpen, closeBookModal, bookModalProperty, showToast, properties, addSiteVisit, currentUser } = useApp();
+  const {
+    isBookModalOpen = false,
+    closeBookModal = () => {},
+    bookModalProperty = null,
+    showToast = () => {},
+    properties = [],
+    addSiteVisit = async () => {},
+    currentUser = null,
+  } = useApp() || {};
 
   const [formData, setFormData] = useState({
     name: '',
@@ -101,7 +109,7 @@ const BookSiteVisitModal = () => {
         propertyName: formData.property,
         date: formData.date,
         time: formData.time,
-        consultantName: 'Vikram Malhotra',
+        city: bookModalProperty?.city || 'Chennai',
         propertyId: bookModalProperty?.id || bookModalProperty?._id,
       });
 

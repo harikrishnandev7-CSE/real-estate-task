@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Search, Heart, Grid, List, ChevronDown, Check, ShieldCheck, MapPin, BedDouble, Bath, Square, Sparkles, Filter, RefreshCw, X, Eye, Calendar } from 'lucide-react';
 import { useApp } from '../context/AppContext';
@@ -7,9 +7,13 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 
 const Buy = () => {
   const [searchParams] = useSearchParams();
-  const { properties, wishlist, compareList, addToWishlist, removeFromWishlist, addToCompare, removeFromCompare, addToRecentlyViewed, openBookModal } = useApp();
+  const { properties, fetchProperties, wishlist, compareList, addToWishlist, removeFromWishlist, addToCompare, removeFromCompare, addToRecentlyViewed, openBookModal } = useApp();
   const navigate = useNavigate();
   const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (fetchProperties) fetchProperties();
+  }, []);
 
   // Filter States
   const [selectedCity, setSelectedCity] = useState('All');
@@ -33,8 +37,16 @@ const Buy = () => {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [quickViewProperty, setQuickViewProperty] = useState(null);
 
-  // Available Filter Options
-  const cities = ['All', 'Chennai', 'Coimbatore', 'Madurai', 'Bangalore', 'Hyderabad', 'Mumbai'];
+  // Available Filter Options (dynamically includes all cities from DB properties)
+  const cities = useMemo(() => {
+    const defaultCities = ['All', 'Chennai', 'Coimbatore', 'Madurai', 'Bangalore', 'Hyderabad', 'Mumbai'];
+    const dynamicSet = new Set(defaultCities);
+    (properties || []).forEach(p => {
+      if (p.city && p.city.trim()) dynamicSet.add(p.city.trim());
+    });
+    return Array.from(dynamicSet);
+  }, [properties]);
+
   const types = ['All', 'Villa', 'Apartment', 'Penthouse', 'Plot'];
   const bedsOptions = ['All', '3', '4', '5'];
   const bathsOptions = ['All', '3', '4', '5', '6'];
@@ -86,13 +98,13 @@ const Buy = () => {
 
   // Filter listings
   const filteredProperties = properties.filter(prop => {
-    if (prop.purpose !== 'Buy') return false;
+    if (prop.purpose && String(prop.purpose).toLowerCase() !== 'buy') return false;
     
     // City filter
     if (selectedCity !== 'All' && prop.city !== selectedCity) return false;
 
     // Type filter
-    if (selectedType !== 'All' && prop.type !== selectedType) return false;
+    if (selectedType !== 'All' && String(prop.type || '').toLowerCase() !== selectedType.toLowerCase()) return false;
 
     // Budget filter
     if (prop.numericPrice > maxBudget) return false;
@@ -479,7 +491,7 @@ const Buy = () => {
               initial="hidden"
               animate="visible"
               className={viewMode === 'grid' 
-                ? "grid grid-cols-1 md:grid-cols-2 gap-8" 
+                ? "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8" 
                 : "flex flex-col gap-6"
               }
             >
@@ -487,8 +499,8 @@ const Buy = () => {
                 {currentItems.map((prop, idx) => {
                   const propId = prop.id || prop._id || prop.slug || (prop.title ? prop.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') : `prop-${idx}`);
                   const propImg = prop.image || prop.imageUrl || (Array.isArray(prop.galleryUrls) && prop.galleryUrls[0]) || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80";
-                  const isWishlisted = wishlist.some(item => item === propId || item.id === propId || item._id === propId);
-                  const isCompared = compareList.some(item => item === propId || item.id === propId || item._id === propId);
+                  const isWishlisted = Array.isArray(wishlist) && wishlist.some(item => item && (item === propId || item.id === propId || item._id === propId));
+                  const isCompared = Array.isArray(compareList) && compareList.some(item => item && (item === propId || item.id === propId || item._id === propId));
 
                   return (
                     <motion.div
@@ -523,7 +535,7 @@ const Buy = () => {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                isWishlisted ? removeFromWishlist(propId) : addToWishlist(prop);
+                                addToWishlist(prop);
                               }}
                               className="p-2 rounded-full bg-white/90 text-[#1A1A1A] hover:bg-[#F5A623] hover:text-white transition-colors cursor-pointer shadow-xs"
                               aria-label="Wishlist"
@@ -884,12 +896,11 @@ const Buy = () => {
                     </button>
                     <button
                       onClick={() => {
-                        const isWishlisted = wishlist.some(item => item.id === quickViewProperty.id);
-                        isWishlisted ? removeFromWishlist(quickViewProperty.id) : addToWishlist(quickViewProperty);
+                        addToWishlist(quickViewProperty);
                       }}
                       className="px-4 py-3.5 border border-[#E8E4DA] bg-white rounded-full text-[#1A1A1A] hover:border-[#F5A623] transition-colors flex items-center justify-center cursor-pointer shadow-xs"
                     >
-                      <Heart className={`w-4 h-4 ${wishlist.some(item => item.id === quickViewProperty.id) ? 'fill-current text-red-500' : ''}`} />
+                      <Heart className={`w-4 h-4 ${Array.isArray(wishlist) && wishlist.some(item => item && ((item.id || item._id) === (quickViewProperty.id || quickViewProperty._id) || item === (quickViewProperty.id || quickViewProperty._id))) ? 'fill-current text-red-500' : ''}`} />
                     </button>
                   </div>
                 </div>

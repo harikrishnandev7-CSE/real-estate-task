@@ -1,18 +1,115 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { MapPin, BedDouble, Bath, Square, Car, Calendar, Share2, Compass, ShieldAlert, ArrowLeft } from 'lucide-react';
+import { AnimatePresence } from 'framer-motion';
+import { MapPin, BedDouble, Bath, Square, Car, Calendar, Share2, Compass, ShieldAlert, ArrowLeft, ExternalLink, Calculator, Armchair, Eye } from 'lucide-react';
+import VirtualTourModal from '../components/common/VirtualTourModal';
 import { useApp } from '../context/AppContext';
 import LuxuryGallery from '../components/common/LuxuryGallery';
-import { PropertyBadge, StatusBadge, SpecificationCard, AmenityCard, BuilderCard, AgentCard } from '../components/common/CardsAndBadges';
+import RoomImagesSection from '../components/common/RoomImagesSection';
+import { PropertyBadge, StatusBadge, FurnishingBadge, SpecificationCard, AmenityCard, BuilderCard, AgentCard } from '../components/common/CardsAndBadges';
 import { EMICard, BookingCard, SectionHeader, AnimatedButton } from '../components/common/InteractiveWidgets';
+import api from '../services/api';
+
+const LandAreaConverter = ({ numericArea = 2400 }) => {
+  const [sqft, setSqft] = useState(numericArea);
+
+  const cents = (sqft / 435.6).toFixed(2);
+  const sqMeters = (sqft * 0.092903).toFixed(2);
+  const acres = (sqft / 43560).toFixed(4);
+
+  return (
+    <div className="bg-white border border-[#E8E4DA] rounded-3xl p-6 space-y-4 shadow-sm">
+      <div className="flex items-center gap-3">
+        <Calculator className="w-5 h-5 text-[#F5A623]" />
+        <div>
+          <h4 className="text-sm font-bold text-[#1A1A1A]">Land Area Unit Converter</h4>
+          <p className="text-[11px] text-[#8A8A85]">Enter square footage to convert into South Indian land units</p>
+        </div>
+      </div>
+
+      <div className="space-y-1.5">
+        <label className="text-[10px] uppercase tracking-wider text-[#8A8A85] font-bold block">
+          Area in Sq.Ft.
+        </label>
+        <input
+          type="number"
+          value={sqft}
+          onChange={(e) => setSqft(Number(e.target.value) || 0)}
+          className="w-full bg-[#F4F1EA] border border-[#E8E4DA] rounded-xl px-4 py-2.5 text-xs text-[#1A1A1A] font-bold outline-none focus:border-[#F5A623]"
+        />
+      </div>
+
+      <div className="grid grid-cols-3 gap-3 text-center">
+        <div className="p-3 bg-[#F4F1EA]/60 border border-[#E8E4DA] rounded-xl">
+          <p className="text-[10px] uppercase text-[#8A8A85] font-bold">Cents</p>
+          <p className="text-sm font-extrabold text-[#F5A623]">{cents}</p>
+        </div>
+        <div className="p-3 bg-[#F4F1EA]/60 border border-[#E8E4DA] rounded-xl">
+          <p className="text-[10px] uppercase text-[#8A8A85] font-bold">Sq. Meters</p>
+          <p className="text-sm font-extrabold text-[#1A1A1A]">{sqMeters}</p>
+        </div>
+        <div className="p-3 bg-[#F4F1EA]/60 border border-[#E8E4DA] rounded-xl">
+          <p className="text-[10px] uppercase text-[#8A8A85] font-bold">Acres</p>
+          <p className="text-sm font-extrabold text-[#1A1A1A]">{acres}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const HomeLoanBankSection = () => {
+  const [banks, setBanks] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    api.getBanks()
+      .then(res => setBanks(res.banks || []))
+      .catch(() => setBanks([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  return (
+    <div className="space-y-4 border-t border-[#E8E4DA] pt-8 font-sans">
+      <SectionHeader 
+        title="Institutional Home Financing" 
+        desc="Approved lending partners providing pre-cleared home loans and competitive interest rates." 
+      />
+      {loading ? (
+        <div className="text-xs text-[#8A8A85]">Loading banking partners...</div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {banks.map(bank => (
+            <div key={bank.id} className="p-4 border border-[#E8E4DA] rounded-2xl bg-white space-y-3 shadow-2xs flex flex-col justify-between">
+              <div className="space-y-1">
+                <p className="font-extrabold text-xs text-[#1A1A1A]">{bank.bankName}</p>
+                <p className="text-xs text-emerald-600 font-bold">Rates from {bank.interestRateFrom}</p>
+                <p className="text-[10px] text-[#8A8A85]">Max Tenure: {bank.maxTenure}</p>
+              </div>
+              <a
+                href={bank.officialLoanPageUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-between px-3 py-2 bg-[#F4F1EA] hover:bg-[#1A1A1A] hover:text-white rounded-xl text-[11px] font-bold text-[#1A1A1A] transition-colors"
+              >
+                <span>Apply / Info</span>
+                <ExternalLink className="w-3 h-3 text-[#F5A623]" />
+              </a>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const PropertyDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { properties, wishlist, addToWishlist, removeFromWishlist, addToRecentlyViewed, openBookModal } = useApp();
+  const { properties = [], siteVisits = [], wishlist, addToWishlist, removeFromWishlist, addToRecentlyViewed, openBookModal } = useApp();
 
   // Find current property with safe id / _id / slug / index fallback
-  let property = properties.find(p => (
+  const safeProperties = Array.isArray(properties) ? properties : [];
+  let property = safeProperties.find(p => p && (
     p.id === id || 
     p._id === id || 
     String(p.id) === String(id) || 
@@ -22,22 +119,23 @@ const PropertyDetails = () => {
   ));
 
   // Fallback for index or prop-N urls if properties array is loaded
-  if (!property && properties && properties.length > 0) {
+  if (!property && safeProperties.length > 0) {
     if (typeof id === 'string' && id.startsWith('prop-')) {
       const idx = parseInt(id.replace('prop-', ''), 10);
-      if (!isNaN(idx) && properties[idx]) {
-        property = properties[idx];
+      if (!isNaN(idx) && safeProperties[idx]) {
+        property = safeProperties[idx];
       }
     }
     if (!property) {
-      property = properties[0];
+      property = safeProperties[0];
     }
   }
 
-  // Track viewing history
+  // Track viewing history safely
   useEffect(() => {
     if (property) {
-      addToRecentlyViewed(property);
+      const targetId = property.id || property._id || property.slug || id;
+      addToRecentlyViewed(targetId);
     }
   }, [id, property]);
 
@@ -56,7 +154,17 @@ const PropertyDetails = () => {
   }
 
   const propId = property.id || property._id;
-  const isWishlisted = wishlist.some(item => (item.id || item._id) === propId || item === propId);
+  const isWishlisted = Array.isArray(wishlist) && wishlist.some(item => item && ((item.id || item._id) === propId || item === propId));
+
+  // Initial state: NO consultant on page load until user books visit
+  const [assignedConsultant, setAssignedConsultant] = useState(null);
+  const [showTour, setShowTour] = useState(false);
+
+  const handleBookClick = () => {
+    openBookModal(property, (consultant) => {
+      if (consultant) setAssignedConsultant(consultant);
+    });
+  };
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -76,9 +184,18 @@ const PropertyDetails = () => {
     { name: "International Airport Hub", distance: "14.0 km (25 mins)" }
   ];
 
-  const galleryImages = property.gallery || property.galleryUrls || [property.image || property.imageUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80"];
+  // Build hero gallery: prefer explicit gallery/galleryUrls, else pull exterior roomImages, else fallback
+  const exteriorRoomImages = Array.isArray(property.roomImages)
+    ? property.roomImages.filter(r => String(r.type || '').toLowerCase() === 'exterior').map(r => r.url || r)
+    : [];
+  const galleryImages =
+    (property.gallery && property.gallery.length > 0) ? property.gallery
+    : (property.galleryUrls && property.galleryUrls.length > 0) ? property.galleryUrls
+    : exteriorRoomImages.length > 0 ? exteriorRoomImages
+    : [property.image || property.imageUrl || 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80'];
 
   return (
+    <>
     <div className="pt-24 pb-28 md:pb-36 min-h-screen bg-[#F4F1EA] text-[#1A1A1A]">
       {/* Back Link */}
       <div className="max-w-7xl mx-auto px-6 md:px-12 pt-6">
@@ -99,7 +216,7 @@ const PropertyDetails = () => {
           
           {/* Main slideshow widget */}
           <div className="relative">
-            <LuxuryGallery images={galleryImages} alt={property.title} />
+            <LuxuryGallery images={galleryImages} roomImages={property.roomImages} alt={property.title} />
 
             {/* Float Save & Share Buttons (Z-20 top display overrides) */}
             <div className="absolute top-4 right-4 flex gap-3 z-20">
@@ -111,7 +228,7 @@ const PropertyDetails = () => {
                 <Share2 className="w-4 h-4" />
               </button>
               <button 
-                onClick={() => isWishlisted ? removeFromWishlist(propId) : addToWishlist(property)}
+                onClick={() => addToWishlist(property)}
                 className="p-3 rounded-full bg-white/90 hover:bg-[#1A1A1A] hover:text-white text-[#1A1A1A] transition-all cursor-pointer shadow-md"
                 aria-label="Save"
               >
@@ -122,15 +239,30 @@ const PropertyDetails = () => {
             </div>
           </div>
 
+          {/* 3D Virtual Tour Button */}
+          {['villa','apartment','penthouse'].includes(String(property.type || '').toLowerCase()) &&
+           Array.isArray(property.roomImages) && property.roomImages.length > 0 && (
+            <button
+              onClick={() => setShowTour(true)}
+              className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-gradient-to-r from-[#1A1A1A] to-[#2A2420] hover:from-[#F5A623] hover:to-[#E8941A] text-white font-bold font-sans text-sm uppercase tracking-widest transition-all duration-300 shadow-lg hover:shadow-amber-500/20 group border border-white/5 hover:border-[#F5A623]/30 cursor-pointer"
+              aria-label="Open 3D Virtual Tour"
+            >
+              <Eye className="w-5 h-5 text-[#F5A623] group-hover:text-white transition-colors" />
+              <span>View 3D Walkthrough Tour</span>
+              <span className="px-2 py-0.5 rounded-full bg-[#F5A623]/20 group-hover:bg-white/20 text-[#F5A623] group-hover:text-white text-[10px] font-bold tracking-wider transition-colors">360°</span>
+            </button>
+          )}
+
           {/* Heading Info Block & CTA */}
           <div className="space-y-4 font-sans border-b border-[#E8E4DA] pb-6">
             <div className="flex items-center justify-between gap-4 flex-wrap">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
                 <PropertyBadge label={property.tag} />
+                <FurnishingBadge furnishing={property.furnishing || (property.specs && property.specs.Furnished)} />
                 <StatusBadge rera={property.rera || property.reraApproved} />
               </div>
               <button
-                onClick={() => openBookModal(property)}
+                onClick={handleBookClick}
                 className="flex items-center gap-2 px-6 py-3 rounded-full bg-[#1A1A1A] hover:bg-[#F5A623] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md cursor-pointer"
               >
                 <Calendar className="w-4 h-4 text-[#F5A623]" />
@@ -144,7 +276,7 @@ const PropertyDetails = () => {
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-[#3A3732] text-xs font-bold">
-                <MapPin className="w-4 h-4 text-[#F5A623] shrink-0" />
+                <MapPin className="w-4 h-4 text-[#F5A623]" />
                 <span>{property.location}</span>
               </div>
               <p className="text-2xl md:text-3xl font-extrabold text-[#F5A623] font-sans">{property.price || property.priceDisplay}</p>
@@ -162,8 +294,9 @@ const PropertyDetails = () => {
                 <SpecificationCard label="Approval" value={property.approval || 'Verified'} icon={Compass} />
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
                 <SpecificationCard label="Typology" value={property.type} icon={Compass} />
+                <SpecificationCard label="Furnishing" value={property.furnishingLabel || (property.furnishing === 'full' ? 'Fully Furnished' : property.furnishing === 'semi' ? 'Semi Furnished' : 'Unfurnished')} icon={Armchair} />
                 <SpecificationCard label="Configuration" value={property.beds > 0 ? `${property.beds} BHK` : "Commercial"} icon={BedDouble} />
                 <SpecificationCard label="Bathrooms" value={`${property.baths} Baths`} icon={Bath} />
                 <SpecificationCard label="Area Size" value={property.area} icon={Square} />
@@ -246,18 +379,20 @@ const PropertyDetails = () => {
             </div>
           </div>
 
-          {/* Neighborhood connectivity */}
-          <div className="space-y-4 border-t border-[#E8E4DA] pt-8 font-sans">
-            <SectionHeader title="Neighborhood Connectivity" desc="Distances from coordinates calculated via local transport vectors." />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-sans text-xs">
-              {nearbyPlaces.map((place, idx) => (
-                <div key={idx} className="flex items-center justify-between p-4 border border-[#E8E4DA] rounded-2xl bg-white shadow-2xs">
-                  <span className="text-[#8A8A85] font-semibold">{place.name}</span>
-                  <span className="text-[#F5A623] font-bold">{place.distance}</span>
-                </div>
-              ))}
+          {/* 360° Virtual Tour Embed */}
+          {property.tourUrl360 && (
+            <div className="space-y-4 border-t border-[#E8E4DA] pt-8 font-sans">
+              <SectionHeader title="360° Virtual Experience" desc="Immersive walkthrough of estate grounds and interior spaces." />
+              <div className="relative aspect-video rounded-3xl overflow-hidden border border-[#E8E4DA] bg-black shadow-lg">
+                <iframe
+                  src={property.tourUrl360}
+                  title="360 Tour"
+                  className="w-full h-full border-0"
+                  allowFullScreen
+                />
+              </div>
             </div>
-          </div>
+          )}
 
         </div>
 
@@ -265,7 +400,12 @@ const PropertyDetails = () => {
         <aside className="lg:col-span-4 space-y-8 font-sans">
           
           {/* Booking card */}
-          <BookingCard propertyTitle={property.title} />
+          <BookingCard 
+            propertyTitle={property.title} 
+            propertyCity={property.city}
+            propertyId={propId}
+            onConsultantAssigned={(consultant) => setAssignedConsultant(consultant)}
+          />
 
           {/* Calculator card */}
           <EMICard initialPrincipal={property.numericPrice} />
@@ -281,17 +421,74 @@ const PropertyDetails = () => {
 
           {/* Agent Card */}
           <AgentCard 
-            name="Vikram Malhotra"
-            designation="Relationship Concierge Director"
-            experience={12}
-            languages={["English", "Tamil", "Hindi"]}
-            phone="+91 98765 09876"
-            email="v.malhotra@imperiaestates.com"
+            name={assignedConsultant?.name}
+            designation="Assigned City Advisor"
+            experience={8}
+            languages={assignedConsultant?.languages || []}
+            phone={assignedConsultant?.phone}
+            email={assignedConsultant?.email}
           />
 
         </aside>
 
       </div>
+
+      {/* FULL WIDTH CENTERED EXTENDED FEATURES SECTION */}
+      <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-12 mt-12 font-sans">
+        {/* ROOM-WISE INTERIOR IMAGES SECTION */}
+        <RoomImagesSection
+          images={property.images}
+          roomImages={property.roomImages || []}
+          furnishing={property.furnishing}
+          propertyType={property.type}
+        />
+
+        {/* Legal Verification Section */}
+        <div className="space-y-4 border-t border-[#E8E4DA] pt-8 font-sans">
+          <SectionHeader title="Legal Verification & Compliance" desc="Title search, approval status, and statutory clearance report." />
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-sans">
+            <div className="p-4 border border-[#E8E4DA] rounded-2xl bg-white space-y-1 shadow-2xs">
+              <span className="text-[#8A8A85] uppercase tracking-widest text-[10px] font-bold">Encumbrance (EC)</span>
+              <p className="text-emerald-600 font-bold text-sm">{property.legal?.ecStatus || 'Clear (13 Years)'}</p>
+            </div>
+            <div className="p-4 border border-[#E8E4DA] rounded-2xl bg-white space-y-1 shadow-2xs">
+              <span className="text-[#8A8A85] uppercase tracking-widest text-[10px] font-bold">DTCP / CMDA</span>
+              <p className="text-emerald-600 font-bold text-sm">{property.legal?.dtcpCmdaApproval || 'Approved'}</p>
+            </div>
+            <div className="p-4 border border-[#E8E4DA] rounded-2xl bg-white space-y-1 shadow-2xs">
+              <span className="text-[#8A8A85] uppercase tracking-widest text-[10px] font-bold">RERA Status</span>
+              <p className="text-emerald-600 font-bold text-sm">{property.legal?.reraStatus || (property.rera ? 'Registered' : 'Verified')}</p>
+            </div>
+            <div className="p-4 border border-[#E8E4DA] rounded-2xl bg-white space-y-1 shadow-2xs">
+              <span className="text-[#8A8A85] uppercase tracking-widest text-[10px] font-bold">Property Tax</span>
+              <p className="text-emerald-600 font-bold text-sm">{property.legal?.propertyTaxStatus || 'Up-to-date'}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Land Area Calculator */}
+        <div className="space-y-4 border-t border-[#E8E4DA] pt-8 font-sans">
+          <SectionHeader title="Land Area Converter" desc="Quick unit conversion for plots and built-up land area." />
+          <LandAreaConverter numericArea={property.numericArea || 2400} />
+        </div>
+
+        {/* Home Loan Financing Options */}
+        <HomeLoanBankSection />
+
+        {/* Neighborhood connectivity */}
+        <div className="space-y-4 border-t border-[#E8E4DA] pt-8 font-sans">
+          <SectionHeader title="Neighborhood Connectivity" desc="Distances from coordinates calculated via local transport vectors." />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 font-sans text-xs">
+            {nearbyPlaces.map((place, idx) => (
+              <div key={idx} className="flex items-center justify-between p-4 border border-[#E8E4DA] rounded-2xl bg-white shadow-2xs">
+                <span className="text-[#8A8A85] font-semibold">{place.name}</span>
+                <span className="text-[#F5A623] font-bold">{place.distance}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
 
       {/* RELATED PROPERTIES recomendation block */}
       {relatedProperties.length > 0 && (
@@ -346,14 +543,27 @@ const PropertyDetails = () => {
           <span className="text-base font-extrabold text-[#1A1A1A]">{property.price}</span>
         </div>
         <button
-          onClick={() => openBookModal(property)}
+          onClick={handleBookClick}
           className="px-5 py-2.5 bg-[#1A1A1A] hover:bg-black text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-md transition-all cursor-pointer"
         >
           Book Visit
         </button>
       </div>
     </div>
+
+      {/* ── VIRTUAL TOUR MODAL ──────────────────────────── */}
+      <AnimatePresence>
+        {showTour && (
+          <VirtualTourModal
+            property={property}
+            furnishing={property.furnishing}
+            onClose={() => setShowTour(false)}
+          />
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
 export default PropertyDetails;
+

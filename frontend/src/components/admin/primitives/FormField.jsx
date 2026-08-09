@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown, Upload, X, Image as ImageIcon, GripVertical } from 'lucide-react';
+import { api } from '../../../services/api';
 
 /**
  * FormField Primitives Suite for IMPERIA Admin Panel
@@ -153,8 +154,32 @@ export const MultiSelectChips = ({ label, options = [], selected = [], onChange 
   );
 };
 
-export const ImageDropzone = ({ label, images = [], onChange, maxFiles = 6 }) => {
+export const ImageDropzone = ({ label, id, images = [], onChange, maxFiles = 6 }) => {
   const [isDragActive, setIsDragActive] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const inputId = useState(() => id || `dropzone-${Math.random().toString(36).substring(2, 9)}`)[0];
+
+  const processUpload = async (files) => {
+    if (!files || files.length === 0) return;
+    setUploading(true);
+    try {
+      console.log('Uploading to Cloudinary...');
+      const formData = new FormData();
+      files.forEach(file => formData.append('media', file));
+
+      const res = await api.uploadMedia(formData);
+      const uploadedList = res?.urls || res?.data?.urls || (res?.url ? [{ url: res.url }] : []);
+      const newCloudinaryUrls = uploadedList.map(item => typeof item === 'string' ? item : item.url).filter(Boolean);
+      
+      console.log('Cloudinary Upload Success:', newCloudinaryUrls);
+      onChange([...images, ...newCloudinaryUrls].slice(0, maxFiles));
+    } catch (err) {
+      console.error('Cloudinary upload failed:', err.message || err);
+      alert(`Image upload failed: ${err.message || 'Error uploading to Cloudinary'}`);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -168,16 +193,13 @@ export const ImageDropzone = ({ label, images = [], onChange, maxFiles = 6 }) =>
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragActive(false);
-    // Mock upload URL generation for dropped files
-    const files = Array.from(e.dataTransfer.files);
-    const newUrls = files.map(file => URL.createObjectURL(file));
-    onChange([...images, ...newUrls].slice(0, maxFiles));
+    const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+    processUpload(files);
   };
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    const newUrls = files.map(file => URL.createObjectURL(file));
-    onChange([...images, ...newUrls].slice(0, maxFiles));
+    processUpload(files);
   };
 
   const removeImage = (idx) => {
@@ -205,15 +227,20 @@ export const ImageDropzone = ({ label, images = [], onChange, maxFiles = 6 }) =>
           accept="image/*"
           onChange={handleFileChange}
           className="hidden"
-          id="admin-image-upload"
+          id={inputId}
+          disabled={uploading}
         />
-        <label htmlFor="admin-image-upload" className="cursor-pointer flex flex-col items-center justify-center space-y-2">
+        <label htmlFor={inputId} className="cursor-pointer flex flex-col items-center justify-center space-y-2">
           <div className="w-10 h-10 rounded-full bg-white border border-[#E8E4DA] text-[#F5A623] flex items-center justify-center shadow-xs">
-            <Upload className="w-5 h-5 stroke-[2]" />
+            {uploading ? (
+              <div className="w-5 h-5 border-2 border-[#F5A623] border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <Upload className="w-5 h-5 stroke-[2]" />
+            )}
           </div>
           <div>
             <p className="text-xs font-bold text-[#1A1A1A]">
-              Drag & drop images here, or <span className="text-[#F5A623] underline">browse files</span>
+              {uploading ? 'Uploading to Cloudinary...' : <>Drag & drop images here, or <span className="text-[#F5A623] underline">browse files</span></>}
             </p>
             <p className="text-[10px] text-[#8A8A85] mt-0.5 font-medium">
               PNG, JPG, WEBP up to 10MB each (max {maxFiles} images)
@@ -243,3 +270,4 @@ export const ImageDropzone = ({ label, images = [], onChange, maxFiles = 6 }) =>
     </div>
   );
 };
+

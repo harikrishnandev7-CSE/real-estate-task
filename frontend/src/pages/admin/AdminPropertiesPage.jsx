@@ -56,6 +56,15 @@ const AdminPropertiesPage = () => {
   const [searchVal, setSearchVal] = useState('');
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
+  const citiesOptions = useMemo(() => {
+    const defaultCities = ['All', 'Chennai', 'Coimbatore', 'Hyderabad', 'Bengaluru'];
+    const dynamicSet = new Set(defaultCities);
+    (properties || []).forEach(p => {
+      if (p.city && p.city.trim()) dynamicSet.add(p.city.trim());
+    });
+    return Array.from(dynamicSet);
+  }, [properties]);
+
   // Filter drawer states (matching Buy.jsx filter controls)
   const [selectedCity, setSelectedCity] = useState('All');
   const [selectedType, setSelectedType] = useState('All');
@@ -160,7 +169,14 @@ const AdminPropertiesPage = () => {
       sortable: true,
       render: (_, row) => (
         <div className="flex items-center gap-3">
-          <img src={row.image} alt={row.title} className="w-12 h-12 rounded-xl object-cover border border-[#E8E4DA] shrink-0" />
+          <img 
+            src={row.image && !row.image.startsWith('blob:') ? row.image : "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=400&q=80"} 
+            alt={row.title} 
+            onError={(e) => {
+              e.currentTarget.src = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=400&q=80";
+            }}
+            className="w-12 h-12 rounded-xl object-cover border border-[#E8E4DA] shrink-0" 
+          />
           <div className="min-w-0 font-sans">
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-[#1A1A1A] block truncate">{row.title}</span>
@@ -328,8 +344,8 @@ const AdminPropertiesPage = () => {
           pageSize={8}
           onRowClick={(row) => setPreviewProperty(row)}
           onView={(row) => setPreviewProperty(row)}
-          onEdit={(row) => navigate(`/admin/properties/${row.id}/edit`)}
-          onDelete={(row) => deleteProperty(row.id)}
+          onEdit={(row) => navigate(`/admin/properties/${row.id || row._id}/edit`)}
+          onDelete={(row) => deleteProperty(row.id || row._id)}
           bulkActions={[
             { label: 'Publish Selected', action: (ids) => bulkUpdateProperties(ids, 'Publish') },
             { label: 'Archive Selected', action: (ids) => bulkUpdateProperties(ids, 'Archive') },
@@ -340,14 +356,23 @@ const AdminPropertiesPage = () => {
         /* GRID CARD VIEW */
         <div className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProperties.map(prop => (
+            {filteredProperties.map(prop => {
+              const targetId = prop.id || prop._id;
+              return (
               <div
-                key={prop.id}
+                key={targetId}
                 className="group relative bg-white border border-[#E8E4DA] rounded-2xl overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.04)] hover:border-[#1A1A1A] transition-all font-sans flex flex-col justify-between"
               >
                 {/* Image Container with Status Ribbon + Admin Stats Badge */}
                 <div className="relative h-48 overflow-hidden bg-stone-100">
-                  <img src={prop.image} alt={prop.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <img 
+                    src={prop.image && !prop.image.startsWith('blob:') ? prop.image : "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80"} 
+                    alt={prop.title} 
+                    onError={(e) => {
+                      e.currentTarget.src = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80";
+                    }}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                  />
                   
                   {/* Status Ribbon */}
                   <div className="absolute top-3 left-3">
@@ -398,7 +423,7 @@ const AdminPropertiesPage = () => {
 
                     <div className="flex items-center gap-1">
                       <button
-                        onClick={() => navigate(`/admin/properties/${prop.id}/edit`)}
+                        onClick={() => navigate(`/admin/properties/${targetId}/edit`)}
                         className="p-2 rounded-lg text-[#8A8A85] hover:text-[#1A1A1A] hover:bg-[#F4F1EA] transition-colors cursor-pointer"
                         title="Edit Property"
                       >
@@ -412,7 +437,7 @@ const AdminPropertiesPage = () => {
                         <Copy className="w-4 h-4 stroke-[2]" />
                       </button>
                       <button
-                        onClick={() => deleteProperty(prop.id)}
+                        onClick={() => deleteProperty(targetId)}
                         className="p-2 rounded-lg text-[#8A8A85] hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
                         title="Delete Property"
                       >
@@ -422,7 +447,8 @@ const AdminPropertiesPage = () => {
                   </div>
                 </div>
               </div>
-            ))}
+            );
+          })}
           </div>
         </div>
       )}
@@ -441,7 +467,7 @@ const AdminPropertiesPage = () => {
             label="Location City"
             value={selectedCity}
             onChange={(e) => setSelectedCity(e.target.value)}
-            options={CITIES}
+            options={citiesOptions}
           />
 
           {/* Property Type Selector */}
@@ -507,7 +533,14 @@ const AdminPropertiesPage = () => {
           <div className="space-y-6 font-sans">
             {/* Image Banner */}
             <div className="relative h-60 rounded-2xl overflow-hidden border border-[#E8E4DA]">
-              <img src={previewProperty.image} alt={previewProperty.title} className="w-full h-full object-cover" />
+              <img 
+                src={previewProperty.image && !previewProperty.image.startsWith('blob:') ? previewProperty.image : "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80"} 
+                alt={previewProperty.title} 
+                onError={(e) => {
+                  e.currentTarget.src = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80";
+                }}
+                className="w-full h-full object-cover" 
+              />
               <div className="absolute top-3 left-3">
                 <StatusChip status={previewProperty.status || 'Published'} />
               </div>

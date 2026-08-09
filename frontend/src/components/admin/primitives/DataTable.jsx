@@ -84,12 +84,12 @@ const DataTable = ({
   };
 
   // Checkbox Select All / Item Select
-  const isAllSelected = paginatedData.length > 0 && paginatedData.every(row => selectedIds.includes(row.id));
+  const isAllSelected = paginatedData.length > 0 && paginatedData.every(row => selectedIds.includes(row.id || row._id));
   const toggleSelectAll = () => {
     if (isAllSelected) {
-      setSelectedIds(prev => prev.filter(id => !paginatedData.some(r => r.id === id)));
+      setSelectedIds(prev => prev.filter(id => !paginatedData.some(r => (r.id || r._id) === id)));
     } else {
-      const currentPageIds = paginatedData.map(r => r.id);
+      const currentPageIds = paginatedData.map(r => r.id || r._id);
       setSelectedIds(prev => Array.from(new Set([...prev, ...currentPageIds])));
     }
   };
@@ -207,11 +207,12 @@ const DataTable = ({
 
             {/* Table Body */}
             <tbody className="divide-y divide-[#E8E4DA] text-sm text-[#1A1A1A]">
-              {paginatedData.map(row => {
-                const isSelected = selectedIds.includes(row.id);
+              {paginatedData.map((row, rowIdx) => {
+                const rowId = row._id || row.id || rowIdx;
+                const isSelected = selectedIds.includes(rowId);
                 return (
                   <tr
-                    key={row.id}
+                    key={rowId}
                     onClick={() => onRowClick && onRowClick(row)}
                     className={`transition-colors font-medium ${
                       isSelected ? 'bg-amber-50/40' : 'hover:bg-[#F4F1EA]/60'
@@ -221,7 +222,7 @@ const DataTable = ({
                       <input
                         type="checkbox"
                         checked={isSelected}
-                        onChange={(e) => toggleSelectRow(row.id, e)}
+                        onChange={(e) => toggleSelectRow(rowId, e)}
                         className="rounded border-[#E8E4DA] text-[#F5A623] focus:ring-0 cursor-pointer accent-[#1A1A1A]"
                       />
                     </td>

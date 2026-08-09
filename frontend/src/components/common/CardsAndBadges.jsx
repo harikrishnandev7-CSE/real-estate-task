@@ -23,6 +23,35 @@ export const StatusBadge = ({ rera }) => {
   );
 };
 
+// Furnishing Badge: UI Status Label (Full, Semi, None)
+export const FurnishingBadge = ({ furnishing }) => {
+  if (!furnishing) return null;
+  const f = String(furnishing).toLowerCase();
+
+  if (f === 'full' || f.includes('fully')) {
+    return (
+      <div className="flex items-center gap-1 text-[10px] font-bold text-emerald-800 uppercase tracking-wider bg-emerald-100/80 px-3 py-1 rounded-full border border-emerald-300 font-sans">
+        <span className="text-xs">✔</span>
+        <span>Fully Furnished</span>
+      </div>
+    );
+  }
+  if (f === 'semi' || f.includes('semi')) {
+    return (
+      <div className="flex items-center gap-1 text-[10px] font-bold text-amber-800 uppercase tracking-wider bg-amber-100/80 px-3 py-1 rounded-full border border-amber-300 font-sans">
+        <span className="text-xs">⚠️</span>
+        <span>Semi Furnished</span>
+      </div>
+    );
+  }
+  return (
+    <div className="flex items-center gap-1 text-[10px] font-bold text-stone-700 uppercase tracking-wider bg-stone-200/80 px-3 py-1 rounded-full border border-stone-300 font-sans">
+      <span className="text-xs">❌</span>
+      <span>Unfurnished</span>
+    </div>
+  );
+};
+
 // Specification Card: Clean light layouts
 export const SpecificationCard = ({ icon: Icon, label, value }) => {
   return (
@@ -92,52 +121,68 @@ export const BuilderCard = ({ name, experience, completed, ongoing, awards = [],
 };
 
 // Agent Card: Designated concierge brokerage profiles
-export const AgentCard = ({ name, designation, experience, languages = [], phone, email }) => {
+export const AgentCard = ({ name, designation = 'Luxury Real Estate Advisor', experience = 8, languages = [], phone, email }) => {
   const { openWhatsApp, showToast } = useApp();
 
+  const isAssigned = Boolean(name && name !== 'Unassigned');
+
   const handleCall = () => {
-    showToast(`Connecting to concierge desk for ${name}: ${phone}`);
+    showToast(`Connecting to concierge desk for ${name || 'Advisor'}: ${phone || 'N/A'}`);
   };
 
   const handleWhatsapp = () => {
-    openWhatsApp(name, `Hello ${name}, I am interested in consulting regarding your luxury listings.`);
+    openWhatsApp(name || 'Advisor', `Hello ${name || 'Advisor'}, I am interested in consulting regarding your luxury listings.`);
   };
 
   const handleEmail = () => {
-    showToast(`Drafting private client brief to ${email}`);
+    showToast(`Drafting private client brief to ${email || 'advisor@imperiaestates.com'}`);
   };
+
+  if (!isAssigned) {
+    return (
+      <div className="border border-[#E8E4DA] bg-white rounded-3xl p-6 md:p-8 space-y-4 font-sans shadow-md text-center">
+        <div className="w-12 h-12 rounded-full bg-amber-50 border border-amber-200 text-[#F5A623] font-bold flex items-center justify-center mx-auto text-lg">
+          👤
+        </div>
+        <div className="space-y-1">
+          <h5 className="text-sm font-bold text-[#1A1A1A]">Consultant will be assigned shortly</h5>
+          <p className="text-[#8A8A85] text-xs font-medium">Book a site visit to get paired with an available consultant in your city.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="border border-[#E8E4DA] bg-white rounded-3xl p-6 md:p-8 space-y-6 font-sans shadow-md">
       <div className="flex items-center gap-4">
-        <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-[#F5A623] bg-neutral-100 shrink-0">
-          <img 
-            src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&q=80" 
-            alt={name} 
-            className="w-full h-full object-cover"
-          />
+        <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-[#F5A623] bg-amber-100 text-[#F5A623] font-extrabold flex items-center justify-center text-lg shrink-0">
+          {name.charAt(0)}
         </div>
         <div className="space-y-1">
           <h5 className="text-sm font-bold text-[#1A1A1A]">{name}</h5>
           <p className="text-[#8A8A85] text-xs font-medium">{designation}</p>
-          <div className="flex items-center gap-1 mt-0.5 text-[10px] text-[#8A8A85]">
-            <Clock className="w-3.5 h-3.5 text-[#F5A623]" />
-            <span>{experience} Years experience</span>
-          </div>
+          {experience > 0 && (
+            <div className="flex items-center gap-1 mt-0.5 text-[10px] text-[#8A8A85]">
+              <Clock className="w-3.5 h-3.5 text-[#F5A623]" />
+              <span>{experience} Years experience</span>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Language certifications */}
-      <div className="space-y-1">
-        <span className="text-[9px] text-[#8A8A85] uppercase tracking-widest font-bold">Languages</span>
-        <div className="flex flex-wrap gap-1.5">
-          {languages.map(lang => (
-            <span key={lang} className="px-2.5 py-0.5 rounded border border-[#E8E4DA] bg-[#F4F1EA] text-[9px] font-semibold text-[#1A1A1A]">
-              {lang}
-            </span>
-          ))}
+      {languages && languages.length > 0 && (
+        <div className="space-y-1">
+          <span className="text-[9px] text-[#8A8A85] uppercase tracking-widest font-bold">Languages</span>
+          <div className="flex flex-wrap gap-1.5">
+            {languages.map(lang => (
+              <span key={lang} className="px-2.5 py-0.5 rounded border border-[#E8E4DA] bg-[#F4F1EA] text-[9px] font-semibold text-[#1A1A1A]">
+                {lang}
+              </span>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Concierge buttons */}
       <div className="space-y-3 pt-2 text-xs">

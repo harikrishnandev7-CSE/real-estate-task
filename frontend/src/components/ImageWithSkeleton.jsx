@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80";
+
+const sanitizeSrc = (url) => {
+  if (!url || typeof url !== 'string') return FALLBACK_IMAGE;
+  if (url.startsWith('blob:')) return FALLBACK_IMAGE;
+  return url;
+};
+
 const ImageWithSkeleton = ({
   src,
   alt,
@@ -10,23 +18,23 @@ const ImageWithSkeleton = ({
   loading = "lazy",
   ...props
 }) => {
+  const initialSrc = sanitizeSrc(src);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [imgSrc, setImgSrc] = useState(src);
+  const [imgSrc, setImgSrc] = useState(initialSrc);
   const [hasError, setHasError] = useState(false);
   const imgRef = useRef(null);
 
-  // Sync state if source changes, preventing initial mount reset
+  // Sync state ONLY when prop `src` changes from parent
   useEffect(() => {
-    if (src !== imgSrc) {
-      setImgSrc(src);
-      setHasError(false);
-      setIsLoaded(false);
-    }
-  }, [src, imgSrc]);
+    const validSrc = sanitizeSrc(src);
+    setImgSrc(validSrc);
+    setHasError(false);
+    setIsLoaded(false);
+  }, [src]);
 
   // Handle cached images that finish loading before mount
   useEffect(() => {
-    if (imgRef.current && imgRef.current.complete) {
+    if (imgRef.current && imgRef.current.complete && imgRef.current.naturalWidth > 0) {
       setIsLoaded(true);
     }
   }, [imgSrc]);
@@ -34,8 +42,8 @@ const ImageWithSkeleton = ({
   const handleImageError = () => {
     if (!hasError) {
       setHasError(true);
-      // Premium fall-back luxury villa facade image
-      setImgSrc("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80");
+      setImgSrc(FALLBACK_IMAGE);
+      setIsLoaded(true);
     }
   };
 

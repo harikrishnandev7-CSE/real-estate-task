@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Trash2, MapPin, Share2, Scale, ArrowRight, Calendar } from 'lucide-react';
+import { Trash2, MapPin, Share2, Scale, ArrowRight, Calendar, Sparkles } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import ImageWithSkeleton from '../components/ImageWithSkeleton';
 import { PropertyBadge } from '../components/common/CardsAndBadges';
@@ -11,20 +11,75 @@ import PageHero from '../components/PageHero';
 
 const Wishlist = () => {
   const navigate = useNavigate();
-  const { wishlist, recentlyViewed, removeFromWishlist, addToCompare, compareList, removeFromCompare, showToast, openBookModal } = useApp();
+  const { properties = [], wishlist, recentlyViewed, removeFromWishlist, addToCompare, compareList, removeFromCompare, showToast, openBookModal, currentUser } = useApp();
+
+  const wishlistItems = React.useMemo(() => {
+    const list = Array.isArray(wishlist) ? wishlist : [];
+    return list.map(item => {
+      if (typeof item === 'object' && item !== null) return item;
+      return properties.find(p => p.id === item || p._id === item) || null;
+    }).filter(Boolean);
+  }, [wishlist, properties]);
 
   const handleShare = (propertyTitle) => {
     showToast(`Sharing link generated for ${propertyTitle}. Copied to clipboard.`);
   };
 
   const handleCompareToggle = (prop) => {
-    const isCompared = compareList.some(item => item.id === prop.id);
+    const targetId = prop.id || prop._id;
+    const isCompared = Array.isArray(compareList) && compareList.some(item => item && (item.id === targetId || item._id === targetId || item === targetId));
     if (isCompared) {
-      removeFromCompare(prop.id);
+      removeFromCompare(targetId);
     } else {
       addToCompare(prop);
     }
   };
+
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen bg-[#F4F1EA] text-[#1A1A1A]">
+        <div className="pt-[64px] lg:pt-[72px]">
+          <PageHero
+            image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
+            breadcrumbs={[
+              { label: 'Home', href: '/' },
+              { label: 'Wishlist' },
+            ]}
+            eyebrow="VIP ACCESS REQUIRED"
+            heading={
+              <>Private <span className="font-normal text-[#8A8A85]">Saved Collection</span></>
+            }
+            description="Log in to access your saved estates, manage wishlist items, and schedule private chauffeur-driven walkthroughs."
+          />
+        </div>
+        <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 text-center space-y-6 font-sans">
+          <div className="max-w-md mx-auto p-8 sm:p-10 rounded-3xl bg-white border border-[#E8E4DA] shadow-[0_20px_40px_rgba(0,0,0,0.06)] space-y-5">
+            <div className="w-16 h-16 rounded-full bg-amber-50 border border-amber-200 text-[#F5A623] flex items-center justify-center mx-auto shadow-xs">
+              <Sparkles className="w-8 h-8" />
+            </div>
+            <h3 className="text-2xl font-bold text-[#1A1A1A] tracking-tight">Please Log In to Continue</h3>
+            <p className="text-xs text-[#8A8A85] leading-relaxed font-normal">
+              Wishlist features are reserved for registered account holders. Please sign in to view and manage your saved luxury properties.
+            </p>
+            <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
+              <button
+                onClick={() => navigate('/login')}
+                className="px-8 py-3 bg-[#1A1A1A] hover:bg-black text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-md transition-all cursor-pointer"
+              >
+                Continue to Login
+              </button>
+              <button
+                onClick={() => navigate('/signup')}
+                className="px-8 py-3 border border-[#E8E4DA] bg-white text-[#1A1A1A] hover:border-[#F5A623] text-xs font-bold uppercase tracking-wider rounded-full shadow-xs transition-all cursor-pointer"
+              >
+                Create Account
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F4F1EA] text-[#1A1A1A]">
@@ -46,7 +101,7 @@ const Wishlist = () => {
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 space-y-20 font-sans">
         {/* Empty State */}
-        {wishlist.length === 0 ? (
+        {wishlistItems.length === 0 ? (
           <div className="py-12">
             <EmptyState 
               title="Your Collection is Empty"
@@ -58,9 +113,9 @@ const Wishlist = () => {
         ) : (
           /* Wishlist Grid */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {wishlist.map((prop) => {
+            {wishlistItems.map((prop) => {
               const propId = prop.id || prop._id;
-              const isCompared = compareList.some(item => (item.id || item._id) === propId || item === propId);
+              const isCompared = Array.isArray(compareList) && compareList.some(item => item && ((item.id || item._id) === propId || item === propId));
               return (
                 <motion.div
                   key={propId}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Search, Heart, Check, Grid, List, ChevronDown, Filter, MapPin, BedDouble, Bath, Square, Sparkles, ChevronRight, X, Eye, ShieldCheck, Calendar } from 'lucide-react';
@@ -61,8 +61,12 @@ const collectionConfigs = {
 const CollectionPage = ({ collectionSlug: propSlug }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { properties, wishlist, compareList, addToWishlist, removeFromWishlist, addToCompare, removeFromCompare, addToRecentlyViewed, openBookModal } = useApp();
+  const { properties, fetchProperties, wishlist, compareList, addToWishlist, removeFromWishlist, addToCompare, removeFromCompare, addToRecentlyViewed, openBookModal } = useApp();
   const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (fetchProperties) fetchProperties();
+  }, []);
 
   // Determine current slug from prop or pathname
   const currentSlug = propSlug || location.pathname.replace('/', '') || 'premium-plots';
@@ -80,7 +84,14 @@ const CollectionPage = ({ collectionSlug: propSlug }) => {
   const [quickViewProperty, setQuickViewProperty] = useState(null);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  const cities = ['All', 'Chennai', 'Coimbatore', 'Madurai', 'Bangalore', 'Hyderabad', 'Mumbai', 'Goa', 'Ooty', 'Kodaikanal', 'Coonoor', 'Pondicherry'];
+  const cities = useMemo(() => {
+    const defaultCities = ['All', 'Chennai', 'Coimbatore', 'Madurai', 'Bangalore', 'Hyderabad', 'Mumbai', 'Goa', 'Ooty', 'Kodaikanal', 'Coonoor', 'Pondicherry'];
+    const dynamicSet = new Set(defaultCities);
+    (properties || []).forEach(p => {
+      if (p.city && p.city.trim()) dynamicSet.add(p.city.trim());
+    });
+    return Array.from(dynamicSet);
+  }, [properties]);
   const approvals = ['All', 'DTCP Approved', 'CMDA Approved', 'BIAAPA Approved', 'HMDA Approved', 'RERA Verified'];
   const facings = ['All', 'East Facing', 'North Facing', 'North-East Facing', 'South-East Facing'];
 
@@ -383,14 +394,16 @@ const CollectionPage = ({ collectionSlug: propSlug }) => {
             )}
 
             {/* Property Cards Grid */}
-            <div className={viewMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 gap-8" : "flex flex-col gap-6"}>
-              {sortedListings.map((prop) => {
-                const isWishlisted = wishlist.some(item => item.id === prop.id);
-                const isCompared = compareList.some(item => item.id === prop.id);
+            <div className={viewMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8" : "flex flex-col gap-6"}>
+              {sortedListings.map((prop, propIdx) => {
+                const propKey = prop._id || prop.id || propIdx;
+                const targetId = prop._id || prop.id;
+                const isWishlisted = Array.isArray(wishlist) && wishlist.some(item => item && ((item._id || item.id) === targetId || item === targetId));
+                const isCompared = Array.isArray(compareList) && compareList.some(item => item && ((item._id || item.id) === targetId || item === targetId));
 
                 return (
                   <motion.div
-                    key={prop.id}
+                    key={propKey}
                     whileHover={{ y: shouldReduceMotion ? 0 : -6 }}
                     transition={{ duration: 0.3 }}
                     className={`group relative border border-[#E8E4DA] hover:border-[#F5A623] rounded-3xl overflow-hidden bg-white shadow-[0_20px_40px_rgba(0,0,0,0.06)] transition-all duration-300 cursor-pointer ${viewMode === 'list' ? 'flex flex-col md:flex-row items-stretch' : 'flex flex-col'}`}
@@ -415,7 +428,7 @@ const CollectionPage = ({ collectionSlug: propSlug }) => {
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              isWishlisted ? removeFromWishlist(prop.id) : addToWishlist(prop);
+                              addToWishlist(prop);
                             }}
                             className="p-2 rounded-full bg-white/90 text-[#1A1A1A] hover:bg-[#F5A623] hover:text-white transition-colors cursor-pointer shadow-xs"
                             aria-label="Wishlist"
@@ -644,12 +657,11 @@ const CollectionPage = ({ collectionSlug: propSlug }) => {
                     </button>
                     <button
                       onClick={() => {
-                        const isWishlisted = wishlist.some(item => item.id === quickViewProperty.id);
-                        isWishlisted ? removeFromWishlist(quickViewProperty.id) : addToWishlist(quickViewProperty);
+                        addToWishlist(quickViewProperty);
                       }}
                       className="px-4 py-3.5 border border-[#E8E4DA] rounded-full text-[#1A1A1A] hover:border-[#F5A623] transition-colors flex items-center justify-center cursor-pointer shadow-xs"
                     >
-                      <Heart className={`w-4 h-4 ${wishlist.some(item => item.id === quickViewProperty.id) ? 'fill-current text-red-500' : ''}`} />
+                      <Heart className={`w-4 h-4 ${Array.isArray(wishlist) && wishlist.some(item => item && ((item.id || item._id) === (quickViewProperty.id || quickViewProperty._id) || item === (quickViewProperty.id || quickViewProperty._id))) ? 'fill-current text-red-500' : ''}`} />
                     </button>
                   </div>
                 </div>

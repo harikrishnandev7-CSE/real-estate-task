@@ -1,10 +1,67 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Landmark, Calculator, CheckCircle, ChevronDown, Award, ArrowRight, ChevronRight, Percent } from 'lucide-react';
+import { Landmark, Calculator, CheckCircle, ChevronDown, Award, ArrowRight, ChevronRight, Percent, ExternalLink } from 'lucide-react';
 import ImageWithSkeleton from '../components/ImageWithSkeleton';
 import PageHero from '../components/PageHero';
 import { useApp } from '../context/AppContext';
+
+const bankData = [
+  {
+    name: "State Bank of India",
+    rate: "8.50%",
+    tenure: "30 years",
+    link: "https://homeloans.sbi.bank.in/"
+  },
+  {
+    name: "HDFC Bank",
+    rate: "8.70%",
+    tenure: "30 years",
+    link: "https://homeloans.hdfc.bank.in/"
+  },
+  {
+    name: "ICICI Bank",
+    rate: "8.75%",
+    tenure: "30 years",
+    link: "https://www.icicibank.com/personal-banking/loans/home-loan"
+  },
+  {
+    name: "Axis Bank",
+    rate: "8.75%",
+    tenure: "30 years",
+    link: "https://www.axisbank.com/retail/loans/home-loan"
+  },
+  {
+    name: "Kotak Mahindra Bank",
+    rate: "8.85%",
+    tenure: "20 years",
+    link: "https://www.kotak.com/en/personal-banking/loans/home-loan.html"
+  },
+  {
+    name: "Bajaj Housing Finance",
+    rate: "8.50%",
+    tenure: "32 years",
+    link: "https://www.bajajhousingfinance.in/home-loan"
+  },
+  {
+    name: "LIC Housing Finance",
+    rate: "8.65%",
+    tenure: "30 years",
+    link: "https://www.lichousing.com/home-loans"
+  },
+  {
+    name: "PNB Housing Finance",
+    rate: "8.75%",
+    tenure: "30 years",
+    link: "https://www.pnbhousing.com/home-loan/"
+  },
+  {
+    name: "Indian Bank",
+    rate: "8.60%",
+    tenure: "30 years",
+    link: "https://indianbank.bank.in/en/home-loan"
+  }
+];
 
 const HomeFinancingPage = () => {
   const { openBookModal, showToast } = useApp();
@@ -201,6 +258,72 @@ const HomeFinancingPage = () => {
                     </p>
                   </div>
                 </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* Official Bank Partners & Rates */}
+        <section className="space-y-12 border-t border-[#E8E4DA] pt-16 font-sans">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="space-y-3">
+              <span className="text-xs uppercase tracking-[0.2em] text-[#F5A623] font-bold block">
+                OFFICIAL BANK PARTNERS
+              </span>
+              <h2 className="text-3xl font-bold text-[#1A1A1A] tracking-tight">
+                Compare & Apply for Home Loans
+              </h2>
+              <p className="text-[#8A8A85] font-normal text-sm max-w-xl">
+                Access official interest rate structures, tenure options, and direct application portals across Tier-1 financial institutions.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {bankData.map((bank, idx) => (
+              <motion.div
+                key={idx}
+                whileHover={{ y: -5 }}
+                transition={{ duration: 0.2 }}
+                className="border border-[#E8E4DA] hover:border-[#F5A623] bg-white rounded-3xl p-6 shadow-[0_20px_40px_rgba(0,0,0,0.04)] flex flex-col justify-between space-y-6 transition-all duration-300"
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between gap-3 border-b border-[#E8E4DA] pb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-2xl bg-amber-50 border border-amber-200 text-[#F5A623] flex items-center justify-center font-bold shrink-0">
+                        <Landmark className="w-5 h-5 stroke-[2]" />
+                      </div>
+                      <div>
+                        <h3 className="text-base font-bold text-[#1A1A1A] tracking-tight">{bank.name}</h3>
+                        <span className="text-[10px] text-[#8A8A85] uppercase tracking-wider font-semibold">Official Partner</span>
+                      </div>
+                    </div>
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-extrabold uppercase tracking-wider shrink-0">
+                      Verified
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 py-1">
+                    <div className="bg-[#F4F1EA]/60 p-3 rounded-2xl border border-[#E8E4DA]">
+                      <span className="text-[10px] text-[#8A8A85] font-bold uppercase tracking-wider block">Interest Rate</span>
+                      <span className="text-lg font-bold text-[#F5A623]">{bank.rate}</span>
+                    </div>
+                    <div className="bg-[#F4F1EA]/60 p-3 rounded-2xl border border-[#E8E4DA]">
+                      <span className="text-[10px] text-[#8A8A85] font-bold uppercase tracking-wider block">Max Tenure</span>
+                      <span className="text-sm font-bold text-[#1A1A1A] mt-1 block">{bank.tenure}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <a
+                  href={bank.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3.5 px-4 bg-[#1A1A1A] hover:bg-black text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer font-sans"
+                >
+                  <span>Apply / Info</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-[#F5A623]" />
+                </a>
               </motion.div>
             ))}
           </div>

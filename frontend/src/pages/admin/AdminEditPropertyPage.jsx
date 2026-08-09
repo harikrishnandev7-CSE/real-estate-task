@@ -29,6 +29,7 @@ import {
 } from '../../components/admin/primitives/FormField';
 import StatusChip from '../../components/admin/primitives/StatusChip';
 import AdminModal from '../../components/admin/primitives/AdminModal';
+import { formatPricePreview } from '../../utils/formatters';
 
 const TABS = [
   { id: 'basics', label: 'Basics' },
@@ -54,9 +55,10 @@ const AdminEditPropertyPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { properties = [], updateProperty, deleteProperty, showToast } = useApp();
 
-  // Find existing property target
+  // Find existing property target with flexible id / _id matching
   const existingProp = useMemo(() => {
-    return properties.find(p => p.id === id) || properties[0];
+    if (!id) return properties[0];
+    return properties.find(p => p && (p.id === id || p._id === id || String(p.id) === String(id) || String(p._id) === String(id))) || properties[0];
   }, [properties, id]);
 
   const activeTab = searchParams.get('tab') || 'basics';
@@ -96,7 +98,15 @@ const AdminEditPropertyPage = () => {
     rera: true,
     reraNumber: '',
     status: 'Published',
-    registrationStatus: 'Clear Title & DTCP Approved'
+    registrationStatus: 'Clear Title & DTCP Approved',
+    images: {
+      entrance: '',
+      hall: [],
+      kitchen: [],
+      bedrooms: [],
+      bathrooms: [],
+      terrace: []
+    }
   });
 
   // Track Unsaved modifications per tab
@@ -115,6 +125,10 @@ const AdminEditPropertyPage = () => {
   // Initialize form data from existing property
   useEffect(() => {
     if (existingProp) {
+      const rawImgs = existingProp.images && typeof existingProp.images === 'object' && !Array.isArray(existingProp.images)
+        ? existingProp.images
+        : {};
+
       setFormData({
         title: existingProp.title || '',
         type: existingProp.type || 'Villa',
@@ -149,23 +163,23 @@ const AdminEditPropertyPage = () => {
         rera: existingProp.rera ?? true,
         reraNumber: existingProp.reraNumber || 'TN/01/Building/0142/2025',
         status: existingProp.status || 'Published',
-        registrationStatus: 'Clear Title & DTCP Approved'
+        registrationStatus: 'Clear Title & DTCP Approved',
+        images: {
+          entrance: rawImgs.entrance || existingProp.image || '',
+          hall: Array.isArray(rawImgs.hall) ? rawImgs.hall : (existingProp.gallery || []),
+          kitchen: Array.isArray(rawImgs.kitchen) ? rawImgs.kitchen : [],
+          bedrooms: Array.isArray(rawImgs.bedrooms) ? rawImgs.bedrooms : [],
+          bathrooms: Array.isArray(rawImgs.bathrooms) ? rawImgs.bathrooms : [],
+          terrace: Array.isArray(rawImgs.terrace) ? rawImgs.terrace : []
+        }
       });
     }
   }, [existingProp]);
 
-  // Format price preview string
+  // Format price preview string using shared utility
   const formattedPricePreview = useMemo(() => {
-    const val = Number(formData.numericPrice);
-    if (!val || isNaN(val)) return formData.price || '₹0';
-    if (formData.purpose === 'Rent') {
-      if (val >= 100000) return `₹${(val / 100000).toFixed(1)} L/mo`;
-      return `₹${val.toLocaleString('en-IN')}/mo`;
-    }
-    if (val >= 10000000) return `₹${(val / 10000000).toFixed(2)} Cr`;
-    if (val >= 100000) return `₹${(val / 100000).toFixed(2)} L`;
-    return `₹${val.toLocaleString('en-IN')}`;
-  }, [formData.numericPrice, formData.purpose, formData.price]);
+    return formatPricePreview(formData.numericPrice, formData.purpose);
+  }, [formData.numericPrice, formData.purpose]);
 
   // Update Field Handler
   const updateField = (key, val) => {
@@ -173,6 +187,55 @@ const AdminEditPropertyPage = () => {
 
     // Mark current tab unsaved
     setUnsavedTabs(prev => ({ ...prev, [activeTab]: true }));
+  };
+
+  const updateImageCategory = (category, files) => {
+    setFormData(prev => ({
+      ...prev,
+      images: {
+        ...(prev.images || {}),
+        [category]: files
+      }
+    }));
+    setUnsavedTabs(prev => ({ ...prev, media: true }));
+  };
+
+  const updateBedroomImages = (bedNum, files) => {
+    setFormData(prev => {
+      const currentBedObj = (typeof prev.images?.bedrooms === 'object' && !Array.isArray(prev.images?.bedrooms))
+        ? prev.images.bedrooms
+        : {};
+      return {
+        ...prev,
+        images: {
+          ...(prev.images || {}),
+          bedrooms: {
+            ...currentBedObj,
+            [bedNum]: files
+          }
+        }
+      };
+    });
+    setUnsavedTabs(prev => ({ ...prev, media: true }));
+  };
+
+  const updateBathroomImages = (bathNum, files) => {
+    setFormData(prev => {
+      const currentBathObj = (typeof prev.images?.bathrooms === 'object' && !Array.isArray(prev.images?.bathrooms))
+        ? prev.images.bathrooms
+        : {};
+      return {
+        ...prev,
+        images: {
+          ...(prev.images || {}),
+          bathrooms: {
+            ...currentBathObj,
+            [bathNum]: files
+          }
+        }
+      };
+    });
+    setUnsavedTabs(prev => ({ ...prev, media: true }));
   };
 
   // Switch Tab
@@ -209,10 +272,64 @@ const AdminEditPropertyPage = () => {
   const handleSave = async () => {
     const propId = existingProp?.id || existingProp?._id || id;
     try {
-      await updateProperty(propId, {
-        ...formData,
-        price: formattedPricePreview
+      const payload = new FormData();
+      payload.append('title', formData.title);
+      payload.append('type', formData.type);
+      payload.append('purpose', formData.purpose);
+      payload.append('tag', formData.tag || '');
+      payload.append('builder', formData.builder || '');
+      payload.append('city', formData.city || '');
+      payload.append('location', formData.location || '');
+      payload.append('price', formattedPricePreview);
+      payload.append('numericPrice', Number(formData.numericPrice) || 0);
+      payload.append('area', formData.area || '');
+      payload.append('numericArea', parseInt(formData.area, 10) || 0);
+      payload.append('beds', formData.beds || 0);
+      payload.append('baths', formData.baths || 0);
+      payload.append('status', formData.status || 'Published');
+      payload.append('furnishing', formData.furnished === 'Fully Furnished' ? 'full' : formData.furnished === 'Semi Furnished' ? 'semi' : 'none');
+      payload.append('desc', formData.desc || '');
+      payload.append('amenities', JSON.stringify(formData.amenities || []));
+      payload.append('pros', JSON.stringify(formData.pros || []));
+      payload.append('cons', JSON.stringify(formData.cons || []));
+
+      // Entrance file or URL
+      if (formData.images?.entrance) {
+        if (formData.images.entrance instanceof File) {
+          payload.append('entrance', formData.images.entrance);
+        } else if (typeof formData.images.entrance === 'string') {
+          payload.append('entranceUrl', formData.images.entrance);
+        }
+      }
+
+      // Categories (hall, kitchen, bedrooms, bathrooms, terrace)
+      const categories = ['hall', 'kitchen', 'bedrooms', 'bathrooms', 'terrace'];
+      const stringifiedUrls = {};
+
+      categories.forEach(cat => {
+        const rawData = formData.images?.[cat] || [];
+        let items = [];
+        if (Array.isArray(rawData)) {
+          items = rawData;
+        } else if (rawData && typeof rawData === 'object') {
+          items = Object.values(rawData).flat();
+        }
+
+        const existingUrls = [];
+        items.forEach(item => {
+          if (item instanceof File) {
+            payload.append(cat, item);
+          } else if (typeof item === 'string' && item.trim()) {
+            existingUrls.push(item);
+          }
+        });
+        stringifiedUrls[cat] = existingUrls;
       });
+
+      stringifiedUrls.entrance = typeof formData.images?.entrance === 'string' ? formData.images.entrance : null;
+      payload.append('images', JSON.stringify(stringifiedUrls));
+
+      await updateProperty(propId, payload);
 
       setUnsavedTabs({
         basics: false,
@@ -374,12 +491,22 @@ const AdminEditPropertyPage = () => {
                     onChange={(e) => updateField('builder', e.target.value)}
                   />
 
-                  <SelectInput
-                    label="Location City"
-                    value={formData.city}
-                    onChange={(e) => updateField('city', e.target.value)}
-                    options={CITIES}
-                  />
+                  <div className="w-full font-sans">
+                    <FormLabel>Location City</FormLabel>
+                    <input
+                      type="text"
+                      list="city-suggestions-edit"
+                      placeholder="e.g. Chennai, Coimbatore, Madurai, Trichy..."
+                      value={formData.city}
+                      onChange={(e) => updateField('city', e.target.value)}
+                      className="w-full bg-[#F4F1EA] border border-[#E8E4DA] focus:border-[#F5A623] rounded-xl px-4 py-3 text-sm text-[#1A1A1A] placeholder-[#8A8A85] font-medium outline-none transition-colors"
+                    />
+                    <datalist id="city-suggestions-edit">
+                      {['Chennai', 'Coimbatore', 'Madurai', 'Bangalore', 'Hyderabad', 'Mumbai', 'Trichy', 'Salem', 'Tirunelveli', 'Ooty', 'Pondicherry', 'Kochi'].map(c => (
+                        <option key={c} value={c} />
+                      ))}
+                    </datalist>
+                  </div>
                 </div>
 
                 <TextInput
@@ -448,20 +575,130 @@ const AdminEditPropertyPage = () => {
 
             {/* MEDIA TAB */}
             {activeTab === 'media' && (
-              <motion.div key="media" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-                <ImageDropzone
-                  label="Cover Image"
-                  images={formData.image ? [formData.image] : []}
-                  onChange={(imgs) => updateField('image', imgs[0] || '')}
-                  maxFiles={1}
-                />
+              <motion.div key="media" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 font-sans">
+                <div className="border-b border-[#E8E4DA] pb-3">
+                  <h4 className="text-base font-extrabold text-[#1A1A1A]">Structured Media & Room Assets</h4>
+                  <p className="text-xs text-[#8A8A85]">Adjust room counts below to generate upload dropzones for each bedroom and bathroom in order: Entrance, Hall, Kitchen, Bedrooms, Bathrooms, and Terrace.</p>
+                </div>
 
-                <ImageDropzone
-                  label="Gallery Images"
-                  images={formData.gallery}
-                  onChange={(imgs) => updateField('gallery', imgs)}
-                  maxFiles={8}
-                />
+                {/* Room Count Configuration Card */}
+                <div className="p-5 bg-[#F4F1EA] border border-[#E8E4DA] rounded-2xl space-y-4 font-sans">
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#F5A623] block">
+                    ROOM CONFIGURATION SETUP
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <TextInput
+                      label="Number of Bedrooms (BHK Count)"
+                      type="number"
+                      min={1}
+                      max={12}
+                      value={formData.beds}
+                      onChange={(e) => updateField('beds', Math.max(1, parseInt(e.target.value, 10) || 1))}
+                    />
+                    <TextInput
+                      label="Number of Bathrooms"
+                      type="number"
+                      min={1}
+                      max={12}
+                      value={formData.baths}
+                      onChange={(e) => updateField('baths', Math.max(1, parseInt(e.target.value, 10) || 1))}
+                    />
+                  </div>
+                </div>
+
+                {/* 1. Entrance Image (Single Photo) */}
+                <div className="space-y-2">
+                  <FormLabel required>1. ENTRANCE IMAGE (Single Photo)</FormLabel>
+                  <ImageDropzone
+                    id="edit-dropzone-entrance"
+                    images={formData.images?.entrance ? [formData.images.entrance] : []}
+                    onChange={(imgs) => updateImageCategory('entrance', imgs[0] || '')}
+                    maxFiles={1}
+                  />
+                </div>
+
+                {/* 2. Hall Images (Multiple Photos) */}
+                <div className="space-y-2">
+                  <FormLabel>2. HALL IMAGES (LIVING ROOM)</FormLabel>
+                  <ImageDropzone
+                    id="edit-dropzone-hall"
+                    images={formData.images?.hall || []}
+                    onChange={(imgs) => updateImageCategory('hall', imgs)}
+                    maxFiles={10}
+                  />
+                </div>
+
+                {/* 3. Kitchen Images (Multiple Photos) */}
+                <div className="space-y-2">
+                  <FormLabel>3. KITCHEN IMAGES</FormLabel>
+                  <ImageDropzone
+                    id="edit-dropzone-kitchen"
+                    images={formData.images?.kitchen || []}
+                    onChange={(imgs) => updateImageCategory('kitchen', imgs)}
+                    maxFiles={10}
+                  />
+                </div>
+
+                {/* 4. Per-Bedroom Images (Generated dynamically based on beds count) */}
+                <div className="space-y-4 pt-2 border-t border-[#E8E4DA]">
+                  <FormLabel>4. BEDROOM IMAGES ({formData.beds || 1} Bedrooms Configured)</FormLabel>
+                  <div className="space-y-4 pl-2 border-l-2 border-[#F5A623]">
+                    {Array.from({ length: Math.max(1, formData.beds || 1) }).map((_, idx) => {
+                      const bedNum = idx + 1;
+                      const currentImgs = (typeof formData.images?.bedrooms === 'object' && !Array.isArray(formData.images?.bedrooms))
+                        ? (formData.images.bedrooms[bedNum] || [])
+                        : (Array.isArray(formData.images?.bedrooms) ? formData.images.bedrooms : []);
+
+                      return (
+                        <div key={`edit-bed-${bedNum}`} className="space-y-1.5 bg-stone-50 p-4 rounded-2xl border border-[#E8E4DA]">
+                          <span className="text-xs font-bold text-[#1A1A1A] block">🛏️ Bedroom {bedNum} Photos</span>
+                          <ImageDropzone
+                            id={`edit-dropzone-bedroom-${bedNum}`}
+                            images={currentImgs}
+                            onChange={(imgs) => updateBedroomImages(bedNum, imgs)}
+                            maxFiles={6}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 5. Per-Bathroom Images (Generated dynamically based on baths count) */}
+                <div className="space-y-4 pt-2 border-t border-[#E8E4DA]">
+                  <FormLabel>5. BATHROOM IMAGES ({formData.baths || 1} Bathrooms Configured)</FormLabel>
+                  <div className="space-y-4 pl-2 border-l-2 border-teal-500">
+                    {Array.from({ length: Math.max(1, formData.baths || 1) }).map((_, idx) => {
+                      const bathNum = idx + 1;
+                      const currentImgs = (typeof formData.images?.bathrooms === 'object' && !Array.isArray(formData.images?.bathrooms))
+                        ? (formData.images.bathrooms[bathNum] || [])
+                        : (Array.isArray(formData.images?.bathrooms) ? formData.images.bathrooms : []);
+
+                      return (
+                        <div key={`edit-bath-${bathNum}`} className="space-y-1.5 bg-stone-50 p-4 rounded-2xl border border-[#E8E4DA]">
+                          <span className="text-xs font-bold text-[#1A1A1A] block">🚿 Bathroom {bathNum} Photos</span>
+                          <ImageDropzone
+                            id={`edit-dropzone-bathroom-${bathNum}`}
+                            images={currentImgs}
+                            onChange={(imgs) => updateBathroomImages(bathNum, imgs)}
+                            maxFiles={6}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 6. Terrace Images (Multiple Photos) */}
+                <div className="space-y-2 pt-2 border-t border-[#E8E4DA]">
+                  <FormLabel>6. TERRACE & BALCONY IMAGES</FormLabel>
+                  <ImageDropzone
+                    id="edit-dropzone-terrace"
+                    images={formData.images?.terrace || []}
+                    onChange={(imgs) => updateImageCategory('terrace', imgs)}
+                    maxFiles={10}
+                  />
+                </div>
               </motion.div>
             )}
 

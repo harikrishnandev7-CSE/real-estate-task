@@ -388,7 +388,14 @@ const AdminDashboard = () => {
                 <tr key={item.id || item._id || `top-${idx}`} className="hover:bg-[#F4F1EA]/50 transition-colors">
                   <td className="py-3.5 px-5">
                     <div className="flex items-center gap-3">
-                      <img src={item.image} alt={item.title} className="w-10 h-10 rounded-xl object-cover border border-[#E8E4DA]" />
+                      <img 
+                        src={item.image && !item.image.startsWith('blob:') ? item.image : "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=400&q=80"} 
+                        alt={item.title} 
+                        onError={(e) => {
+                          e.currentTarget.src = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=400&q=80";
+                        }}
+                        className="w-10 h-10 rounded-xl object-cover border border-[#E8E4DA]" 
+                      />
                       <div>
                         <span className="font-bold text-[#1A1A1A] block">{item.title}</span>
                         <span className="text-[10px] text-[#8A8A85]">{item.location}</span>

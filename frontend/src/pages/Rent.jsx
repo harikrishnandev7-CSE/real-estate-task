@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Search, Heart, Grid, List, ChevronDown, Check, ShieldCheck, MapPin, BedDouble, Bath, Square, Sparkles, Filter, RefreshCw, X, Eye, Calendar, ShieldAlert } from 'lucide-react';
 import { useApp } from '../context/AppContext';
@@ -7,9 +7,13 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 
 const Rent = () => {
   const [searchParams] = useSearchParams();
-  const { properties, wishlist, compareList, addToWishlist, removeFromWishlist, addToCompare, removeFromCompare, addToRecentlyViewed, openBookModal } = useApp();
+  const { properties, fetchProperties, wishlist, compareList, addToWishlist, removeFromWishlist, addToCompare, removeFromCompare, addToRecentlyViewed, openBookModal } = useApp();
   const navigate = useNavigate();
   const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (fetchProperties) fetchProperties();
+  }, []);
 
   // Filter States
   const [selectedCity, setSelectedCity] = useState('All');
@@ -28,9 +32,17 @@ const Rent = () => {
   const [quickViewProperty, setQuickViewProperty] = useState(null);
   const [viewMode, setViewMode] = useState('grid');
 
-  // Available Filter Options
-  const cities = ['All', 'Chennai', 'Coimbatore', 'Madurai', 'Bangalore', 'Hyderabad', 'Mumbai'];
-  const types = ['All', 'Office', 'Apartment', 'Villa', 'Commercial', 'Co-working'];
+  // Available Filter Options (dynamically includes all cities from DB properties)
+  const cities = useMemo(() => {
+    const defaultCities = ['All', 'Chennai', 'Coimbatore', 'Madurai', 'Bangalore', 'Hyderabad', 'Mumbai'];
+    const dynamicSet = new Set(defaultCities);
+    (properties || []).forEach(p => {
+      if (p.city && p.city.trim()) dynamicSet.add(p.city.trim());
+    });
+    return Array.from(dynamicSet);
+  }, [properties]);
+
+  const types = ['All', 'Villa', 'Apartment', 'Penthouse', 'Plot', 'Commercial'];
 
   // Read URL query params on mount/change
   React.useEffect(() => {
@@ -71,13 +83,13 @@ const Rent = () => {
 
   // Filter listings
   const filteredProperties = properties.filter(prop => {
-    if (prop.purpose !== 'Rent') return false;
+    if (prop.purpose && String(prop.purpose).toLowerCase() !== 'rent') return false;
     
     // City filter
     if (selectedCity !== 'All' && prop.city !== selectedCity) return false;
 
     // Type filter
-    if (selectedType !== 'All' && prop.type !== selectedType) return false;
+    if (selectedType !== 'All' && String(prop.type || '').toLowerCase() !== selectedType.toLowerCase()) return false;
 
     // Budget (Monthly Rent) filter
     if (prop.numericPrice > maxRent) return false;
@@ -390,15 +402,15 @@ const Rent = () => {
               initial="hidden"
               animate="visible"
               className={viewMode === 'grid' 
-                ? "grid grid-cols-1 md:grid-cols-2 gap-8" 
+                ? "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8" 
                 : "flex flex-col gap-6"
               }
             >
               <AnimatePresence mode="popLayout">
                 {currentItems.map((prop, idx) => {
                   const propId = prop.id || prop._id || prop.slug || (prop.title ? prop.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') : `rent-${idx}`);
-                  const isWishlisted = wishlist.some(item => item === propId || item.id === propId || item._id === propId);
-                  const isCompared = compareList.some(item => item === propId || item.id === propId || item._id === propId);
+                  const isWishlisted = Array.isArray(wishlist) && wishlist.some(item => item && (item === propId || item.id === propId || item._id === propId));
+                  const isCompared = Array.isArray(compareList) && compareList.some(item => item && (item === propId || item.id === propId || item._id === propId));
                   const deposit = prop.type === 'Office' || prop.type === 'Commercial' ? prop.numericPrice * 5 : prop.numericPrice * 3;
                   const lease = prop.type === 'Office' || prop.type === 'Commercial' ? 36 : 12;
 
@@ -435,7 +447,7 @@ const Rent = () => {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                isWishlisted ? removeFromWishlist(prop.id) : addToWishlist(prop);
+                                addToWishlist(prop);
                               }}
                               className="p-2 rounded-full bg-white/90 text-[#1A1A1A] hover:bg-[#F5A623] hover:text-white transition-colors cursor-pointer shadow-xs"
                               aria-label="Wishlist"
@@ -725,12 +737,11 @@ const Rent = () => {
                     </button>
                     <button
                       onClick={() => {
-                        const isWishlisted = wishlist.some(item => item.id === quickViewProperty.id);
-                        isWishlisted ? removeFromWishlist(quickViewProperty.id) : addToWishlist(quickViewProperty);
+                        addToWishlist(quickViewProperty);
                       }}
                       className="px-4 py-3.5 border border-[#E8E4DA] bg-white rounded-full text-[#1A1A1A] hover:border-[#F5A623] transition-colors flex items-center justify-center cursor-pointer shadow-xs"
                     >
-                      <Heart className={`w-4 h-4 ${wishlist.some(item => item.id === quickViewProperty.id) ? 'fill-current text-red-500' : ''}`} />
+                      <Heart className={`w-4 h-4 ${Array.isArray(wishlist) && wishlist.some(item => item && ((item.id || item._id) === (quickViewProperty.id || quickViewProperty._id) || item === (quickViewProperty.id || quickViewProperty._id))) ? 'fill-current text-red-500' : ''}`} />
                     </button>
                   </div>
                 </div>
