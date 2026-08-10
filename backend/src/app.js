@@ -22,6 +22,7 @@ import consultantDashboardRoutes from './routes/consultantDashboard.routes.js';
 import adminCalendarRoutes from './routes/adminCalendar.routes.js';
 import banksRoutes from './routes/banks.routes.js';
 import publicConsultantsRoutes from './routes/publicConsultants.routes.js';
+import projectsRoutes from './routes/projects.routes.js';
 
 const app = express();
 
@@ -79,6 +80,8 @@ app.use('/api/v1/consultant', consultantDashboardRoutes);
 // Shared & Public Route Mounts
 app.use('/api/v1/blogs', blogsRoutes);
 app.use('/api/v1/admin/blogs', blogsRoutes);
+app.use('/api/v1/projects', projectsRoutes);
+app.use('/api/v1/admin/projects', projectsRoutes);
 app.use('/api/v1/inquiries', inquiriesRoutes);
 app.use('/api/v1/banks', banksRoutes);
 app.use('/api/v1/consultants', publicConsultantsRoutes);

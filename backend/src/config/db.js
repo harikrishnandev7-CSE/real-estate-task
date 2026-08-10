@@ -15,6 +15,20 @@ export const connectDB = async () => {
     console.log(`🍃 Host: ${conn.connection.host}`);
     console.log(`📁 Database: ${conn.connection.name}`);
     console.log(`====================================================`);
+
+    // Clean up legacy tourUrl360 field from properties collection
+    try {
+      if (conn?.connection?.db) {
+        await conn.connection.db.collection('properties').updateMany(
+          { tourUrl360: { $exists: true } },
+          { $unset: { tourUrl360: "" } }
+        );
+        console.log(`🧹 Cleaned up legacy tourUrl360 fields from properties collection.`);
+      }
+    } catch (cleanErr) {
+      console.warn(`Notice on property field cleanup: ${cleanErr.message}`);
+    }
+
     return conn;
   } catch (error) {
     console.warn(`⚠️ Atlas SRV Lookup failed. Trying direct cluster fallback...`);

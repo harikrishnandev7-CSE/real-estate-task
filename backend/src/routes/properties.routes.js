@@ -21,6 +21,7 @@ router.get('/:id', asyncHandler(propertiesController.getPropertyById));
 // Middleware handles optional multipart file uploads (image, gallery, media) directly to Cloudinary
 const propertyUpload = upload.fields([
   { name: 'image', maxCount: 1 },
+  { name: 'video', maxCount: 1 },
   { name: 'media', maxCount: 20 },
   { name: 'gallery', maxCount: 20 },
   { name: 'entrance', maxCount: 1 },

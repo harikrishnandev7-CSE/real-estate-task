@@ -57,9 +57,10 @@ const propertySchema = new mongoose.Schema(
     enquiries: { type: Number, default: 0 },
     saves: { type: Number, default: 0 },
 
-    // ─── New media & legal fields (additive, backward-compatible) ─────────────
+    // ─── New developer, project & media fields ─────────────────────────
+    developer: { type: String, default: null },
+    projectId: { type: mongoose.Schema.Types.Mixed, ref: 'Project', default: null },
     videoUrl: { type: String, default: null },
-    tourUrl360: { type: String, default: null },
     legal: {
       ecStatus: { type: String, default: null },
       dtcpCmdaApproval: { type: String, default: null },

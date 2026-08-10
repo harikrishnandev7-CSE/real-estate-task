@@ -128,7 +128,9 @@ export const createProperty = async (data) => {
     reraNumber,
     status = 'Published',
     purpose = 'Buy',
+    developer,
     builder,
+    projectId,
     rating,
     growthRate,
     growth,
@@ -144,11 +146,11 @@ export const createProperty = async (data) => {
     registrationStatus,
     // New media & legal fields
     videoUrl,
-    tourUrl360,
     legal,
   } = data;
 
   const generatedId = id || title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  const devName = developer || builder || 'IMPERIA Developers';
 
   const created = await Property.create({
     _id: generatedId,
@@ -174,7 +176,9 @@ export const createProperty = async (data) => {
     reraNumber: reraNumber || null,
     status,
     purpose,
-    builder: builder || null,
+    developer: devName,
+    builder: devName,
+    projectId: projectId || null,
     rating: rating ? parseFloat(rating) : 4.8,
     growthRate: growthRate || growth || null,
     investmentRating: investmentRating || null,
@@ -187,7 +191,6 @@ export const createProperty = async (data) => {
     dimensions: dimensions || null,
     registrationStatus: registrationStatus || null,
     videoUrl: videoUrl || null,
-    tourUrl360: tourUrl360 || null,
     legal: legal || {},
   });
 
@@ -236,7 +239,11 @@ export const updateProperty = async (id, data) => {
   if (data.reraNumber !== undefined) updateData.reraNumber = data.reraNumber;
   if (data.status !== undefined) updateData.status = data.status;
   if (data.purpose !== undefined) updateData.purpose = data.purpose;
-  if (data.builder !== undefined) updateData.builder = data.builder;
+  if (data.developer !== undefined || data.builder !== undefined) {
+    updateData.developer = data.developer || data.builder;
+    updateData.builder = updateData.developer;
+  }
+  if (data.projectId !== undefined) updateData.projectId = data.projectId;
   if (data.rating !== undefined) updateData.rating = parseFloat(data.rating);
   if (data.growthRate !== undefined || data.growth !== undefined) {
     updateData.growthRate = data.growthRate || data.growth;
@@ -247,7 +254,6 @@ export const updateProperty = async (id, data) => {
   }
   if (data.specs !== undefined) updateData.specs = data.specs;
   if (data.videoUrl !== undefined) updateData.videoUrl = data.videoUrl;
-  if (data.tourUrl360 !== undefined) updateData.tourUrl360 = data.tourUrl360;
   if (data.legal !== undefined) updateData.legal = { ...(data.legal) };
 
   const updated = await Property.findByIdAndUpdate(id, updateData, { new: true }).lean();

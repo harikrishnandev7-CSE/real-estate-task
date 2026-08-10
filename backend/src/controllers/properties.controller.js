@@ -1,4 +1,5 @@
 import propertiesService from '../services/properties.service.js';
+import { handleProjectCreation } from '../services/projects.service.js';
 import { successResponse, errorResponse } from '../utils/apiResponse.js';
 
 export const getProperties = async (req, res) => {
@@ -116,6 +117,19 @@ export const createProperty = async (req, res) => {
     const structuredImages = extractStructuredImages(req);
     propertyData.images = structuredImages;
 
+    // Handle Cloudinary Video Upload
+    if (req.files?.video?.[0]) {
+      const videoFile = req.files.video[0];
+      propertyData.videoUrl = videoFile.path || videoFile.secure_url;
+      console.log('Cloudinary Upload Response (Video):', propertyData.videoUrl);
+    } else if (req.file && (req.file.fieldname === 'video' || req.file.mimetype?.startsWith('video/'))) {
+      propertyData.videoUrl = req.file.path || req.file.secure_url;
+    }
+
+    // Developer / Builder normalization
+    propertyData.developer = req.body.developer || req.body.builder || 'IMPERIA Developers';
+    propertyData.builder = propertyData.developer;
+
     if (req.body.amenities) propertyData.amenities = parseJsonArrayField(req.body.amenities);
     if (req.body.pros) propertyData.pros = parseJsonArrayField(req.body.pros);
     if (req.body.cons) propertyData.cons = parseJsonArrayField(req.body.cons);
@@ -136,6 +150,14 @@ export const createProperty = async (req, res) => {
     }
 
     const property = await propertiesService.createProperty(propertyData);
+
+    // FEATURE 1: Call Auto Project Creation logic
+    try {
+      await handleProjectCreation(property);
+    } catch (projectErr) {
+      console.warn('Auto Project Creation warning:', projectErr.message);
+    }
+
     return successResponse(res, { property }, 201);
   } catch (err) {
     console.error('Error creating property:', err.message);
@@ -148,6 +170,20 @@ export const updateProperty = async (req, res) => {
     const propertyData = { ...req.body };
     const structuredImages = extractStructuredImages(req);
     propertyData.images = structuredImages;
+
+    // Handle Cloudinary Video Upload
+    if (req.files?.video?.[0]) {
+      const videoFile = req.files.video[0];
+      propertyData.videoUrl = videoFile.path || videoFile.secure_url;
+      console.log('Cloudinary Upload Response (Video):', propertyData.videoUrl);
+    } else if (req.file && (req.file.fieldname === 'video' || req.file.mimetype?.startsWith('video/'))) {
+      propertyData.videoUrl = req.file.path || req.file.secure_url;
+    }
+
+    if (req.body.developer || req.body.builder) {
+      propertyData.developer = req.body.developer || req.body.builder;
+      propertyData.builder = propertyData.developer;
+    }
 
     if (req.body.amenities) propertyData.amenities = parseJsonArrayField(req.body.amenities);
     if (req.body.pros) propertyData.pros = parseJsonArrayField(req.body.pros);
@@ -168,6 +204,16 @@ export const updateProperty = async (req, res) => {
     }
 
     const property = await propertiesService.updateProperty(req.params.id, propertyData);
+
+    // FEATURE 1: Call Auto Project Creation logic
+    if (property.developer || req.body.developer || req.body.builder) {
+      try {
+        await handleProjectCreation(property);
+      } catch (projectErr) {
+        console.warn('Auto Project Creation warning:', projectErr.message);
+      }
+    }
+
     return successResponse(res, { property });
   } catch (err) {
     console.error('Error updating property:', err.message);

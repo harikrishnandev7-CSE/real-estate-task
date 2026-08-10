@@ -136,7 +136,9 @@ export const formatProperty = (prop) => {
     reraNumber: prop.reraNumber || null,
     status: prop.status || 'Published',
     purpose: prop.purpose || 'Buy',
-    builder: prop.builder || null,
+    builder: prop.developer || prop.builder || null,
+    developer: prop.developer || prop.builder || null,
+    projectId: prop.projectId || null,
     rating: prop.rating ? Number(prop.rating) : 4.8,
     growth: prop.growthRate || null,
     growthRate: prop.growthRate || null,
@@ -155,7 +157,6 @@ export const formatProperty = (prop) => {
     saves: prop.saves || 0,
     // New media & legal fields
     videoUrl: prop.videoUrl || null,
-    tourUrl360: prop.tourUrl360 || null,
     legal: prop.legal || {
       ecStatus: null,
       dtcpCmdaApproval: null,

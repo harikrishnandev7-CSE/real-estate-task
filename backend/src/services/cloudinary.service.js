@@ -36,24 +36,28 @@ export const uploadToCloudinary = async (filePath, folder = 'realestate') => {
   }
 };
 
-// ─── Cloudinary Multer Storage Instance ────────────────────────────────────────
+// ─── Cloudinary Multer Storage Instance (Supports Images & Videos) ────────────
 const storage = new CloudinaryStorage({
   cloudinary,
-  params: async (req, file) => ({
-    folder:          'realestate',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
-    transformation:  [{ width: 1200, height: 800, crop: 'limit', quality: 'auto' }],
-    public_id:       `property-${Date.now()}-${Math.round(Math.random() * 1e6)}`,
-  }),
+  params: async (req, file) => {
+    const isVideo = file.mimetype?.startsWith('video/') || file.fieldname === 'video';
+    return {
+      folder: isVideo ? 'property_videos' : 'realestate',
+      resource_type: isVideo ? 'video' : 'image',
+      public_id: `property-${file.fieldname}-${Date.now()}-${Math.round(Math.random() * 1e6)}`,
+    };
+  },
 });
 
 // ─── MIME type guard ──────────────────────────────────────────────────────────
 const fileFilter = (req, file, cb) => {
-  const allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
-  if (allowed.includes(file.mimetype)) {
+  const allowedImage = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+  const allowedVideo = ['video/mp4', 'video/webm', 'video/quicktime', 'video/x-msvideo', 'video/mkv', 'video/avi'];
+
+  if (allowedImage.includes(file.mimetype) || allowedVideo.includes(file.mimetype) || file.mimetype.startsWith('video/')) {
     cb(null, true);
   } else {
-    cb(new Error('Invalid file type. Only JPEG, PNG, WEBP and GIF images are allowed.'));
+    cb(new Error('Invalid file format. Allowed: JPEG, PNG, WEBP, GIF images and MP4, WEBM, MOV videos.'));
   }
 };
 
@@ -62,7 +66,7 @@ const fileFilter = (req, file, cb) => {
  */
 export const upload = multer({
   storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB limit
+  limits: { fileSize: 100 * 1024 * 1024 }, // 100 MB limit for high-res videos & images
   fileFilter,
 });
 
