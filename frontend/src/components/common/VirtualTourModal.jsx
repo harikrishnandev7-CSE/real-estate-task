@@ -341,7 +341,7 @@ const VirtualTourModal = ({ property, furnishing, onClose }) => {
           <div className="flex items-center gap-2.5 bg-black/50 backdrop-blur-md border border-white/10 rounded-2xl px-4 py-2.5">
             <Compass className="w-4 h-4 text-[#F5A623]" />
             <div>
-              <p className="text-[10px] text-white/50 font-sans uppercase tracking-widest leading-none">Virtual Tour</p>
+              <p className="text-[10px] text-white/50 font-sans uppercase tracking-widest leading-none">Property Video</p>
               <p className="text-white text-xs font-bold font-sans leading-tight mt-0.5 max-w-[200px] truncate">{property.title}</p>
             </div>
           </div>
@@ -352,81 +352,96 @@ const VirtualTourModal = ({ property, furnishing, onClose }) => {
 
         <div className="pointer-events-auto flex items-center gap-2">
           {/* Map toggle */}
-          <button
-            onClick={() => setShowMap(p => !p)}
-            className={`p-2.5 rounded-full backdrop-blur-md border transition-all cursor-pointer ${
-              showMap ? 'bg-[#F5A623] border-[#F5A623] text-white' : 'bg-black/50 border-white/10 text-white/70 hover:text-white'
-            }`}
-            title="Room Map"
-          >
-            <Map className="w-4 h-4" />
-          </button>
+          {!property.videoUrl && (
+            <button
+              onClick={() => setShowMap(p => !p)}
+              className={`p-2.5 rounded-full backdrop-blur-md border transition-all cursor-pointer ${
+                showMap ? 'bg-[#F5A623] border-[#F5A623] text-white' : 'bg-black/50 border-white/10 text-white/70 hover:text-white'
+              }`}
+              title="Room Map"
+            >
+              <Map className="w-4 h-4" />
+            </button>
+          )}
           {/* Reset view */}
-          <button
-            onClick={() => { setPanX(50); setPanY(50); setZoom(1); }}
-            className="p-2.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-white/70 hover:text-white transition-all cursor-pointer"
-            title="Reset View"
-          >
-            <RotateCcw className="w-4 h-4" />
-          </button>
+          {!property.videoUrl && (
+            <button
+              onClick={() => { setPanX(50); setPanY(50); setZoom(1); }}
+              className="p-2.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-white/70 hover:text-white transition-all cursor-pointer"
+              title="Reset View"
+            >
+              <RotateCcw className="w-4 h-4" />
+            </button>
+          )}
           {/* Close */}
           <button
             onClick={onClose}
             className="p-2.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-white/70 hover:bg-red-600 hover:border-red-600 hover:text-white transition-all cursor-pointer"
-            title="Close Tour"
+            title="Close Video"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      {/* ── PANORAMIC VIEWER ────────────────────────────────────────── */}
-      <div
-        ref={containerRef}
-        className={`flex-1 relative overflow-hidden ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-        onWheel={handleWheel}
-      >
-        {/* Panoramic background image */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentSceneId}
-            initial={{ opacity: 0, scale: 1.08 }}
-            animate={{ opacity: transitioning ? 0 : 1, scale: transitioning ? 0.95 : 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.45, ease: 'easeInOut' }}
-            className="absolute inset-0 will-change-transform"
-            style={{
-              backgroundImage: `url(${currentScene.image})`,
-              backgroundSize: `${250 * zoom}% auto`,
-              backgroundPosition: `${panX}% ${panY}%`,
-              backgroundRepeat: 'no-repeat',
-              filter: transitioning ? 'brightness(0.3) blur(4px)' : 'brightness(1) blur(0px)',
-              transition: isDragging ? 'none' : 'background-position 0.05s linear',
-            }}
+      {/* ── VIDEO / PANORAMIC VIEWER ────────────────────────────────── */}
+      {property.videoUrl ? (
+        <div className="flex-1 relative bg-black flex items-center justify-center pt-16 pb-16">
+          <video
+            src={property.videoUrl}
+            controls
+            autoPlay
+            playsInline
+            className="w-full h-full max-h-[85vh] object-contain shadow-2xl"
           />
-        </AnimatePresence>
+        </div>
+      ) : (
+        <div
+          ref={containerRef}
+          className={`flex-1 relative overflow-hidden ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onWheel={handleWheel}
+        >
+          {/* Panoramic background image */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentSceneId}
+              initial={{ opacity: 0, scale: 1.08 }}
+              animate={{ opacity: transitioning ? 0 : 1, scale: transitioning ? 0.95 : 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.45, ease: 'easeInOut' }}
+              className="absolute inset-0 will-change-transform"
+              style={{
+                backgroundImage: `url(${currentScene.image})`,
+                backgroundSize: `${250 * zoom}% auto`,
+                backgroundPosition: `${panX}% ${panY}%`,
+                backgroundRepeat: 'no-repeat',
+                filter: transitioning ? 'brightness(0.3) blur(4px)' : 'brightness(1) blur(0px)',
+                transition: isDragging ? 'none' : 'background-position 0.05s linear',
+              }}
+            />
+          </AnimatePresence>
 
-        {/* Scene gradient tint */}
-        <div className={`absolute inset-0 bg-gradient-to-br ${SCENE_COLORS[currentScene.type] || 'from-stone-900/40 to-black/40'} opacity-30 pointer-events-none`} />
+          {/* Scene gradient tint */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${SCENE_COLORS[currentScene.type] || 'from-stone-900/40 to-black/40'} opacity-30 pointer-events-none`} />
 
-        {/* Vignette edges */}
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.65) 100%)'
-        }} />
+          {/* Vignette edges */}
+          <div className="absolute inset-0 pointer-events-none" style={{
+            background: 'radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.65) 100%)'
+          }} />
 
-        {/* Hotspots */}
-        <AnimatePresence>
-          {!transitioning && currentScene.hotspots?.map(hotspot => (
-            <Hotspot key={hotspot.id} hotspot={hotspot} onNavigate={navigateTo} />
-          ))}
-        </AnimatePresence>
+          {/* Hotspots */}
+          <AnimatePresence>
+            {!transitioning && currentScene.hotspots?.map(hotspot => (
+              <Hotspot key={hotspot.id} hotspot={hotspot} onNavigate={navigateTo} />
+            ))}
+          </AnimatePresence>
 
         {/* Current room label — bottom-center of viewer */}
         <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
@@ -508,6 +523,7 @@ const VirtualTourModal = ({ property, furnishing, onClose }) => {
           )}
         </AnimatePresence>
       </div>
+      )}
 
       {/* ── BOTTOM ROOM NAVIGATOR ────────────────────────────────────── */}
       <div className="relative z-50 bg-gradient-to-t from-black/95 via-black/80 to-transparent px-4 pt-6 pb-5">

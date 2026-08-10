@@ -3,15 +3,15 @@ import { ChevronDown, Upload, X, Image as ImageIcon, GripVertical } from 'lucide
 import { api } from '../../../services/api';
 
 export const FormLabel = ({ children, required, className = '' }) => (
-  <label className={`text-[10px] uppercase tracking-wider text-[#5D6472] font-bold mb-1.5 block font-sans ${className}`}>
-    {children} {required && <span className="text-red-500">*</span>}
+  <label className={`text-[11px] uppercase tracking-wider text-[#111111] font-extrabold mb-1.5 block font-sans ${className}`}>
+    {children} {required && <span className="text-rose-600">*</span>}
   </label>
 );
 
 export const FormError = ({ message }) => {
   if (!message) return null;
   return (
-    <span className="text-[10px] font-bold text-red-500 mt-1 block font-sans">
+    <span className="text-xs font-bold text-rose-600 mt-1 block font-sans">
       {message}
     </span>
   );
@@ -21,9 +21,9 @@ export const TextInput = ({ label, error, required, className = '', ...props }) 
   <div className="w-full font-sans">
     {label && <FormLabel required={required}>{label}</FormLabel>}
     <input
-      className={`w-full bg-[#E0EEE9]/50 border ${
-        error ? 'border-red-500 focus:border-red-500' : 'border-[rgba(93,100,114,0.20)] focus:border-[#CFB6A8]'
-      } rounded-lg px-4 py-3 text-xs text-[#363C46] placeholder-[#5D6472]/60 font-medium outline-none transition-colors ${className}`}
+      className={`w-full bg-white border ${
+        error ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-200' : 'border-[#BFA76F] focus:border-[#C6A66B] focus:ring-[#C6A66B]/30'
+      } focus:ring-2 rounded-xl px-4 py-3.5 text-sm text-[#111111] placeholder-[#6B6B6B] font-medium outline-none transition-all shadow-xs ${className}`}
       {...props}
     />
     <FormError message={error} />
@@ -35,9 +35,9 @@ export const SelectInput = ({ label, options = [], error, required, className = 
     {label && <FormLabel required={required}>{label}</FormLabel>}
     <div className="relative">
       <select
-        className={`w-full bg-[#E0EEE9]/50 border ${
-          error ? 'border-red-500 focus:border-red-500' : 'border-[rgba(93,100,114,0.20)] focus:border-[#CFB6A8]'
-        } rounded-lg px-4 py-3 text-xs text-[#363C46] font-bold outline-none appearance-none pr-10 cursor-pointer transition-colors ${className}`}
+        className={`w-full bg-white border ${
+          error ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-200' : 'border-[#BFA76F] focus:border-[#C6A66B] focus:ring-[#C6A66B]/30'
+        } focus:ring-2 rounded-xl px-4 py-3.5 text-sm text-[#111111] font-bold outline-none appearance-none pr-10 cursor-pointer transition-all shadow-xs ${className}`}
         {...props}
       >
         {options.map((opt, idx) => (
@@ -46,7 +46,7 @@ export const SelectInput = ({ label, options = [], error, required, className = 
           </option>
         ))}
       </select>
-      <ChevronDown className="w-4 h-4 text-[#5D6472] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+      <ChevronDown className="w-4 h-4 text-[#6B6B6B] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
     </div>
     <FormError message={error} />
   </div>
@@ -57,9 +57,9 @@ export const TextAreaInput = ({ label, error, required, rows = 4, className = ''
     {label && <FormLabel required={required}>{label}</FormLabel>}
     <textarea
       rows={rows}
-      className={`w-full bg-[#E0EEE9]/50 border ${
-        error ? 'border-red-500 focus:border-red-500' : 'border-[rgba(93,100,114,0.20)] focus:border-[#CFB6A8]'
-      } rounded-lg p-3.5 text-xs text-[#363C46] placeholder-[#5D6472]/60 font-medium outline-none transition-colors ${className}`}
+      className={`w-full bg-white border ${
+        error ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-200' : 'border-[#BFA76F] focus:border-[#C6A66B] focus:ring-[#C6A66B]/30'
+      } focus:ring-2 rounded-xl p-4 text-sm text-[#111111] placeholder-[#6B6B6B] font-medium outline-none transition-all shadow-xs ${className}`}
       {...props}
     />
     <FormError message={error} />

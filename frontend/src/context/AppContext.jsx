@@ -284,6 +284,22 @@ export const AppProvider = ({ children }) => {
     }
   };
 
+  const [projects, setProjects] = useState([]);
+
+  // --- FETCH REAL PROJECTS FROM API ---
+  const fetchProjects = async () => {
+    try {
+      const projData = await api.getProjects();
+      const list = projData?.projects || (Array.isArray(projData) ? projData : null);
+      if (list && list.length > 0) {
+        setProjects(list);
+        return list;
+      }
+    } catch (err) {
+      console.warn("API projects fetch error:", err.message);
+    }
+  };
+
   // --- INITIAL BACKEND DATA SYNC ---
   useEffect(() => {
     const initApp = async () => {
@@ -306,6 +322,9 @@ export const AppProvider = ({ children }) => {
 
       // 2. Fetch Real Properties from API
       await fetchProperties();
+
+      // 3. Fetch Real Projects from API
+      await fetchProjects();
 
       // 3. Fetch Real Blogs from API
       try {
@@ -458,6 +477,7 @@ export const AppProvider = ({ children }) => {
       const created = data.property || data;
       showToast(`Property "${created.title || 'New Property'}" created successfully!`);
       await fetchProperties();
+      await fetchProjects();
       return created;
     } catch (err) {
       showToast(err.message || "Failed to create property.", "error");
@@ -471,6 +491,7 @@ export const AppProvider = ({ children }) => {
       const updated = data.property || data;
       showToast("Property updated successfully!");
       await fetchProperties();
+      await fetchProjects();
       return updated;
     } catch (err) {
       showToast(err.message || "Failed to update property.", "error");
@@ -878,6 +899,9 @@ export const AppProvider = ({ children }) => {
       properties,
       setProperties,
       fetchProperties,
+      projects,
+      setProjects,
+      fetchProjects,
       addProperty,
       updateProperty,
       deleteProperty,

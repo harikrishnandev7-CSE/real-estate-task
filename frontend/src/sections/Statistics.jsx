@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Award, Landmark, Smile, Calendar } from 'lucide-react';
 
 const AnimatedCounter = ({ value, duration = 1000 }) => {
   const elementRef = useRef(null);
@@ -57,26 +56,22 @@ const Statistics = () => {
     {
       label: 'Delivered Projects',
       value: '150+',
-      desc: 'Bespoke residential developments and commercial assets completed.',
-      icon: Landmark
+      desc: 'Bespoke residential developments and commercial assets completed.'
     },
     {
-      label: 'Happy Families',
+      label: 'Placed Families',
       value: '1200+',
-      desc: 'Discerning buyers successfully placed in their signature estates.',
-      icon: Smile
+      desc: 'Discerning buyers successfully placed in signature estates.'
     },
     {
       label: 'Exclusive Listings',
       value: '450+',
-      desc: 'Active verified plots, penthouses, villas, and commercial properties.',
-      icon: Award
+      desc: 'Active verified plots, penthouses, villas, and commercial assets.'
     },
     {
       label: 'Years Experience',
       value: '25+',
-      desc: 'A quarter-century of legacy in high-end real estate brokerage.',
-      icon: Calendar
+      desc: 'A quarter-century of legacy in high-end real estate advisory.'
     }
   ];
 
@@ -92,34 +87,13 @@ const Statistics = () => {
   };
 
   const cardVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: shouldReduceMotion ? 0 : 20, 
-      scale: 0.98 
-    },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      scale: 1,
-      transition: { 
-        duration: 0.8, 
-        ease: [0.16, 1, 0.3, 1] 
-      }
-    },
-    hover: {
-      y: shouldReduceMotion ? 0 : -6,
-      borderColor: "#CFB6A8",
-      boxShadow: "0 20px 40px rgba(54, 60, 70, 0.08)",
-      transition: {
-        duration: 0.45,
-        ease: [0.16, 1, 0.3, 1]
-      }
-    }
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 16 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
   };
 
   return (
-    <section className="py-24 md:py-28 lg:py-32 bg-[#E0EEE9] relative border-t border-[rgba(93,100,114,0.15)] overflow-hidden font-sans">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+    <section className="py-20 md:py-24 bg-[#F7F6F3] text-[#16161a] border-t border-[rgba(22,22,26,0.08)] font-sans">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
         <motion.div 
           variants={containerVariants}
           initial="hidden"
@@ -127,43 +101,25 @@ const Statistics = () => {
           viewport={{ once: true, margin: '-50px' }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
         >
-          {stats.map((stat, idx) => {
-            const Icon = stat.icon;
-            return (
-              <motion.div
-                key={idx}
-                variants={cardVariants}
-                whileHover="hover"
-                className="group relative p-8 bg-white border border-[rgba(93,100,114,0.15)] rounded-xl overflow-hidden shadow-xs flex flex-col justify-between min-h-[220px] transition-all duration-300"
+          {stats.map((stat, idx) => (
+            <motion.div
+              key={idx}
+              variants={cardVariants}
+              className="p-8 bg-white border border-[rgba(22,22,26,0.10)] rounded-md shadow-[0_1px_2px_rgba(22,22,26,0.04),0_8px_24px_rgba(22,22,26,0.05)] space-y-4"
+            >
+              <div
+                className="text-4xl lg:text-5xl font-medium text-[#16161a] tracking-tight"
+                style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
               >
-                <div className="space-y-4">
-                  {/* Top Bar with Icon */}
-                  <div className="flex items-center justify-between">
-                    <div className="p-2.5 rounded-lg bg-[rgba(207,182,168,0.15)] text-[#CFB6A8] group-hover:bg-[#CFB6A8] group-hover:text-white transition-all duration-300 shadow-xs">
-                      <Icon className="w-4.5 h-4.5 stroke-[2]" />
-                    </div>
-                  </div>
+                <AnimatedCounter value={stat.value} duration={1200} />
+              </div>
 
-                  {/* Counter Digit */}
-                  <div
-                    className="text-4xl lg:text-5xl font-bold text-[#363C46] tracking-tight group-hover:text-[#CFB6A8] transition-colors"
-                    style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
-                  >
-                    <AnimatedCounter value={stat.value} duration={1200} />
-                  </div>
-                </div>
-
-                {/* Metadata Description */}
-                <div className="space-y-1 mt-6">
-                  <h4 className="text-xs uppercase tracking-widest text-[#363C46] font-bold font-sans">{stat.label}</h4>
-                  <p className="text-[#5D6472] text-[11px] leading-relaxed font-normal font-sans">{stat.desc}</p>
-                </div>
-
-                {/* Hover indicator line */}
-                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#CFB6A8] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" />
-              </motion.div>
-            );
-          })}
+              <div className="space-y-1 pt-2 border-t border-[rgba(22,22,26,0.08)]">
+                <h4 className="text-xs uppercase tracking-[0.2em] text-[#A98A5B] font-semibold">{stat.label}</h4>
+                <p className="text-[#4a4a4f] text-xs leading-relaxed">{stat.desc}</p>
+              </div>
+            </motion.div>
+          ))}
         </motion.div>
       </div>
     </section>

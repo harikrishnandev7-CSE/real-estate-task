@@ -277,7 +277,8 @@ const AdminEditPropertyPage = () => {
       payload.append('type', formData.type);
       payload.append('purpose', formData.purpose);
       payload.append('tag', formData.tag || '');
-      payload.append('builder', formData.builder || '');
+      payload.append('developer', formData.developer || formData.builder || '');
+      payload.append('builder', formData.developer || formData.builder || '');
       payload.append('city', formData.city || '');
       payload.append('location', formData.location || '');
       payload.append('price', formattedPricePreview);
@@ -292,6 +293,12 @@ const AdminEditPropertyPage = () => {
       payload.append('amenities', JSON.stringify(formData.amenities || []));
       payload.append('pros', JSON.stringify(formData.pros || []));
       payload.append('cons', JSON.stringify(formData.cons || []));
+
+      if (formData.videoFile) {
+        payload.append('video', formData.videoFile);
+      } else if (formData.videoUrl) {
+        payload.append('videoUrl', formData.videoUrl);
+      }
 
       // Entrance file or URL
       if (formData.images?.entrance) {

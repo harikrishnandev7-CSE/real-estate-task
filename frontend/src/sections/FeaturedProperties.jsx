@@ -1,16 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, useReducedMotion, useInView, useMotionValue, animate } from 'framer-motion';
-import { MapPin, BedDouble, Bath, Square, Heart, ArrowRight, Calendar } from 'lucide-react';
+import { motion, useReducedMotion, useInView } from 'framer-motion';
+import { Heart, ArrowRight } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 const FeaturedProperties = () => {
   const navigate = useNavigate();
   const { properties } = useApp();
-
-  // Pick 3 featured properties
   const featuredList = properties.slice(0, 3);
-
   const shouldReduceMotion = useReducedMotion();
 
   const containerVariants = {
@@ -25,83 +22,54 @@ const FeaturedProperties = () => {
   const cardVariants = {
     hidden: {
       opacity: 0,
-      y: shouldReduceMotion ? 0 : 25,
-      scale: 0.98
+      y: shouldReduceMotion ? 0 : 20,
     },
     visible: {
       opacity: 1,
       y: 0,
-      scale: 1,
       transition: {
-        duration: 0.8,
+        duration: 0.7,
         ease: [0.16, 1, 0.3, 1]
       }
-    },
-    hover: {
-      y: shouldReduceMotion ? 0 : -8,
-      borderColor: "#CFB6A8",
-      boxShadow: "0 20px 40px rgba(54, 60, 70, 0.1)",
-      transition: {
-        duration: 0.45,
-        ease: [0.16, 1, 0.3, 1]
-      }
-    }
-  };
-
-  const badgeVariants = {
-    hidden: { scale: 1 },
-    visible: { scale: 1 },
-    hover: {
-      scale: 1.05,
-      transition: { duration: 0.3, ease: "easeOut" }
-    }
-  };
-
-  const ctaTextVariants = {
-    hidden: { color: "#5D6472" },
-    visible: { color: "#5D6472" },
-    hover: {
-      color: "#363C46",
-      transition: { duration: 0.3 }
     }
   };
 
   return (
-    <section className="py-24 md:py-28 lg:py-32 bg-[#E0EEE9] relative border-t border-[rgba(93,100,114,0.15)] font-sans">
+    <section className="py-24 md:py-28 lg:py-32 bg-[#F7F6F3] relative border-t border-[rgba(22,22,26,0.08)] font-sans">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
 
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div className="space-y-4">
+          <div className="space-y-3">
             <motion.span
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="text-xs uppercase tracking-[0.25em] text-[#CFB6A8] font-bold inline-block font-sans"
+              className="eyebrow"
             >
               PREMIER DEVELOPMENTS
             </motion.span>
             <motion.h2
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="text-3xl md:text-5xl font-medium text-[#363C46] leading-tight tracking-tight"
+              className="text-3xl md:text-5xl font-medium text-[#16161a] leading-tight tracking-tight"
               style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
             >
               Featured Luxury <br />
-              <span className="font-normal text-[#5D6472]">Residences</span>
+              <span className="font-normal text-[#4a4a4f]">Residences</span>
             </motion.h2>
           </div>
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="text-[#5D6472] font-normal text-sm md:text-base max-w-md leading-relaxed font-sans"
+            className="text-[#4a4a4f] font-normal text-sm md:text-base max-w-md leading-relaxed"
           >
-            A handpicked curation of luxury architecture, combining premium locations with masterfully crafted interiors and landscape designs.
+            A handpicked curation of luxury architecture, combining premier locations with masterfully crafted interiors and landscape designs.
           </motion.p>
         </div>
 
@@ -118,23 +86,20 @@ const FeaturedProperties = () => {
               key={prop.id || prop._id || `prop-${idx}`}
               prop={prop}
               cardVariants={cardVariants}
-              badgeVariants={badgeVariants}
-              ctaTextVariants={ctaTextVariants}
-              reduceMotion={shouldReduceMotion}
             />
           ))}
         </motion.div>
 
-        {/* View All Properties Action */}
+        {/* View All Action */}
         <div className="mt-16 text-center">
           <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => navigate('/buy')}
-            className="px-8 py-4 bg-[#363C46] hover:bg-[#1A1A1A] text-white font-bold text-xs uppercase tracking-wider rounded-lg shadow-sm inline-flex items-center gap-3 cursor-pointer transition-all font-sans"
+            className="px-8 py-3.5 bg-[#16161a] hover:bg-[#A98A5B] text-white font-semibold text-xs uppercase tracking-wider rounded-full shadow-xs inline-flex items-center gap-3 cursor-pointer transition-all font-sans"
           >
             <span>VIEW ALL RESIDENCES</span>
-            <ArrowRight className="w-4 h-4 text-[#CFB6A8]" />
+            <ArrowRight className="w-4 h-4 text-[#A98A5B]" />
           </motion.button>
         </div>
       </div>
@@ -142,7 +107,7 @@ const FeaturedProperties = () => {
   );
 };
 
-const PropertyCard = ({ prop, cardVariants, badgeVariants, ctaTextVariants, reduceMotion }) => {
+const PropertyCard = ({ prop, cardVariants }) => {
   const navigate = useNavigate();
   const { wishlist, addToWishlist, openBookModal } = useApp();
 
@@ -151,27 +116,7 @@ const PropertyCard = ({ prop, cardVariants, badgeVariants, ctaTextVariants, redu
 
   const isLiked = Array.isArray(wishlist) && wishlist.some(item => item && ((item.id || item._id) === propId || item === propId));
 
-  const revealRef = useRef(null);
-  const isInView = useInView(revealRef, { once: true, amount: 0.15 });
-  const scaleY = useMotionValue(reduceMotion ? 0 : 1);
-  const [revealed, setRevealed] = useState(reduceMotion);
   const [imgLoaded, setImgLoaded] = useState(false);
-
-  useEffect(() => {
-    if (reduceMotion || revealed) return;
-    const failsafe = setTimeout(() => setRevealed(true), 1200);
-    return () => clearTimeout(failsafe);
-  }, [reduceMotion, revealed]);
-
-  useEffect(() => {
-    if (isInView) setRevealed(true);
-  }, [isInView]);
-
-  useEffect(() => {
-    if (!revealed || reduceMotion) return;
-    const controls = animate(scaleY, 0, { duration: 0.8, ease: [0.16, 1, 0.3, 1] });
-    return () => controls.stop();
-  }, [revealed, reduceMotion, scaleY]);
 
   const handleCardClick = () => {
     navigate(`/property/${propId}`);
@@ -185,16 +130,13 @@ const PropertyCard = ({ prop, cardVariants, badgeVariants, ctaTextVariants, redu
   return (
     <motion.div
       variants={cardVariants}
-      whileHover="hover"
       onClick={handleCardClick}
-      className="group relative flex flex-col bg-white border border-[rgba(93,100,114,0.15)] rounded-xl overflow-hidden shadow-[0_12px_32px_rgba(54,60,70,0.06)] cursor-pointer transition-all duration-300"
+      className="group relative flex flex-col bg-white border border-[rgba(198,166,107,0.2)] rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.05)] cursor-pointer transition-all duration-300 ease-out hover:scale-[1.03] hover:shadow-[0_20px_40px_rgba(198,166,107,0.15)] hover:border-[#C6A66B]"
     >
-      {/* Image Layer & Floating Badges */}
-      <div ref={revealRef} className="relative h-[300px] overflow-hidden bg-[#E0EEE9]">
+      {/* Photo (Edge-to-Edge) with Gradient Overlay */}
+      <div className="relative h-[290px] overflow-hidden bg-[#F8F6F2]">
         {!imgLoaded && (
-          <div className="absolute inset-0 bg-[#E0EEE9] z-10">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-[shimmer_1.6s_infinite]" />
-          </div>
+          <div className="absolute inset-0 bg-[#F8F6F2] z-10" />
         )}
 
         <img
@@ -202,108 +144,80 @@ const PropertyCard = ({ prop, cardVariants, badgeVariants, ctaTextVariants, redu
           alt={prop.title}
           loading="lazy"
           onLoad={() => setImgLoaded(true)}
-          className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+          className={`w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
         />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10 pointer-events-none" />
+        {/* Gradient Overlay for luxury depth */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B]/50 via-transparent to-transparent opacity-80 z-10 pointer-events-none" />
 
-        {!reduceMotion && (
-          <motion.div
-            style={{ scaleY }}
-            className="absolute inset-0 origin-bottom bg-[#E0EEE9] border-b-2 border-[#CFB6A8]/50 z-30 pointer-events-none"
-          />
+        {/* Gold Tag */}
+        {prop.tag && (
+          <span className="absolute top-4 left-4 z-20 px-3 py-1 bg-[#0B0B0B]/90 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-[#C6A66B] rounded-md border border-[rgba(198,166,107,0.3)]">
+            {prop.tag}
+          </span>
         )}
 
-        {/* Floating Badges */}
-        <div className="absolute top-5 left-5 right-5 flex items-center justify-between z-20">
-          <motion.span
-            variants={badgeVariants}
-            className="px-3.5 py-1.5 rounded-md bg-[#CFB6A8] text-[9px] font-bold uppercase tracking-[0.2em] text-white shadow-xs font-sans"
-          >
-            {prop.tag}
-          </motion.span>
-          <motion.button
-            onClick={handleHeartClick}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.85 }}
-            aria-pressed={isLiked}
-            aria-label={isLiked ? 'Remove from wishlist' : 'Save to wishlist'}
-            className="p-2.5 rounded-full bg-white/90 backdrop-blur-md text-[#363C46] hover:bg-[#CFB6A8] hover:text-white transition-colors duration-300 cursor-pointer shadow-xs"
-          >
-            <motion.span
-              className="flex"
-              animate={isLiked ? { scale: [1, 1.35, 1] } : { scale: 1 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <Heart
-                className="w-4 h-4 stroke-[2] transition-colors duration-200"
-                style={{
-                  fill: isLiked ? '#CFB6A8' : 'transparent',
-                  color: isLiked ? '#CFB6A8' : 'currentColor'
-                }}
-              />
-            </motion.span>
-          </motion.button>
-        </div>
-
-        {/* Floating Price */}
-        <div className="absolute bottom-5 left-6 z-20">
-          <p className="text-2xl font-bold text-white font-sans tracking-tight drop-shadow-xs">{prop.price}</p>
-        </div>
+        {/* Wishlist Heart */}
+        <button
+          onClick={handleHeartClick}
+          aria-label={isLiked ? 'Remove from wishlist' : 'Save to wishlist'}
+          className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-white/90 hover:bg-white text-[#0B0B0B] transition-all duration-300 cursor-pointer shadow-md"
+        >
+          <Heart
+            className="w-4 h-4 transition-colors"
+            style={{
+              fill: isLiked ? '#C6A66B' : 'transparent',
+              color: isLiked ? '#C6A66B' : '#0B0B0B'
+            }}
+          />
+        </button>
       </div>
 
-      {/* Card Body */}
-      <div className="p-6 flex-1 flex flex-col justify-between font-sans">
-        <div>
-          {/* Location */}
-          <div className="flex items-center gap-1.5 text-[#5D6472] text-xs font-semibold mb-3">
-            <MapPin className="w-3.5 h-3.5 text-[#CFB6A8] shrink-0" />
-            <span>{prop.location}</span>
-          </div>
+      {/* Caption Block */}
+      <div className="p-6 flex-1 flex flex-col justify-between font-sans bg-white">
+        <div className="space-y-2">
+          <span className="eyebrow-accent block text-[10px]">
+            {prop.location}
+          </span>
 
-          {/* Title */}
+          {/* Title — Playfair Display Serif */}
           <h3
-            className="text-xl font-bold text-[#363C46] tracking-tight mb-4 transition-colors duration-300 group-hover:text-[#CFB6A8]"
-            style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+            className="text-xl font-bold text-[#0B0B0B] tracking-tight leading-snug group-hover:text-[#C6A66B] transition-colors"
+            style={{ fontFamily: "'Playfair Display', 'Fraunces', serif" }}
           >
             {prop.title}
           </h3>
 
-          {/* Spec Row */}
-          <div className="grid grid-cols-3 gap-2 border-t border-[rgba(93,100,114,0.15)] pt-4 pb-2 text-[11px] text-[#5D6472] font-semibold">
-            <div className="flex items-center gap-1.5">
-              <BedDouble className="w-4 h-4 stroke-[2] text-[#CFB6A8]" />
-              <span>{prop.beds > 0 ? `${prop.beds} BHK` : 'Commercial'}</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <Bath className="w-4 h-4 stroke-[2] text-[#CFB6A8]" />
-              <span>{prop.baths} Baths</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <Square className="w-4 h-4 stroke-[2] text-[#CFB6A8]" />
-              <span>{prop.area}</span>
-            </div>
-          </div>
+          {/* Price — Highlighted in Gold */}
+          <p className="text-2xl font-extrabold text-[#C6A66B] tracking-tight pt-1 font-sans">
+            {prop.price || prop.priceDisplay}
+          </p>
         </div>
 
-        {/* Action trigger footer */}
-        <div className="mt-4 pt-4 border-t border-[rgba(93,100,114,0.15)] flex items-center justify-between gap-3">
-          <motion.span
-            variants={ctaTextVariants}
-            className="text-[10px] uppercase tracking-[0.2em] font-bold font-sans shrink-0"
-          >
-            VIEW DETAILS
-          </motion.span>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              openBookModal(prop.title);
-            }}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-[#363C46] hover:bg-[#CFB6A8] text-white text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0"
-          >
-            <Calendar className="w-3 h-3" />
-            Book Visit
-          </button>
+        {/* Specs Row & CTA Link */}
+        <div className="pt-4 mt-4 border-t border-[rgba(198,166,107,0.15)] space-y-3">
+          <div className="flex items-center gap-2 text-xs text-[#6B6B6B] font-medium">
+            <span>{prop.beds > 0 ? `${prop.beds} Beds` : 'Commercial'}</span>
+            <span>·</span>
+            <span>{prop.baths} Baths</span>
+            <span>·</span>
+            <span>{prop.area}</span>
+          </div>
+
+          <div className="flex items-center justify-between pt-1">
+            <span className="text-[11px] uppercase tracking-[0.18em] font-bold text-[#0B0B0B] group-hover:text-[#C6A66B] transition-colors">
+              Explore Property →
+            </span>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                openBookModal(prop.title);
+              }}
+              className="text-[11px] font-bold uppercase tracking-wider text-[#C6A66B] hover:text-[#0B0B0B] transition-colors"
+            >
+              Book Visit
+            </button>
+          </div>
         </div>
       </div>
     </motion.div>

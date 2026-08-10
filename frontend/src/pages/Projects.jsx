@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Building, MapPin, Calendar, Compass, ArrowRight, Download, CheckCircle, Clock, FileText, ChevronRight, User, Phone, Check } from 'lucide-react';
@@ -6,12 +6,75 @@ import ImageWithSkeleton from '../components/ImageWithSkeleton';
 import { useApp } from '../context/AppContext';
 import PageHero from '../components/PageHero';
 
+const DEFAULT_PROJECTS = [
+  {
+    id: "imperia-ritz",
+    name: "The Ritz-Carlton Residences",
+    location: "OMR, Chennai",
+    builder: "Imperia Developers & Ritz Group",
+    timeline: "Possession Dec 2025",
+    progress: 90,
+    totalProperties: 12,
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+    desc: "Branded residences featuring full concierge service, valet, private lounges, and sky-deck infinity pools.",
+    milestones: [
+      { label: "Excavation & Foundations", status: "completed" },
+      { label: "Superstructure Structure", status: "completed" },
+      { label: "Exterior Masonry & Glassing", status: "completed" },
+      { label: "Interior Fitouts & Commissioning", status: "in-progress" },
+      { label: "Possession Handover", status: "pending" }
+    ]
+  },
+  {
+    id: "imperia-skyline",
+    name: "Imperia Skyline Towers",
+    location: "Race Course, Coimbatore",
+    builder: "IMPERIA Infra",
+    timeline: "Possession June 2027",
+    progress: 45,
+    totalProperties: 8,
+    image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80",
+    desc: "Ultra-luxury high-rises designed by award-winning architectural firms, defining the skyline of Coimbatore.",
+    milestones: [
+      { label: "Excavation & Foundations", status: "completed" },
+      { label: "Superstructure Structure", status: "in-progress" },
+      { label: "Exterior Masonry & Glassing", status: "pending" },
+      { label: "Interior Fitouts & Commissioning", status: "pending" },
+      { label: "Possession Handover", status: "pending" }
+    ]
+  }
+];
+
 const Projects = () => {
   const navigate = useNavigate();
-  const { showToast, openBookModal } = useApp();
+  const { showToast, openBookModal, projects: dbProjects = [] } = useApp();
   const shouldReduceMotion = useReducedMotion();
   const [siteVisitBooked, setSiteVisitBooked] = useState(false);
   const [formData, setFormData] = useState({ name: '', phone: '', project: 'The Ritz-Carlton Residences', date: '' });
+
+  const activeProjects = useMemo(() => {
+    if (Array.isArray(dbProjects) && dbProjects.length > 0) {
+      return dbProjects.map(p => ({
+        id: p.id || p._id,
+        name: p.name || p.developer || 'IMPERIA Landmark Project',
+        location: p.location || (p.city ? `${p.city}, India` : 'Chennai, India'),
+        builder: p.builder || p.name || 'IMPERIA Developers',
+        timeline: p.timeline || 'Active Development',
+        progress: p.progress || 80,
+        totalProperties: p.totalProperties || p.properties?.length || 1,
+        image: p.image || 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+        desc: p.desc || `Branded luxury development by ${p.builder || p.name || 'IMPERIA Developers'} featuring ultra-modern amenities.`,
+        milestones: p.milestones || [
+          { label: "Excavation & Foundations", status: "completed" },
+          { label: "Superstructure Structure", status: "completed" },
+          { label: "Exterior Masonry & Glassing", status: "in-progress" },
+          { label: "Interior Fitouts & Commissioning", status: "in-progress" },
+          { label: "Possession Handover", status: "pending" }
+        ]
+      }));
+    }
+    return DEFAULT_PROJECTS;
+  }, [dbProjects]);
 
   const handleBookSiteVisit = (e) => {
     e.preventDefault();
@@ -20,60 +83,6 @@ const Projects = () => {
       showToast(`Site visit request registered for ${formData.name}`);
     }
   };
-
-  const activeProjects = [
-    {
-      id: "imperia-ritz",
-      name: "The Ritz-Carlton Residences",
-      location: "OMR, Chennai",
-      builder: "Imperia Developers & Ritz Group",
-      timeline: "Possession Dec 2025",
-      progress: 90,
-      image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
-      desc: "Branded residences featuring full concierge service, valet, private lounges, and sky-deck infinity pools.",
-      milestones: [
-        { label: "Excavation & Foundations", status: "completed" },
-        { label: "Superstructure Structure", status: "completed" },
-        { label: "Exterior Masonry & Glassing", status: "completed" },
-        { label: "Interior Fitouts & Commissioning", status: "in-progress" },
-        { label: "Possession Handover", status: "pending" }
-      ]
-    },
-    {
-      id: "imperia-skyline",
-      name: "Imperia Skyline Towers",
-      location: "Race Course, Coimbatore",
-      builder: "IMPERIA Infra",
-      timeline: "Possession June 2027",
-      progress: 45,
-      image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80",
-      desc: "Ultra-luxury high-rises designed by award-winning architectural firms, defining the skyline of Coimbatore.",
-      milestones: [
-        { label: "Excavation & Foundations", status: "completed" },
-        { label: "Superstructure Structure", status: "in-progress" },
-        { label: "Exterior Masonry & Glassing", status: "pending" },
-        { label: "Interior Fitouts & Commissioning", status: "pending" },
-        { label: "Possession Handover", status: "pending" }
-      ]
-    },
-    {
-      id: "imperia-villas-coimbatore",
-      name: "Elysian Hills Estate",
-      location: "Kalapatti, Coimbatore",
-      builder: "IMPERIA Estates",
-      timeline: "Possession Ready",
-      progress: 100,
-      image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
-      desc: "Private garden mansion units designed with acoustic isolation systems, private gyms, and individual lap pools.",
-      milestones: [
-        { label: "Excavation & Foundations", status: "completed" },
-        { label: "Superstructure Structure", status: "completed" },
-        { label: "Exterior Masonry & Glassing", status: "completed" },
-        { label: "Interior Fitouts & Commissioning", status: "completed" },
-        { label: "Possession Handover", status: "completed" }
-      ]
-    }
-  ];
 
   const handleDownloadBrochure = (projectName) => {
     showToast(`Brochure download initiated for ${projectName}`);
@@ -101,7 +110,7 @@ const Projects = () => {
       {/* PageHero */}
       <div className="pt-[64px] lg:pt-[72px]">
         <PageHero
-          image="https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1600&q=80"
+          image="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80"
           breadcrumbs={[
             { label: 'Home', href: '/' },
             { label: 'Projects' },
@@ -136,11 +145,15 @@ const Projects = () => {
                 {/* Project Header Info */}
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 font-sans">
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-[#5D6472] text-xs font-bold">
+                    <div className="flex items-center gap-2 text-[#5D6472] text-xs font-bold flex-wrap">
                       <MapPin className="w-3.5 h-3.5 text-[#CFB6A8]" />
                       <span>{project.location}</span>
                       <span className="h-1 w-1 bg-[#5D6472] rounded-full" />
                       <span className="text-[#CFB6A8] font-bold">{project.builder}</span>
+                      <span className="h-1 w-1 bg-[#5D6472] rounded-full" />
+                      <span className="px-2.5 py-0.5 rounded-full bg-[#E0EEE9] text-[#363C46] text-[10px] font-extrabold border border-[rgba(93,100,114,0.15)]">
+                        {project.totalProperties || 1} {(project.totalProperties || 1) === 1 ? 'Property' : 'Properties'}
+                      </span>
                     </div>
                     <h3 
                       onClick={() => navigate(`/property/${project.id}`)}

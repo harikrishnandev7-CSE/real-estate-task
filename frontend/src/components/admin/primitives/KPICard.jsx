@@ -14,8 +14,8 @@ const KPICard = ({
     const min = Math.min(...sparkline);
     const max = Math.max(...sparkline);
     const range = max - min || 1;
-    const width = 80;
-    const height = 24;
+    const width = 70;
+    const height = 20;
 
     const points = sparkline.map((val, idx) => {
       const x = (idx / (sparkline.length - 1)) * width;
@@ -24,7 +24,7 @@ const KPICard = ({
     }).join(' ');
 
     return (
-      <svg width={width} height={height} className="overflow-visible stroke-[#CFB6A8] fill-none stroke-[2]">
+      <svg width={width} height={height} className="overflow-visible stroke-[#A98A5B] fill-none stroke-[1.8]">
         <polyline points={points} strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     );
@@ -32,15 +32,14 @@ const KPICard = ({
 
   return (
     <div
-      className={`bg-white border border-[rgba(93,100,114,0.15)] rounded-xl p-5 shadow-[0_12px_32px_rgba(54,60,70,0.06)] hover:-translate-y-0.5 transition-transform duration-200 font-sans flex flex-col justify-between space-y-4 ${className}`}
+      className={`bg-white border border-[rgba(198,166,107,0.25)] rounded-2xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.05)] font-sans flex flex-col justify-between space-y-4 hover:border-[#C6A66B] hover:shadow-[0_15px_35px_rgba(198,166,107,0.15)] hover:scale-[1.02] transition-all duration-300 ${className}`}
     >
-      {/* Top Row: Icon badge + Delta / Sparkline */}
       <div className="flex items-center justify-between">
-        <div className="w-9 h-9 rounded-full bg-[rgba(207,182,168,0.15)] border border-[#CFB6A8] text-[#CFB6A8] flex items-center justify-center shrink-0">
+        <div className="w-10 h-10 rounded-xl bg-[#F8F6F2] border border-[rgba(198,166,107,0.3)] text-[#0B0B0B] flex items-center justify-center shrink-0 shadow-xs">
           {React.isValidElement(Icon) ? (
             Icon
           ) : Icon ? (
-            <Icon className="w-4 h-4 stroke-[2]" />
+            <Icon className="w-5 h-5 text-[#C6A66B]" />
           ) : null}
         </div>
 
@@ -48,27 +47,26 @@ const KPICard = ({
           {renderSparkline()}
           {delta && (
             <span
-              className={`px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wide flex items-center gap-1 border ${
+              className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-wide flex items-center gap-1 border ${
                 delta.positive
-                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                  : 'bg-red-50 text-red-600 border-red-200'
+                  ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                  : 'bg-rose-50 text-rose-700 border-rose-200'
               }`}
             >
-              {delta.positive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+              {delta.positive ? <TrendingUp className="w-3 h-3 text-emerald-600" /> : <TrendingDown className="w-3 h-3 text-rose-600" />}
               {delta.value}
             </span>
           )}
         </div>
       </div>
 
-      {/* Main Numeral & Label */}
       <div className="space-y-1">
-        <span className="text-[10px] uppercase tracking-wider text-[#5D6472] font-bold block font-sans">
+        <span className="eyebrow-accent block text-[10px]">
           {title}
         </span>
         <div
-          className="text-2xl md:text-3xl font-bold text-[#363C46] tracking-tight font-sans"
-          style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+          className="text-2xl md:text-3xl font-extrabold text-[#0B0B0B] tracking-tight"
+          style={{ fontFamily: "'Playfair Display', 'Fraunces', serif" }}
         >
           {value}
         </div>

@@ -219,16 +219,16 @@ const AdminLayout = () => {
     return 'Admin Panel';
   };
 
-  return (
-    <div className="min-h-screen font-sans flex flex-col md:flex-row" style={{ background: '#E0EEE9', color: '#363C46' }}>
-      
-      {/* ── DESKTOP SIDEBAR ────────────────────────────────────────── */}
-      <aside
-        className={`hidden md:flex flex-col fixed top-0 bottom-0 left-0 z-40 transition-all duration-300 ${
-          collapsed ? 'w-20' : 'w-64'
-        }`}
-        style={{ background: '#FFFFFF', borderRight: '1px solid rgba(93,100,114,0.15)' }}
-      >
+    return (
+      <div className="min-h-screen font-sans flex flex-col md:flex-row" style={{ background: '#F8F6F2', color: '#111111' }}>
+        
+        {/* ── DESKTOP SIDEBAR ────────────────────────────────────────── */}
+        <aside
+          className={`hidden md:flex flex-col fixed top-0 bottom-0 left-0 z-40 transition-all duration-300 ${
+            collapsed ? 'w-20' : 'w-64'
+          }`}
+          style={{ background: '#FFFFFF', borderRight: '1px solid rgba(198,166,107,0.20)' }}
+        >
         {/* Sidebar Header / Logo */}
         <div className="h-16 px-5 flex items-center justify-between shrink-0" style={{ borderBottom: '1px solid rgba(93,100,114,0.15)' }}>
           <Link to="/admin" className="flex items-center gap-3 overflow-hidden">

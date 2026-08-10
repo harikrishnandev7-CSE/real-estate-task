@@ -1,18 +1,17 @@
 /* ─────────────────────────────────────────────────────────────────────────────
-   IMPERIA · App.css — Phase 1 Global Overrides
-   Supplements index.css design tokens with any app-level global rules.
+   IMPERIA ESTATES · App.css — Global Overrides (Elliman Neutral Luxury)
    ───────────────────────────────────────────────────────────────────────────── */
 
-/* Selection highlight uses Dark Vanilla accent */
+/* Selection highlight uses Gold-Bronze accent */
 ::selection {
-  background-color: rgba(207, 182, 168, 0.30);   /* Dark Vanilla at 30% */
-  color: #363C46;
+  background-color: rgba(169, 138, 91, 0.25);   /* Accent #A98A5B at 25% */
+  color: #16161a;
 }
 
-/* Focus ring — Arsenic-toned, accessible */
+/* Focus ring — restrained gold-bronze ring */
 :focus-visible {
-  outline: 2px solid #CFB6A8;   /* Dark Vanilla */
-  outline-offset: 3px;
+  outline: 2px solid #A98A5B;
+  outline-offset: 2px;
 }
 
 /* Smooth scroll globally */
@@ -20,7 +19,7 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Global link reset — inherit color, add accent underline on hover */
+/* Global link reset — inherit color */
 a {
   color: inherit;
   text-decoration: none;

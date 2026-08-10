@@ -1,108 +1,43 @@
 /* ─────────────────────────────────────────────────────────────────────────────
-   IMPERIA · Phase 1 Global Design System
-   Palette: Arsenic / Black Coral / Dark Vanilla / Azureish White / White
-   Typography: Fraunces (serif heading) + Inter / Plus Jakarta Sans (sans body)
+   IMPERIA LUXURY REAL ESTATE · Design System
+   Primary: #0B0B0B (Deep Black) | Accent Gold: #C6A66B | Soft Gold: #E5D3A3
+   Background: #F8F6F2 (Cream) | Card: #FFFFFF | Text: #111111 / #6B6B6B
+   Typography: Playfair Display (Luxury Serif Headings) + Inter (Clean Sans Body)
    ───────────────────────────────────────────────────────────────────────────── */
 
 @import "tailwindcss";
 
-/* ── Google Fonts are loaded via index.html — no @import needed here ── */
-
 @theme {
-  /* ── 1. COLOR TOKENS ─────────────────────────────────────────────────────── */
+  /* Core Luxury Color Palette */
+  --color-primary:         #0B0B0B;
+  --color-gold-accent:     #C6A66B;
+  --color-gold-soft:       #E5D3A3;
+  --color-gold-border:     #BFA76F;
+  --color-bg-page:         #F8F6F2;
+  --color-bg-card:         #FFFFFF;
+  --color-text-primary:    #111111;
+  --color-text-secondary:  #6B6B6B;
 
-  /* Core palette */
-  --color-arsenic:         #363C46;   /* primary dark — text, headers, footers, primary buttons */
-  --color-black-coral:     #5D6472;   /* secondary dark — muted headings, icons, secondary buttons, hover */
-  --color-dark-vanilla:    #CFB6A8;   /* warm accent — CTAs, badges, active states, dividers, small highlights */
-  --color-azureish-white:  #E0EEE9;   /* dominant page background, section backgrounds, card backgrounds */
-  --color-surface-white:   #FFFFFF;   /* card surfaces, contrast layers */
+  /* Aliases for components */
+  --color-ink:             #0B0B0B;
+  --color-graphite:        #6B6B6B;
+  --color-bone:            #F8F6F2;
+  --color-paper:           #FFFFFF;
+  --color-accent:          #C6A66B;
+  --color-accent-deep:     #BFA76F;
 
-  /* Semantic role mapping */
-  --color-bg-page:         #E0EEE9;   /* → Azureish White */
-  --color-bg-card:         #FFFFFF;   /* → Pure White */
-  --color-bg-section:      #E0EEE9;   /* → Azureish White */
-  --color-bg-footer:       #363C46;   /* → Arsenic */
+  /* Typography Tokens */
+  --font-heading: 'Playfair Display', 'Fraunces', Georgia, serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+  --font-serif:   'Playfair Display', 'Fraunces', Georgia, serif;
+  --font-sans:    'Inter', system-ui, sans-serif;
 
-  --color-text-primary:    #363C46;   /* → Arsenic */
-  --color-text-secondary:  #5D6472;   /* → Black Coral */
-  --color-text-muted:      rgba(93, 100, 114, 0.65);   /* Black Coral at 65% */
-  --color-text-on-dark:    #FFFFFF;   /* white text on Arsenic backgrounds */
-  --color-text-on-image-primary:   #363C46;
-  --color-text-on-image-secondary: #5D6472;
-
-  --color-accent:          #CFB6A8;   /* → Dark Vanilla — CTAs, tags, active underlines */
-  --color-accent-hover:    #BFA294;   /* Dark Vanilla darkened 8% for hover */
-
-  --color-border:          rgba(93, 100, 114, 0.15);   /* Black Coral tint border */
-  --color-border-strong:   rgba(93, 100, 114, 0.30);   /* stronger border / dividers */
-  --color-border-accent:   #CFB6A8;   /* Dark Vanilla accent border */
-
-  /* Legacy compatibility aliases — map old gold/stone/charcoal references */
-  --color-gold-300:        #CFB6A8;   /* old #F5A623 amber → Dark Vanilla */
-  --color-gold-400:        #CFB6A8;
-  --color-gold-500:        #CFB6A8;
-  --color-gold-600:        #BFA294;
-  --color-gold-700:        #B09080;
-  --color-stone-50:        #F5F9F7;
-  --color-stone-100:       #E0EEE9;   /* old #F4F1EA cream → Azureish White */
-  --color-stone-200:       rgba(93, 100, 114, 0.15);   /* old #E8E4DA → Border tint */
-  --color-stone-300:       rgba(93, 100, 114, 0.25);
-  --color-luxury-charcoal: #363C46;   /* old #1A1A1A → Arsenic */
-  --color-luxury-black:    #363C46;
-  --color-luxury-cream:    #E0EEE9;   /* old #F4F1EA → Azureish White */
-
-  /* ── 2. TYPOGRAPHY TOKENS ───────────────────────────────────────────────── */
-
-  --font-heading: 'Fraunces', 'Playfair Display', Georgia, serif;
-  --font-body:    'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
-
-  /* Legacy font family aliases */
-  --font-hero:    'Fraunces', 'Playfair Display', serif;
-  --font-serif:   'Fraunces', 'Playfair Display', serif;
-  --font-sans:    'Inter', 'Plus Jakarta Sans', sans-serif;
-  --font-display: 'Fraunces', 'Playfair Display', serif;
-
-  /* Type scale (clamp-based fluid) */
-  --text-h1: clamp(36px, 4vw, 64px);
-  --text-h2: clamp(28px, 3vw, 44px);
-  --text-h3: clamp(22px, 2.5vw, 28px);
-  --text-h4: clamp(18px, 2vw, 22px);
-  --text-body-lg: 16px;
-  --text-body:    15px;
-  --text-body-sm: 14px;
-  --text-caption: 12px;
-  --text-eyebrow: 11px;
-
-  /* ── 3. SHADOW TOKENS ───────────────────────────────────────────────────── */
-
-  /* Arsenic-based shadows (cool, architectural, low-key) */
-  --shadow-xs:  0 1px 2px rgba(54, 60, 70, 0.04);
-  --shadow-sm:  0 2px 6px rgba(54, 60, 70, 0.05);
-  --shadow-md:  0 4px 12px rgba(54, 60, 70, 0.06);
-  --shadow-lg:  0 10px 25px rgba(54, 60, 70, 0.07);
-  --shadow-xl:  0 20px 40px rgba(54, 60, 70, 0.08);
-  --shadow-2xl: 0 25px 50px rgba(54, 60, 70, 0.10);
-
-  /* ── 4. BORDER RADIUS TOKENS (sharper / minimal, replacing old 24px+) ─── */
-
-  --radius-xs:  2px;
-  --radius-sm:  4px;
-  --radius-md:  6px;
-  --radius-lg:  8px;
-  --radius-xl:  12px;
-  --radius-2xl: 16px;   /* max radius used for cards — replaces old rounded-3xl (24px) */
-
-  /* ── 5. SPACING / SECTION SCALE TOKENS ──────────────────────────────────── */
-
-  --space-section-y:     6rem;    /* py-24 equivalent — airy section padding */
-  --space-section-y-lg:  7rem;    /* py-28 */
-  --space-section-y-xl:  8rem;    /* py-32 */
-  --space-card-pad:      1.5rem;  /* standard card padding (24px) */
-  --space-card-pad-lg:   2rem;    /* generous card padding (32px) */
+  --text-h1: clamp(36px, 4.8vw, 68px);
+  --text-h2: clamp(28px, 3.2vw, 44px);
+  --text-h3: clamp(22px, 2.4vw, 28px);
+  --text-h4: clamp(18px, 1.8vw, 22px);
 }
 
-/* ── BASE LAYER ──────────────────────────────────────────────────────────── */
 @layer base {
   html, body {
     max-width: 100vw;
@@ -111,152 +46,140 @@
 
   body {
     font-family: var(--font-body);
-    font-size: var(--text-body);
+    font-size: 15px;
     font-weight: 400;
-    color: var(--color-arsenic);
-    background-color: var(--color-azureish-white);
+    color: #111111;
+    background-color: #F8F6F2;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    -webkit-tap-highlight-color: transparent;
-    overflow-x: hidden;
   }
 
-  /* Headings — editorial serif */
-  h1 {
+  h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
-    font-size: var(--text-h1);
-    font-weight: 600;
-    color: var(--color-arsenic);
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-  }
-  h2 {
-    font-family: var(--font-heading);
-    font-size: var(--text-h2);
-    font-weight: 600;
-    color: var(--color-arsenic);
-    letter-spacing: -0.015em;
-    line-height: 1.15;
-  }
-  h3 {
-    font-family: var(--font-heading);
-    font-size: var(--text-h3);
-    font-weight: 500;
-    color: var(--color-arsenic);
+    color: #0B0B0B;
     letter-spacing: -0.01em;
-    line-height: 1.25;
-  }
-  h4, h5, h6 {
-    font-family: var(--font-heading);
-    font-weight: 500;
-    color: var(--color-arsenic);
-    letter-spacing: -0.01em;
-    line-height: 1.3;
   }
 }
 
-/* ── PREMIUM SCROLLBAR ───────────────────────────────────────────────────── */
+/* ── BUTTON SYSTEM UTILITIES ───────────────────────────────────────────── */
+.btn-primary {
+  background-color: #0B0B0B;
+  color: #FFFFFF;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 9999px;
+  padding: 0.75rem 1.75rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn-primary:hover {
+  background-color: #C6A66B;
+  color: #0B0B0B;
+  box-shadow: 0 8px 25px rgba(198, 166, 107, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: #111111;
+  border: 1px solid #C6A66B;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 9999px;
+  padding: 0.75rem 1.75rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: #C6A66B;
+  color: #FFFFFF;
+  box-shadow: 0 8px 25px rgba(198, 166, 107, 0.25);
+  transform: translateY(-1px);
+}
+
+/* ── CARD LUXURY HOVER LIFT ────────────────────────────────────────────── */
+.card-luxury {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(198, 166, 107, 0.2);
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.card-luxury:hover {
+  transform: scale(1.03) translateY(-4px);
+  box-shadow: 0 20px 40px rgba(198, 166, 107, 0.15);
+  border-color: #C6A66B;
+}
+
+/* ── LUXURY INPUT FORM CONTROL ──────────────────────────────────────────── */
+.input-luxury {
+  width: 100%;
+  background-color: #FFFFFF;
+  border: 1px solid #BFA76F;
+  border-radius: 0.75rem;
+  padding: 0.875rem 1rem;
+  font-size: 0.875rem;
+  color: #111111;
+  font-family: var(--font-body);
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.input-luxury:focus {
+  border-color: #C6A66B;
+  box-shadow: 0 0 0 3px rgba(198, 166, 107, 0.25);
+}
+
+/* ── EYEBROW / OVERLINE UTILITIES ───────────────────────────────────────── */
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #6B6B6B;
+}
+
+.eyebrow-accent {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #C6A66B;
+}
+
+/* ── CUSTOM SCROLLBAR ───────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-azureish-white);
+  background: #F8F6F2;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(93, 100, 114, 0.3);
+  background: #C6A66B;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-dark-vanilla);
-}
-
-/* ── EYEBROW / OVERLINE LABEL UTILITY ────────────────────────────────────── */
-/* Usage: <p class="eyebrow">Location</p> */
-.eyebrow {
-  font-family: var(--font-body);
-  font-size: var(--text-eyebrow);
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--color-dark-vanilla);
-}
-
-/* Eyebrow in secondary color */
-.eyebrow-muted {
-  font-family: var(--font-body);
-  font-size: var(--text-eyebrow);
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--color-black-coral);
-}
-
-/* ── GLASS / FROSTED PANEL UTILITIES ────────────────────────────────────── */
-.glass {
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(93, 100, 114, 0.12);
-}
-
-.glass-nav {
-  background: rgba(224, 238, 233, 0.90);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(93, 100, 114, 0.12);
-}
-
-.glass-dark {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(93, 100, 114, 0.12);
-  box-shadow: var(--shadow-xl);
-}
-
-.glass-card {
-  background: #FFFFFF;
-  border: 1px solid rgba(93, 100, 114, 0.12);
-  box-shadow: var(--shadow-xl);
-}
-
-/* ── CARD SURFACE UTILITY ───────────────────────────────────────────────── */
-.card-light {
-  background: #FFFFFF;
-  border: 1px solid rgba(93, 100, 114, 0.12);
-  box-shadow: var(--shadow-xl);
-  border-radius: var(--radius-2xl);   /* 16px — replaces old rounded-3xl (24px) */
-}
-
-/* ── CLIP PATH NOTCH ─────────────────────────────────────────────────────── */
-.clip-notch {
-  clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 40px, 100% 100%, 0 100%);
-}
-
-@media (min-width: 768px) {
-  .clip-notch {
-    clip-path: polygon(0 0, calc(100% - 64px) 0, 100% 64px, 100% 100%, 0 100%);
-  }
-}
-
-/* ── HIDE SCROLLBAR UTILITY ─────────────────────────────────────────────── */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* ── CUSTOM SCROLLBAR (branded panel) ───────────────────────────────────── */
-.custom-scrollbar::-webkit-scrollbar {
-  height: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: var(--color-azureish-white);
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--color-dark-vanilla);
-  border-radius: 9999px;
+  background: #0B0B0B;
 }

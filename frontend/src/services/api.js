@@ -109,6 +109,10 @@ export const api = {
   getRecentlyViewed: () => request('/user/recently-viewed', { method: 'GET' }),
   addRecentlyViewed: (propertyId) => request('/user/recently-viewed', { method: 'POST', body: { propertyId } }),
 
+  // --- PROJECTS ---
+  getProjects: (filters = {}) => request(`/projects${buildQueryString(filters)}`, { method: 'GET' }),
+  getProjectById: (id) => request(`/projects/${id}`, { method: 'GET' }),
+
   // --- PROPERTIES ---
   getProperties: (filters = {}) => request(`/properties${buildQueryString(filters)}`, { method: 'GET' }),
   getPropertyById: (id) => request(`/properties/${id}`, { method: 'GET' }),

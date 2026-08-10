@@ -322,7 +322,8 @@ const AdminAddPropertyPage = () => {
       payload.append('type', formData.type);
       payload.append('purpose', formData.purpose);
       payload.append('tag', formData.tag || '');
-      payload.append('builder', formData.builder || '');
+      payload.append('developer', formData.developer || formData.builder || '');
+      payload.append('builder', formData.developer || formData.builder || '');
       payload.append('city', formData.city || '');
       payload.append('location', formData.location || '');
       payload.append('price', formattedPricePreview);
@@ -337,6 +338,13 @@ const AdminAddPropertyPage = () => {
       payload.append('amenities', JSON.stringify(formData.amenities || []));
       payload.append('pros', JSON.stringify(formData.pros || []));
       payload.append('cons', JSON.stringify(formData.cons || []));
+
+      // Video File or Video URL
+      if (formData.videoFile) {
+        payload.append('video', formData.videoFile);
+      } else if (formData.videoUrl) {
+        payload.append('videoUrl', formData.videoUrl);
+      }
 
       // 1. Entrance file or URL
       if (formData.images?.entrance) {
@@ -822,6 +830,49 @@ const AdminAddPropertyPage = () => {
                     onChange={(imgs) => updateImageCategory('terrace', imgs)}
                     maxFiles={10}
                   />
+                </div>
+
+                {/* 7. Property Video Upload (Cloudinary Video) */}
+                <div className="space-y-2 pt-2 border-t border-[#E8E4DA]">
+                  <FormLabel>7. PROPERTY VIDEO (FEATURED VIDEO TOUR)</FormLabel>
+                  <div className="p-5 bg-[#F4F1EA] border border-[#E8E4DA] rounded-2xl space-y-3 font-sans">
+                    <p className="text-xs text-[#8A8A85]">
+                      Upload high-definition property video walk-through (MP4, WEBM, MOV up to 100MB). Video will upload directly to Cloudinary <code className="text-[#F5A623] bg-stone-200 px-1 py-0.5 rounded">property_videos</code>.
+                    </p>
+                    <input
+                      type="file"
+                      name="video"
+                      accept="video/*"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          setFormData(prev => ({
+                            ...prev,
+                            videoFile: file,
+                            videoUrl: URL.createObjectURL(file)
+                          }));
+                        }
+                      }}
+                      className="block w-full text-xs text-[#1A1A1A] file:mr-4 file:py-2.5 file:px-5 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#1A1A1A] file:text-white hover:file:bg-[#F5A623] file:cursor-pointer transition-colors"
+                    />
+                    {formData.videoUrl && (
+                      <div className="mt-3 p-3 bg-white rounded-xl border border-[#E8E4DA] space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-emerald-700 flex items-center gap-1.5">
+                            ✔ Video Selected
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setFormData(prev => ({ ...prev, videoFile: null, videoUrl: '' }))}
+                            className="text-xs text-rose-600 hover:underline font-semibold"
+                          >
+                            Remove Video
+                          </button>
+                        </div>
+                        <video src={formData.videoUrl} controls className="w-full max-h-56 rounded-lg border border-stone-200 bg-black" />
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* PDF Brochure Link */}

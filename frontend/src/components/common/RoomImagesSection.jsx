@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  ChevronLeft, ChevronRight, X, Maximize2,
-  BedDouble, Sofa, ChefHat, ShowerHead, Building2
-} from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Maximize2, BedDouble, Sofa, ChefHat, ShowerHead, Building2 } from 'lucide-react';
 import ImageWithSkeleton from '../ImageWithSkeleton';
 
 const ROOM_CONFIG = {
-  entrance:  { label: 'Entrance View',       Icon: Building2,  order: 1, accent: 'bg-[#E0EEE9]/50 border-[rgba(93,100,114,0.15)] text-[#363C46]' },
-  hall:      { label: 'Living Hall',         Icon: Sofa,       order: 2, accent: 'bg-[rgba(207,182,168,0.15)] border-[rgba(207,182,168,0.3)] text-[#363C46]' },
-  kitchen:   { label: 'Kitchen',             Icon: ChefHat,    order: 3, accent: 'bg-emerald-50 border-emerald-100 text-emerald-700' },
-  bedroom:   { label: 'Bedrooms',            Icon: BedDouble,  order: 4, accent: 'bg-purple-50 border-purple-100 text-purple-700' },
-  bedrooms:  { label: 'Bedrooms',            Icon: BedDouble,  order: 4, accent: 'bg-purple-50 border-purple-100 text-purple-700' },
-  bathroom:  { label: 'Bathrooms',           Icon: ShowerHead, order: 5, accent: 'bg-teal-50 border-teal-100 text-teal-700' },
-  bathrooms: { label: 'Bathrooms',           Icon: ShowerHead, order: 5, accent: 'bg-teal-50 border-teal-100 text-teal-700' },
-  terrace:   { label: 'Terrace & Balcony',    Icon: Building2,  order: 6, accent: 'bg-sky-50 border-sky-100 text-sky-700' },
+  entrance:  { label: 'Entrance View',       Icon: Building2,  order: 1 },
+  hall:      { label: 'Living Hall',         Icon: Sofa,       order: 2 },
+  kitchen:   { label: 'Kitchen',             Icon: ChefHat,    order: 3 },
+  bedroom:   { label: 'Bedrooms',            Icon: BedDouble,  order: 4 },
+  bedrooms:  { label: 'Bedrooms',            Icon: BedDouble,  order: 4 },
+  bathroom:  { label: 'Bathrooms',           Icon: ShowerHead, order: 5 },
+  bathrooms: { label: 'Bathrooms',           Icon: ShowerHead, order: 5 },
+  terrace:   { label: 'Terrace & Balcony',    Icon: Building2,  order: 6 },
 };
 
 const Lightbox = ({ images, startIndex, onClose }) => {
@@ -47,7 +44,7 @@ const Lightbox = ({ images, startIndex, onClose }) => {
       >
         <X className="w-5 h-5" />
       </button>
-      <p className="absolute top-6 left-1/2 -translate-x-1/2 text-white/60 text-xs font-sans font-bold uppercase tracking-widest">
+      <p className="absolute top-6 left-1/2 -translate-x-1/2 text-white/60 text-xs font-sans font-semibold uppercase tracking-widest">
         {idx + 1} / {images.length}
       </p>
 
@@ -57,11 +54,11 @@ const Lightbox = ({ images, startIndex, onClose }) => {
             key={idx}
             src={images[idx]}
             alt="Room view"
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="max-h-[80vh] max-w-full object-contain rounded-lg shadow-2xl"
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.3 }}
+            className="max-h-[80vh] max-w-full object-contain rounded-md shadow-2xl"
           />
         </AnimatePresence>
       </div>
@@ -85,25 +82,21 @@ const RoomSection = ({ roomType, images = [] }) => {
   const cfg = ROOM_CONFIG[roomType] || {
     label: roomType.charAt(0).toUpperCase() + roomType.slice(1),
     Icon: Building2,
-    accent: 'bg-[#E0EEE9]/50 border-[rgba(93,100,114,0.15)] text-[#363C46]'
   };
-  const { Icon, label, accent } = cfg;
+  const { label } = cfg;
 
   if (!images || images.length === 0) return null;
 
   return (
     <div className="space-y-4 font-sans">
       <div className="flex items-center gap-3">
-        <div className={`p-2 rounded-lg border ${accent} flex items-center justify-center shrink-0`}>
-          <Icon className="w-4 h-4" />
-        </div>
         <h4
-          className="text-lg font-bold text-[#363C46] tracking-tight"
+          className="text-lg font-medium text-[#16161a] tracking-tight"
           style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
         >
           {label}
         </h4>
-        <span className="text-xs text-[#5D6472] font-semibold">({images.length} {images.length === 1 ? 'Photo' : 'Photos'})</span>
+        <span className="text-xs text-[#4a4a4f] font-semibold">({images.length} {images.length === 1 ? 'Photo' : 'Photos'})</span>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -111,15 +104,15 @@ const RoomSection = ({ roomType, images = [] }) => {
           <div
             key={idx}
             onClick={() => setLightboxIdx(idx)}
-            className="group relative h-52 rounded-xl overflow-hidden bg-[#E0EEE9] border border-[rgba(93,100,114,0.15)] cursor-pointer shadow-xs"
+            className="group relative h-52 rounded-md overflow-hidden bg-[#F7F6F3] border border-[rgba(22,22,26,0.10)] cursor-pointer shadow-xs"
           >
             <ImageWithSkeleton
               src={imgUrl}
               alt={`${label} photo ${idx + 1}`}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-500 ease-out"
             />
-            <div className="absolute inset-0 bg-[#363C46]/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <span className="p-2.5 rounded-md bg-white/90 text-[#363C46] shadow-xs">
+            <div className="absolute inset-0 bg-[#16161a]/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <span className="p-2.5 rounded-full bg-white/90 text-[#16161a] shadow-xs">
                 <Maximize2 className="w-4 h-4" />
               </span>
             </div>
@@ -195,29 +188,20 @@ const RoomImagesSection = ({ rooms = {}, roomImages = [], furnishing = 'full', f
 
   const sortedTypes = categoriesOrder.filter(cat => grouped[cat] && grouped[cat].length > 0);
 
-  const furnBadge = furnLevel === 'full'
-    ? { text: '✔ Fully Furnished Interior', cls: 'text-emerald-700 bg-emerald-50 border-emerald-200' }
-    : furnLevel === 'semi'
-    ? { text: '⚡ Semi Furnished — Mixed Interior', cls: 'text-[#CFB6A8] bg-[rgba(207,182,168,0.12)] border-[rgba(207,182,168,0.25)]' }
-    : { text: '○ Unfurnished — Empty Rooms', cls: 'text-[#5D6472] bg-stone-50 border-stone-200' };
-
   return (
-    <div className="space-y-8 border-t border-[rgba(93,100,114,0.15)] pt-10 font-sans">
+    <div className="space-y-8 border-t border-[rgba(22,22,26,0.10)] pt-10 font-sans">
       {/* Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <div className="space-y-1.5">
-          <p className="text-[10px] uppercase tracking-[0.25em] text-[#CFB6A8] font-bold">Interior Tour</p>
+        <div className="space-y-1">
+          <span className="eyebrow">INTERIOR WALKTHROUGH</span>
           <h3
-            className="text-2xl font-bold text-[#363C46] tracking-tight"
+            className="text-2xl font-medium text-[#16161a] tracking-tight"
             style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
           >
-            Inside the Property
+            Inside the Residence
           </h3>
-          <p className="text-xs text-[#5D6472]">Room-by-room walkthrough</p>
+          <p className="text-xs text-[#4a4a4f]">Room-by-room photo gallery</p>
         </div>
-        <span className={`self-start sm:self-auto px-3 py-1.5 rounded-md border text-xs font-semibold font-sans ${furnBadge.cls}`}>
-          {furnBadge.text}
-        </span>
       </div>
 
       {/* Room Sections */}
