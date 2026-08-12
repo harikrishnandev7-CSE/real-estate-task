@@ -55,6 +55,21 @@
   backface-visibility: hidden;
 }
 
+/* ── Static Poster: Instant background image shown while video buffers ──
+   Cloudinary serves a JPEG thumbnail from the first frame of the hero video.
+   CSS transition makes it fade out smoothly as the video reveals itself.     */
+.hero-poster {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background-image: url('https://res.cloudinary.com/hkrsplqg/video/upload/so_0,w_1920,q_auto,f_jpg/v1786323393/258708_medium_tlyw3b.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  transition: opacity 1.4s ease;
+  pointer-events: none;
+}
+
 /* Dark Editorial Gradient Overlays for Perfect Readability */
 .hero-overlay-gradient {
   position: absolute;
