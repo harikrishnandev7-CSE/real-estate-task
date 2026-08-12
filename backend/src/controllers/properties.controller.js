@@ -135,12 +135,12 @@ export const createProperty = async (req, res) => {
     if (req.body.cons) propertyData.cons = parseJsonArrayField(req.body.cons);
 
     // Pick cover photo: entrance image first, else first available room image
-    const primaryCover = structuredImages.entrance 
-      || structuredImages.hall[0] 
-      || structuredImages.kitchen[0] 
-      || structuredImages.bedrooms[0] 
-      || structuredImages.bathrooms[0] 
-      || structuredImages.terrace[0] 
+    const primaryCover = (typeof structuredImages.entrance === 'string' ? structuredImages.entrance : null)
+      || (Array.isArray(structuredImages.hall) ? structuredImages.hall[0] : null)
+      || (Array.isArray(structuredImages.kitchen) ? structuredImages.kitchen[0] : null)
+      || (Array.isArray(structuredImages.bedrooms) ? structuredImages.bedrooms[0] : null)
+      || (Array.isArray(structuredImages.bathrooms) ? structuredImages.bathrooms[0] : null)
+      || (Array.isArray(structuredImages.terrace) ? structuredImages.terrace[0] : null)
       || propertyData.imageUrl 
       || propertyData.image;
 
@@ -189,12 +189,12 @@ export const updateProperty = async (req, res) => {
     if (req.body.pros) propertyData.pros = parseJsonArrayField(req.body.pros);
     if (req.body.cons) propertyData.cons = parseJsonArrayField(req.body.cons);
 
-    const primaryCover = structuredImages.entrance 
-      || structuredImages.hall[0] 
-      || structuredImages.kitchen[0] 
-      || structuredImages.bedrooms[0] 
-      || structuredImages.bathrooms[0] 
-      || structuredImages.terrace[0] 
+    const primaryCover = (typeof structuredImages.entrance === 'string' ? structuredImages.entrance : null)
+      || (Array.isArray(structuredImages.hall) ? structuredImages.hall[0] : null)
+      || (Array.isArray(structuredImages.kitchen) ? structuredImages.kitchen[0] : null)
+      || (Array.isArray(structuredImages.bedrooms) ? structuredImages.bedrooms[0] : null)
+      || (Array.isArray(structuredImages.bathrooms) ? structuredImages.bathrooms[0] : null)
+      || (Array.isArray(structuredImages.terrace) ? structuredImages.terrace[0] : null)
       || propertyData.imageUrl 
       || propertyData.image;
 
@@ -260,5 +260,21 @@ export const uploadMedia = async (req, res) => {
   return successResponse(res, {
     urls,
     url: urls[0]?.url,
+  }, 201);
+};
+
+export const uploadVideo = async (req, res) => {
+  const file = req.file || (req.files && (req.files.video?.[0] || req.files[0]));
+  if (!file) {
+    return errorResponse(res, 'No video file provided for upload', 400);
+  }
+
+  const secureUrl = file.path || file.secure_url;
+  console.log('Cloudinary Video Upload Response:', secureUrl);
+
+  return successResponse(res, {
+    url: secureUrl,
+    secure_url: secureUrl,
+    public_id: file.filename || file.public_id,
   }, 201);
 };

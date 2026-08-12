@@ -57,4 +57,12 @@ router.post(
   asyncHandler(propertiesController.uploadMedia)
 );
 
+router.post(
+  '/upload-video',
+  verifyToken,
+  requireRole('admin'),
+  upload.single('video'),
+  asyncHandler(propertiesController.uploadVideo)
+);
+
 export default router;
