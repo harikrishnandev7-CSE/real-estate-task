@@ -1,4 +1,5 @@
 import Wishlist from '../models/Wishlist.js';
+import CompareList from '../models/CompareList.js';
 import RecentlyViewed from '../models/RecentlyViewed.js';
 import User from '../models/User.js';
 import Notification from '../models/Notification.js';
@@ -29,6 +30,27 @@ export const toggleWishlist = async (userId, propertyId) => {
     Property.findByIdAndUpdate(propertyId, { $inc: { saves: 1 } }).exec().catch(() => {});
 
     return { inWishlist: true, propertyId, message: 'Added to wishlist.' };
+  }
+};
+
+// --- Compare List ---
+export const getUserCompareList = async (userId) => {
+  const items = await CompareList.find({ user: userId })
+    .populate('property')
+    .sort({ createdAt: -1 })
+    .lean();
+  return items.map(item => formatProperty(item.property));
+};
+
+export const toggleCompareList = async (userId, propertyId) => {
+  const existing = await CompareList.findOne({ user: userId, property: propertyId });
+
+  if (existing) {
+    await CompareList.findByIdAndDelete(existing._id);
+    return { inCompare: false, propertyId, message: 'Removed from compare list.' };
+  } else {
+    await CompareList.create({ user: userId, property: propertyId });
+    return { inCompare: true, propertyId, message: 'Added to compare list.' };
   }
 };
 

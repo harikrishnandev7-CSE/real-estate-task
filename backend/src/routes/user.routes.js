@@ -19,6 +19,11 @@ router.post('/wishlist/toggle', validate(propertyIdSchema), asyncHandler(userCon
 router.post('/wishlist', validate(propertyIdSchema), asyncHandler(userController.toggleWishlist));
 router.delete('/wishlist/:propertyId', asyncHandler(userController.toggleWishlist));
 
+// Compare List
+router.get('/compare', asyncHandler(userController.getCompareList));
+router.post('/compare', validate(propertyIdSchema), asyncHandler(userController.toggleCompare));
+router.delete('/compare/:propertyId', asyncHandler(userController.toggleCompare));
+
 
 // Recently Viewed
 router.get('/recently-viewed', asyncHandler(userController.getRecentlyViewed));

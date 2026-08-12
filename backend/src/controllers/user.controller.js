@@ -13,6 +13,18 @@ export const toggleWishlist = async (req, res) => {
   return successResponse(res, result);
 };
 
+// Compare List
+export const getCompareList = async (req, res) => {
+  const compareList = await userService.getUserCompareList(req.user.id);
+  return successResponse(res, { compareList, properties: compareList });
+};
+
+export const toggleCompare = async (req, res) => {
+  const propertyId = req.body.propertyId || req.params.propertyId;
+  const result = await userService.toggleCompareList(req.user.id, propertyId);
+  return successResponse(res, result);
+};
+
 
 // Recently Viewed
 export const getRecentlyViewed = async (req, res) => {
