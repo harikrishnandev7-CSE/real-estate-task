@@ -69,7 +69,7 @@ const Rent = () => {
     }
 
     if (maxRent) {
-      result = result.filter(p => (p.priceNum || 0) <= maxRent);
+      result = result.filter(p => (p.numericPrice || 0) <= maxRent);
     }
 
     return result;
@@ -282,7 +282,7 @@ const Rent = () => {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                openBookModal(prop.title);
+                                openBookModal(prop);
                               }}
                               className="text-[11px] font-semibold uppercase tracking-wider text-[#4a4a4f] hover:text-[#16161a] transition-colors"
                             >

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Calendar, MapPin, Clock, User, Phone, CheckCircle, ChevronRight, XCircle, Sparkles, PlusCircle } from 'lucide-react';
 import { useApp } from '../context/AppContext';
@@ -6,7 +6,14 @@ import PageHero from '../components/PageHero';
 
 const MyBookings = () => {
   const navigate = useNavigate();
-  const { siteVisits = [], cancelSiteVisit, openBookModal, currentUser } = useApp();
+  const { siteVisits = [], cancelSiteVisit, openBookModal, currentUser, fetchSiteVisits } = useApp();
+
+  // Refetch from backend each time this page is visited so admin status updates are visible
+  useEffect(() => {
+    if (currentUser && fetchSiteVisits) {
+      fetchSiteVisits();
+    }
+  }, [currentUser]);
 
   if (!currentUser) {
     return (

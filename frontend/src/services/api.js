@@ -106,6 +106,9 @@ export const api = {
   getWishlist: () => request('/user/wishlist', { method: 'GET' }),
   addToWishlist: (propertyId) => request('/user/wishlist', { method: 'POST', body: { propertyId } }),
   removeFromWishlist: (propertyId) => request(`/user/wishlist/${propertyId}`, { method: 'DELETE' }),
+  getCompareList: () => request('/user/compare', { method: 'GET' }),
+  toggleCompare: (propertyId) => request('/user/compare', { method: 'POST', body: { propertyId } }),
+  removeFromCompare: (propertyId) => request(`/user/compare/${propertyId}`, { method: 'DELETE' }),
   getRecentlyViewed: () => request('/user/recently-viewed', { method: 'GET' }),
   addRecentlyViewed: (propertyId) => request('/user/recently-viewed', { method: 'POST', body: { propertyId } }),
 

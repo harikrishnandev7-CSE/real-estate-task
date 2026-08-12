@@ -142,8 +142,8 @@ export const AppProvider = ({ children }) => {
   const [customers, setCustomers] = useState([]);
   const [siteVisits, setSiteVisits] = useState([]);
   const [broadcasts, setBroadcasts] = useState([]);
-  const [wishlist, setWishlist] = useState(["imperia-ritz"]);
-  const [compareList, setCompareList] = useState(["imperia-ritz", "imperia-skyline"]);
+  const [wishlist, setWishlist] = useState([]);
+  const [compareList, setCompareList] = useState([]);
   const [recentlyViewed, setRecentlyViewed] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
 
@@ -361,6 +361,12 @@ export const AppProvider = ({ children }) => {
         } catch (err) {}
 
         try {
+          const cmpData = await api.getCompareList();
+          const list = safeArray(cmpData, 'compareList');
+          if (list) setCompareList(list.filter(Boolean));
+        } catch (err) {}
+
+        try {
           const notifData = await api.getUserNotifications();
           const list = safeArray(notifData, 'notifications');
           if (list) setNotifications(list);
@@ -417,6 +423,7 @@ export const AppProvider = ({ children }) => {
       } else {
         api.getUserSiteVisits().then(res => { const l = safeArray(res, 'siteVisits'); if (l) setSiteVisits(l); }).catch(()=>{});
         api.getWishlist().then(res => { const l = safeArray(res, 'wishlist'); if (l) setWishlist(l); }).catch(()=>{});
+        api.getCompareList().then(res => { const l = safeArray(res, 'compareList'); if (l) setCompareList(l.filter(Boolean)); }).catch(()=>{});
         api.getUserNotifications().then(res => { const l = safeArray(res, 'notifications'); if (l) setNotifications(l); }).catch(()=>{});
       }
 
@@ -532,6 +539,31 @@ export const AppProvider = ({ children }) => {
   };
 
   // --- SITE VISITS ---
+
+  // Refetch site visits from backend (customer or admin)
+  const fetchSiteVisits = async () => {
+    const safeArray = (res, key) => {
+      if (!res) return null;
+      const target = res.data || res;
+      if (key && Array.isArray(target[key])) return target[key];
+      if (Array.isArray(target)) return target;
+      return null;
+    };
+    try {
+      if (currentUser?.role === 'admin') {
+        const res = await api.getAdminSiteVisits();
+        const l = safeArray(res, 'siteVisits');
+        if (l) setSiteVisits(l);
+      } else {
+        const res = await api.getUserSiteVisits();
+        const l = safeArray(res, 'siteVisits');
+        if (l) setSiteVisits(l);
+      }
+    } catch (err) {
+      console.error('fetchSiteVisits error:', err.message);
+    }
+  };
+
   const addSiteVisit = async (visit) => {
     try {
       const nameVal = visit.name || visit.customerName || visit.visitorName || currentUser?.fullName || currentUser?.name || 'Valued Client';
@@ -595,56 +627,84 @@ export const AppProvider = ({ children }) => {
     try {
       const data = await api.confirmSiteVisit(id);
       const updated = data.siteVisit || data;
-      setSiteVisits(prev => prev.map(v => (v.id === id || v._id === id) ? { ...v, ...updated, status: 'Confirmed' } : v));
+      setSiteVisits(prev => prev.map(v =>
+        (String(v.id) === String(id) || String(v._id) === String(id))
+          ? { ...v, ...updated, status: updated.status || 'Confirmed' }
+          : v
+      ));
       showToast("Site visit confirmed & consultant assigned!");
-
-      // Refresh admin site visits to keep dashboard in sync
+      // Refetch so admin table stays in sync with DB
       api.getAdminSiteVisits().then(res => {
         const l = res?.siteVisits || (Array.isArray(res) ? res : null);
         if (l) setSiteVisits(l);
       }).catch(() => {});
     } catch (err) {
-      setSiteVisits(prev => prev.map(v => (v.id === id || v._id === id) ? { ...v, status: 'Confirmed' } : v));
-      showToast("Site visit marked as Confirmed.");
+      console.error('confirmSiteVisit API error:', err.status, err.message);
+      showToast(err.message || "Failed to confirm site visit.", "error");
     }
   };
 
   const rescheduleSiteVisit = async (id, newDate, newTime, newConsultant) => {
     try {
-      const updateData = { date: newDate, time: newTime, consultantName: newConsultant, status: 'Scheduled' };
+      const updateData = { date: newDate, time: newTime, scheduledDate: newDate, scheduledTime: newTime, consultantName: newConsultant, status: 'Scheduled' };
       const data = await api.rescheduleSiteVisit(id, updateData);
       const updated = data.siteVisit || data;
-      setSiteVisits(prev => prev.map(v => (v.id === id || v._id === id) ? { ...v, ...updated } : v));
+      setSiteVisits(prev => prev.map(v =>
+        (String(v.id) === String(id) || String(v._id) === String(id))
+          ? { ...v, ...updated }
+          : v
+      ));
       showToast("Site visit rescheduled successfully!");
+      // Refetch so admin table stays in sync with DB
+      api.getAdminSiteVisits().then(res => {
+        const l = res?.siteVisits || (Array.isArray(res) ? res : null);
+        if (l) setSiteVisits(l);
+      }).catch(() => {});
     } catch (err) {
-      setSiteVisits(prev => prev.map(v => (v.id === id || v._id === id) ? { ...v, date: newDate, time: newTime, consultantName: newConsultant, status: 'Scheduled' } : v));
-      showToast("Site visit rescheduled!");
+      console.error('rescheduleSiteVisit API error:', err.status, err.message);
+      showToast(err.message || "Failed to reschedule site visit.", "error");
     }
   };
 
   const cancelSiteVisit = async (id, reason) => {
     try {
-      const updateData = { status: 'Cancelled', cancellationReason: reason };
-      const data = await api.updateSiteVisitStatus(id, updateData);
+      const data = await api.cancelSiteVisit(id, { cancelReason: reason });
       const updated = data.siteVisit || data;
-      setSiteVisits(prev => prev.map(v => (v.id === id || v._id === id) ? { ...v, ...updated } : v));
+      setSiteVisits(prev => prev.map(v =>
+        (String(v.id) === String(id) || String(v._id) === String(id))
+          ? { ...v, ...updated, status: updated.status || 'Cancelled' }
+          : v
+      ));
       showToast("Site visit marked as Cancelled.");
+      // Refetch so admin table stays in sync with DB
+      api.getAdminSiteVisits().then(res => {
+        const l = res?.siteVisits || (Array.isArray(res) ? res : null);
+        if (l) setSiteVisits(l);
+      }).catch(() => {});
     } catch (err) {
-      setSiteVisits(prev => prev.map(v => (v.id === id || v._id === id) ? { ...v, status: "Cancelled", cancelReason: reason } : v));
-      showToast("Site visit cancelled.");
+      console.error('cancelSiteVisit API error:', err.status, err.message);
+      showToast(err.message || "Failed to cancel site visit.", "error");
     }
   };
 
   const completeSiteVisit = async (id, note) => {
     try {
-      const updateData = { status: 'Completed', completionNote: note };
-      const data = await api.updateSiteVisitStatus(id, updateData);
+      const data = await api.completeSiteVisit(id, { completionNote: note });
       const updated = data.siteVisit || data;
-      setSiteVisits(prev => prev.map(v => (v.id === id || v._id === id) ? { ...v, ...updated } : v));
+      setSiteVisits(prev => prev.map(v =>
+        (String(v.id) === String(id) || String(v._id) === String(id))
+          ? { ...v, ...updated, status: updated.status || 'Completed' }
+          : v
+      ));
       showToast("Site visit marked as Completed.");
+      // Refetch so admin table stays in sync with DB
+      api.getAdminSiteVisits().then(res => {
+        const l = res?.siteVisits || (Array.isArray(res) ? res : null);
+        if (l) setSiteVisits(l);
+      }).catch(() => {});
     } catch (err) {
-      setSiteVisits(prev => prev.map(v => (v.id === id || v._id === id) ? { ...v, status: "Completed", completionNote: note } : v));
-      showToast("Site visit completed.");
+      console.error('completeSiteVisit API error:', err.status, err.message);
+      showToast(err.message || "Failed to complete site visit.", "error");
     }
   };
 
@@ -821,6 +881,18 @@ export const AppProvider = ({ children }) => {
     return true;
   };
 
+  // Helper to normalise property type strings for same-type compare validation
+  const normalizeType = (t) => {
+    if (!t) return '';
+    const s = String(t).toLowerCase().trim();
+    if (s.includes('villa')) return 'villa';
+    if (s.includes('penthouse')) return 'penthouse';
+    if (s.includes('apartment') || s.includes('flat')) return 'apartment';
+    if (s.includes('plot') || s.includes('land')) return 'plot';
+    if (s.includes('commercial') || s.includes('office')) return 'commercial';
+    return s;
+  };
+
   const addToCompare = async (propertyId) => {
     if (!currentUser) {
       showToast("Please log in to compare properties.", "warning");
@@ -867,6 +939,14 @@ export const AppProvider = ({ children }) => {
 
     setCompareList(prev => [...prev, id]);
     showToast("Added to Compare");
+
+    // Persist to backend
+    try {
+      await api.toggleCompare(id);
+    } catch (err) {
+      console.warn('api.toggleCompare (add) error:', err.message);
+    }
+
     return true;
   };
 
@@ -878,6 +958,14 @@ export const AppProvider = ({ children }) => {
     const targetId = getPropId(propertyId);
     setCompareList(prev => prev.filter(item => getPropId(item) !== targetId));
     showToast("Removed from Compare");
+
+    // Persist to backend
+    try {
+      await api.removeFromCompare(targetId);
+    } catch (err) {
+      console.warn('api.removeFromCompare error:', err.message);
+    }
+
     return true;
   };
 
@@ -896,6 +984,7 @@ export const AppProvider = ({ children }) => {
   };
 
   return (
+    // expose fetchSiteVisits via context for use by MyBookings.jsx
     <AppContext.Provider value={{
       properties,
       setProperties,
@@ -914,6 +1003,7 @@ export const AppProvider = ({ children }) => {
       deleteCustomer,
       siteVisits,
       setSiteVisits,
+      fetchSiteVisits,
       addSiteVisit,
       updateSiteVisit,
       confirmSiteVisit,

@@ -82,7 +82,7 @@ const Buy = () => {
     }
 
     if (maxBudget) {
-      result = result.filter(p => (p.priceNum || 0) <= maxBudget);
+      result = result.filter(p => (p.numericPrice || 0) <= maxBudget);
     }
 
     if (selectedBeds !== 'All') {
@@ -100,9 +100,9 @@ const Buy = () => {
     }
 
     if (sortBy === 'price-asc') {
-      result.sort((a, b) => (a.priceNum || 0) - (b.priceNum || 0));
+      result.sort((a, b) => (a.numericPrice || 0) - (b.numericPrice || 0));
     } else if (sortBy === 'price-desc') {
-      result.sort((a, b) => (b.priceNum || 0) - (a.priceNum || 0));
+      result.sort((a, b) => (b.numericPrice || 0) - (a.numericPrice || 0));
     } else if (sortBy === 'newest') {
       result.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
     }
@@ -372,7 +372,7 @@ const Buy = () => {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                openBookModal(prop.title);
+                                openBookModal(prop);
                               }}
                               className="text-[11px] font-semibold uppercase tracking-wider text-[#4a4a4f] hover:text-[#16161a] transition-colors"
                             >
