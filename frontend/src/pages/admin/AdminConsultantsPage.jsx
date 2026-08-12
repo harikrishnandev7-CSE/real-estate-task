@@ -10,7 +10,7 @@ import KPICard from '../../components/admin/primitives/KPICard';
 import DataTable from '../../components/admin/primitives/DataTable';
 import StatusChip from '../../components/admin/primitives/StatusChip';
 import AdminModal from '../../components/admin/primitives/AdminModal';
-import { FormLabel, TextInput, SelectInput } from '../../components/admin/primitives/FormField';
+import { FormLabel, TextInput, SelectInput, PhoneInput } from '../../components/admin/primitives/FormField';
 import api from '../../services/api';
 
 const CITIES = ['Chennai', 'Coimbatore', 'Madurai', 'Ooty', 'Bengaluru', 'Hyderabad'];
@@ -143,14 +143,20 @@ const AdminConsultantsPage = () => {
       dailyVisitCap: Number(form.dailyVisitCap || form.maxDailyVisits || 5),
       maxDailyVisits: Number(form.dailyVisitCap || form.maxDailyVisits || 5),
     };
+    if (!payload.password || !payload.password.trim()) {
+      delete payload.password;
+    }
+
     try {
       if (editTarget) {
-        const data = await api.updateConsultant(editTarget._id, payload);
-        setConsultants(prev => prev.map(c => c._id === editTarget._id ? (data.consultant || c) : c));
+        const data = await api.updateConsultant(editTarget._id || editTarget.id, payload);
+        const updated = data.consultant || data;
+        setConsultants(prev => prev.map(c => (c._id === editTarget._id || c.id === editTarget.id) ? { ...c, ...updated } : c));
         showToast('Consultant updated successfully!');
       } else {
         const data = await api.createConsultant(payload);
-        setConsultants(prev => [data.consultant, ...prev]);
+        const newConsultant = data.consultant || data;
+        setConsultants(prev => [newConsultant, ...prev]);
         showToast('Consultant created! They can now log in with their email and password.');
       }
       setIsAddOpen(false);
@@ -316,8 +322,7 @@ const AdminConsultantsPage = () => {
               <TextInput value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="Vikram Malhotra" />
             </div>
             <div>
-              <FormLabel required>Phone</FormLabel>
-              <TextInput value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} placeholder="+91 99000 00000" />
+              <PhoneInput label="Phone Number" required value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} placeholder="9876543210" />
             </div>
           </div>
           <div>

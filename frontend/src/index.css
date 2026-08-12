@@ -120,13 +120,16 @@
   border: 1px solid rgba(198, 166, 107, 0.2);
   border-radius: 1rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
   overflow: hidden;
 }
 
 .card-luxury:hover {
-  transform: scale(1.03) translateY(-4px);
-  box-shadow: 0 20px 40px rgba(198, 166, 107, 0.15);
+  transform: translate3d(0, -6px, 0) scale(1.015);
+  box-shadow: 0 24px 48px rgba(198, 166, 107, 0.18);
   border-color: #C6A66B;
 }
 
@@ -182,4 +185,40 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #0B0B0B;
+}
+
+/* ── UNIVERSAL DROPDOWN SELECT STYLING ─────────────────────────────────── */
+select {
+  background-color: #F8F6F2;
+  border: 1px solid rgba(198, 166, 107, 0.35);
+  border-radius: 0.75rem;
+  color: #0B0B0B;
+  font-family: var(--font-body);
+  outline: none;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+select:focus {
+  border-color: #C6A66B;
+  box-shadow: 0 0 0 3px rgba(198, 166, 107, 0.2);
+}
+
+select option {
+  background-color: #FFFFFF;
+  color: #0B0B0B;
+  padding: 0.5rem;
+  font-weight: 500;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #F8F6F2;
+  border-radius: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #C6A66B;
+  border-radius: 8px;
 }

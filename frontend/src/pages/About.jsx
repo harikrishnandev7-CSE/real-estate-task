@@ -24,22 +24,18 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
+    <div className="min-h-screen bg-[#F7F6F3] text-[#16161a] font-sans pb-20">
       {/* HERO SECTION */}
-      <div className="pt-[64px] lg:pt-[72px]">
-        <PageHero
-          image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'About' },
-          ]}
-          eyebrow="ABOUT US"
-          heading={
-            <>Curators of the <span className="font-normal text-[#5D6472]">Exceptional</span></>
-          }
-          description="IMPERIA ESTATES is a premier real estate concierge, specializing in sourcing, managing, and structuring high-capital acquisitions for discerning private clients, NRIs, and family offices."
-        />
-      </div>
+      <PageHero
+        image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'About Us' },
+        ]}
+        eyebrow="ABOUT IMPERIA ESTATES"
+        heading="Curating South India's Finest Estates"
+        description="Pioneering architectural excellence, private land banks, and high-net-worth real estate portfolio advisories across premier regions."
+      />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-20 space-y-28 font-sans">
         

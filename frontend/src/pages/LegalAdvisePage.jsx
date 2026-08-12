@@ -10,22 +10,18 @@ const LegalAdvisePage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
-      <div className="pt-[64px] lg:pt-[72px]">
-        <PageHero
-          image="https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=1600&q=80"
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Services', href: '/services' },
-            { label: 'Legal Verification' }
-          ]}
-          eyebrow="TRANSACTIONAL INTEGRITY"
-          heading={
-            <>Legal Due Diligence &amp; <span className="font-normal text-[#5D6472]">Title Audits</span></>
-          }
-          description="Institutional legal audit services protecting high-net-worth acquisitions against regulatory liabilities."
-        />
-      </div>
+    <div className="min-h-screen bg-[#F7F6F3] text-[#16161a] font-sans pb-20">
+      <PageHero
+        image="https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=1600&q=80"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Services', href: '/services' },
+          { label: 'Legal Verification' }
+        ]}
+        eyebrow="TRANSACTIONAL INTEGRITY"
+        heading="Legal Due Diligence & Title Audits"
+        description="Private legal audit protocols ensuring clear title deeds, encumbrance certificates, RERA approvals, and tax compliance."
+      />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 space-y-16 font-sans">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

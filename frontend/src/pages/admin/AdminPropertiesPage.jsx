@@ -253,12 +253,12 @@ const AdminPropertiesPage = () => {
       {/* ── TOPBAR CONTROLS & ACTION ROW ────────────────────────────── */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-[rgba(93,100,114,0.15)] rounded-xl p-5 shadow-[0_12px_32px_rgba(54,60,70,0.06)]">
         <div>
-          <span className="text-[10px] uppercase tracking-[0.25em] text-[#CFB6A8] font-bold block font-sans">
+          <span className="text-[10px] uppercase tracking-[0.25em] text-[#C9A96E] font-extrabold block font-sans">
             INVENTORY MANAGEMENT
           </span>
           <h2
-            className="text-2xl font-bold text-[#363C46] tracking-tight"
-            style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+            className="text-2xl font-bold text-[#0B0B0B] tracking-tight"
+            style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
           >
             Properties Catalog
           </h2>
@@ -268,31 +268,31 @@ const AdminPropertiesPage = () => {
         <div className="flex flex-wrap items-center gap-3">
           {/* Search Input */}
           <div className="relative">
-            <Search className="w-3.5 h-3.5 text-[#5D6472] absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-[#C9A96E] absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search title, city, type..."
               value={searchVal}
               onChange={(e) => setSearchVal(e.target.value)}
-              className="bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] rounded-lg text-xs px-4 py-2 pl-9 text-[#363C46] placeholder-[#5D6472]/60 focus:outline-none focus:border-[#CFB6A8] w-48 sm:w-60 transition-all font-sans"
+              className="bg-[#F8F6F2] border border-[rgba(201,169,110,0.25)] rounded-xl text-xs px-4 py-2.5 pl-9 text-[#0B0B0B] placeholder-[#8A8A85] focus:outline-none focus:border-[#C9A96E] w-48 sm:w-60 transition-all font-sans font-medium"
             />
           </div>
 
           {/* Filters Button */}
           <button
             onClick={() => setIsFilterDrawerOpen(true)}
-            className="px-4 py-2 bg-[#E0EEE9]/50 hover:bg-[#363C46] hover:text-white border border-[rgba(93,100,114,0.20)] text-[#363C46] text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer font-sans"
+            className="px-4 py-2.5 bg-[#F8F6F2] hover:bg-[#0E0E10] hover:text-[#F4F1EA] border border-[rgba(201,169,110,0.25)] text-[#0B0B0B] text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer font-sans"
           >
-            <Filter className="w-3.5 h-3.5 text-[#CFB6A8]" />
+            <Filter className="w-3.5 h-3.5 text-[#C9A96E]" />
             <span>Filters</span>
           </button>
 
           {/* Grid / List View Toggle */}
-          <div className="flex items-center p-1 bg-[#F4F1EA] border border-[#E8E4DA] rounded-full">
+          <div className="flex items-center p-1 bg-[#F8F6F2] border border-[rgba(201,169,110,0.25)] rounded-full">
             <button
               onClick={() => setViewMode('table')}
               className={`p-1.5 rounded-full transition-colors cursor-pointer ${
-                viewMode === 'table' ? 'bg-[#1A1A1A] text-white shadow-xs' : 'text-[#8A8A85] hover:text-[#1A1A1A]'
+                viewMode === 'table' ? 'bg-[#0E0E10] text-[#F4F1EA] shadow-xs' : 'text-[#8A8A85] hover:text-[#0B0B0B]'
               }`}
               title="Table View"
             >
@@ -301,7 +301,7 @@ const AdminPropertiesPage = () => {
             <button
               onClick={() => setViewMode('grid')}
               className={`p-1.5 rounded-full transition-colors cursor-pointer ${
-                viewMode === 'grid' ? 'bg-[#1A1A1A] text-white shadow-xs' : 'text-[#8A8A85] hover:text-[#1A1A1A]'
+                viewMode === 'grid' ? 'bg-[#0E0E10] text-[#F4F1EA] shadow-xs' : 'text-[#8A8A85] hover:text-[#0B0B0B]'
               }`}
               title="Grid Card View"
             >
@@ -312,18 +312,18 @@ const AdminPropertiesPage = () => {
           {/* Export CSV Ghost Button */}
           <button
             onClick={handleExportCSV}
-            className="px-4 py-2 bg-white border border-[#E8E4DA] hover:bg-[#F4F1EA] text-[#1A1A1A] text-xs font-bold rounded-full transition-colors flex items-center gap-1.5 cursor-pointer"
+            className="px-4 py-2.5 bg-white border border-[rgba(201,169,110,0.25)] hover:bg-[#F8F6F2] text-[#0B0B0B] text-xs font-bold rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer"
           >
-            <Download className="w-3.5 h-3.5 text-[#8A8A85]" />
+            <Download className="w-3.5 h-3.5 text-[#C9A96E]" />
             <span className="hidden sm:inline">Export CSV</span>
           </button>
 
           {/* Add Property Primary Black Pill */}
           <button
             onClick={() => navigate('/admin/properties/new')}
-            className="px-5 py-2.5 bg-[#363C46] hover:bg-[#1A1A1A] text-white text-xs font-bold tracking-wider uppercase rounded-lg shadow-xs transition-all cursor-pointer flex items-center gap-2 font-sans"
+            className="px-5 py-2.5 bg-[#0E0E10] hover:bg-[#C9A96E] text-[#F4F1EA] hover:text-[#0B0B0B] text-xs font-extrabold tracking-wider uppercase rounded-xl shadow-md border border-[#C9A96E] transition-all cursor-pointer flex items-center gap-2 font-sans"
           >
-            <PlusCircle className="w-4 h-4 text-[#CFB6A8]" />
+            <PlusCircle className="w-4 h-4 text-[#C9A96E]" />
             <span>Add Property</span>
           </button>
         </div>

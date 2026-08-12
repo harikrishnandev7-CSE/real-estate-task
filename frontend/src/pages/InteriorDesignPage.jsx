@@ -109,24 +109,19 @@ const InteriorDesignPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F4F1EA] text-[#1A1A1A]">
-      
+    <div className="min-h-screen bg-[#F7F6F3] text-[#16161a] pb-20">
       {/* Hero Banner */}
-      <div className="pt-[64px] lg:pt-[72px]">
-        <PageHero
-          image="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=80"
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Services', href: '/services' },
-            { label: 'Interior Design' },
-          ]}
-          eyebrow="DESIGN ATELIER"
-          heading={
-            <>Bespoke Luxury <span className="font-normal text-[#8A8A85]">Interior Architecture</span></>
-          }
-          description="Transforming spaces into living works of art using imported Italian stone, smart home automation, bespoke millwork, and turnkey execution."
-        />
-      </div>
+      <PageHero
+        image="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=80"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Services', href: '/services' },
+          { label: 'Interior Design' },
+        ]}
+        eyebrow="DESIGN ATELIER"
+        heading="Bespoke Luxury Interior Architecture"
+        description="Turnkey spatial planning, Italian marble sourcing, custom millwork, and intelligent lighting systems curated for South India's finest private residences."
+      />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 space-y-24 font-sans">
         

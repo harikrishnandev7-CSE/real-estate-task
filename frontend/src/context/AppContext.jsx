@@ -136,6 +136,7 @@ const initialBlogsData = [
 ];
 
 export const AppProvider = ({ children }) => {
+  const [isIntroComplete, setIsIntroComplete] = useState(false);
   const [properties, setProperties] = useState(initialPropertiesData);
   const [blogs, setBlogs] = useState(initialBlogsData);
   const [customers, setCustomers] = useState([]);
@@ -940,6 +941,9 @@ export const AppProvider = ({ children }) => {
       signupUser,
       loginUser,
       logoutUser,
+      login: loginUser,
+      signup: signupUser,
+      logout: logoutUser,
       updateUserProfile,
       toast,
       showToast,
@@ -957,7 +961,9 @@ export const AppProvider = ({ children }) => {
       toggleNotificationRead,
       markAllNotificationsRead,
       deleteNotification,
-      switchRole
+      switchRole,
+      isIntroComplete,
+      setIsIntroComplete
     }}>
       {children}
     </AppContext.Provider>

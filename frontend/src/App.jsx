@@ -68,10 +68,10 @@ function AppRoutes() {
     <AnimatePresence mode="wait">
       <motion.div
         key={location.pathname}
-        initial={{ opacity: 0, scale: 0.99 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.99 }}
-        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
       >
         <Routes location={location}>
           <Route path="/" element={<Home />} />
@@ -103,6 +103,7 @@ function AppRoutes() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/insights" element={<Blog />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<Privacy />} />
@@ -116,16 +117,18 @@ function AppRoutes() {
 }
 
 function AppContent() {
+  const appContext = useApp() || {};
+  const { setIsIntroComplete, toast = { show: false, message: '' }, hideToast = (() => {}) } = appContext;
   const [loading, setLoading] = useState(true);
   const location = useLocation();
 
   const handlePreloaderComplete = useCallback(() => {
     setLoading(false);
-  }, []);
+    if (setIsIntroComplete) {
+      setIsIntroComplete(true);
+    }
+  }, [setIsIntroComplete]);
 
-  const appContext = useApp() || {};
-  const toast = appContext.toast || { show: false, message: '' };
-  const hideToast = appContext.hideToast || (() => {});
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   if (isAdminRoute) {
@@ -188,7 +191,7 @@ function AppContent() {
       </AnimatePresence>
 
       {/* Main Application Content Mounted Underneath */}
-      <div className="min-h-screen flex flex-col" style={{ background: '#E0EEE9', color: '#363C46', userSelect: 'text' }}>
+      <div className="min-h-screen flex flex-col bg-[#0B0B0B] text-[#F4F1EA] select-text">
         {/* Header / Sticky Glass Navbar */}
         <Navbar />
         <ScrollToTop />

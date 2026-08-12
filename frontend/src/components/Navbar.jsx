@@ -38,6 +38,9 @@ const Navbar = () => {
     if (link.href === '/services') {
       return location.pathname.startsWith('/services');
     }
+    if (link.href === '/insights') {
+      return location.pathname === '/insights' || location.pathname === '/blog';
+    }
     return location.pathname === link.href;
   };
 
@@ -83,27 +86,30 @@ const Navbar = () => {
     { name: 'Rent', href: '/rent' },
     { name: 'Projects', href: '/projects', type: 'projects' },
     { name: 'Services', href: '/services', type: 'services' },
+    { name: 'Insights', href: '/insights' },
   ];
 
   const navLinkStyle = (active) => ({
     fontFamily: "'Inter', system-ui, sans-serif",
-    fontSize: 13,
-    fontWeight: 700,
-    letterSpacing: '0.18em',
+    fontSize: 12,
+    fontWeight: 600,
+    letterSpacing: '0.22em',
     textTransform: 'uppercase',
-    color: active ? C.accent : '#111111',
-    transition: 'color 0.2s ease',
+    color: active ? '#C9A96E' : '#F4F1EA',
+    transition: 'color 0.25s ease',
   });
 
   const megaCardStyle = {
-    background: '#FFFFFF',
-    border: `1px solid ${C.hairlineStrong}`,
-    borderRadius: 12,
-    boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
+    background: '#141416',
+    border: '1px solid rgba(201, 169, 110, 0.25)',
+    borderRadius: 8,
+    boxShadow: '0 24px 48px rgba(0,0,0,0.50)',
     padding: '1.5rem',
   };
 
-  const iconBtnCls = 'p-2 rounded-full hover:bg-black/5 transition-colors duration-200 cursor-pointer outline-none flex items-center justify-center relative';
+  const iconBtnCls = 'p-2 rounded-full transition-colors duration-200 cursor-pointer outline-none flex items-center justify-center relative';
+
+  const isHome = location.pathname === '/';
 
   return (
     <>
@@ -111,16 +117,11 @@ const Navbar = () => {
         variants={headerVariants}
         initial="hidden"
         animate="visible"
-        className="fixed top-0 left-0 w-full z-50 transition-all duration-300 h-[76px] lg:h-[84px] flex items-center"
-        style={{
-          background: isScrolled
-            ? 'rgba(255,255,255,0.98)'
-            : 'rgba(255,255,255,0.95)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          borderBottom: `1px solid ${isScrolled ? 'rgba(198,166,107,0.35)' : 'rgba(198,166,107,0.20)'}`,
-          boxShadow: isScrolled ? '0 10px 30px rgba(0,0,0,0.06)' : '0 4px 20px rgba(0,0,0,0.03)',
-        }}
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 flex items-center ${
+          isScrolled || !isHome
+            ? 'h-[72px] lg:h-[78px] bg-[#0E0E10]/95 backdrop-blur-md border-b border-[rgba(201,169,110,0.20)] shadow-2xl'
+            : 'h-[88px] lg:h-[96px] bg-transparent border-b border-transparent shadow-none'
+        }`}
       >
         <div className="w-full max-w-[1440px] mx-auto px-4 md:px-8 xl:px-12 flex items-center justify-between gap-4 relative h-full">
 
@@ -129,15 +130,15 @@ const Navbar = () => {
             <Link to="/" className="flex items-center group" aria-label="IMPERIA – home">
               <ImperiaLogo
                 layout="icon"
-                variant="dark"
-                height={30}
-                className="xl:hidden transition-opacity duration-300 group-hover:opacity-80"
+                variant="light"
+                height={isScrolled ? 26 : 32}
+                className="xl:hidden transition-all duration-300 group-hover:opacity-80"
               />
               <ImperiaLogo
                 layout="lockup"
-                variant="dark"
-                height={30}
-                className="hidden xl:block transition-opacity duration-300 group-hover:opacity-80"
+                variant="light"
+                height={isScrolled ? 26 : 32}
+                className="hidden xl:block transition-all duration-300 group-hover:opacity-80"
               />
             </Link>
           </div>
@@ -157,18 +158,18 @@ const Navbar = () => {
                       onClick={() => navigate('/projects')}
                       className="relative flex items-center gap-1 py-1 px-1 cursor-pointer outline-none transition-colors"
                       style={navLinkStyle(isLinkActive(link))}
-                      onMouseEnter={e => { e.currentTarget.style.color = C.accent; }}
-                      onMouseLeave={e => { e.currentTarget.style.color = isLinkActive(link) ? C.accent : '#111111'; }}
+                      onMouseEnter={e => { e.currentTarget.style.color = '#C9A96E'; }}
+                      onMouseLeave={e => { e.currentTarget.style.color = (isLinkActive(link) || activeMegaMenu === 'projects') ? '#C9A96E' : '#F4F1EA'; }}
                     >
                       Projects
                       <ChevronDown
                         className="transition-transform duration-300"
-                        style={{ width: 13, height: 13, transform: activeMegaMenu === 'projects' ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                        style={{ width: 12, height: 12, transform: activeMegaMenu === 'projects' ? 'rotate(180deg)' : 'rotate(0deg)' }}
                       />
                       {isLinkActive(link) && (
                         <span
                           className="absolute -bottom-[20px] left-0 right-0 h-0.5"
-                          style={{ background: C.accent }}
+                          style={{ background: '#C9A96E' }}
                         />
                       )}
                     </button>
@@ -184,7 +185,7 @@ const Navbar = () => {
                           style={megaCardStyle}
                         >
                           <div>
-                            <p className="eyebrow-accent mb-3">Our Collections</p>
+                            <p className="eyebrow-accent mb-3 text-[#C9A96E]">Our Collections</p>
                             <ul className="space-y-3">
                               {[
                                 { to: '/projects', icon: Building, title: 'Architectural Villas', sub: 'Custom estates & oceanfront villas' },
@@ -195,12 +196,12 @@ const Navbar = () => {
                                   <Link
                                     to={item.to}
                                     onClick={() => setActiveMegaMenu(null)}
-                                    className="group flex items-start gap-3 p-1.5 rounded-md hover:bg-[#F8F6F2] transition-colors"
+                                    className="group flex items-start gap-3 p-1.5 rounded-md hover:bg-white/5 transition-colors"
                                   >
-                                    <item.icon className="w-4 h-4 mt-0.5" style={{ color: C.accent }} />
+                                    <item.icon className="w-4 h-4 mt-0.5 text-[#C9A96E]" />
                                     <div>
-                                      <p className="text-xs font-bold text-[#111111]">{item.title}</p>
-                                      <p className="text-[11px] text-[#6B6B6B] mt-0.5">{item.sub}</p>
+                                      <p className="text-xs font-bold text-[#F4F1EA]">{item.title}</p>
+                                      <p className="text-[11px] text-[#A09D96] mt-0.5">{item.sub}</p>
                                     </div>
                                   </Link>
                                 </li>
@@ -208,14 +209,14 @@ const Navbar = () => {
                             </ul>
                           </div>
 
-                          <div className="relative rounded-md overflow-hidden group border border-[rgba(198,166,107,0.2)]">
+                          <div className="relative rounded-md overflow-hidden group border border-[rgba(201,169,110,0.2)]">
                             <img
                               src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=400&q=80"
                               alt="Project Showcase"
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B]/80 via-transparent to-transparent p-4 flex flex-col justify-end">
-                              <p className="eyebrow-accent text-white/90">Curated Landmark</p>
+                              <p className="eyebrow-accent text-[#C9A96E]">Curated Landmark</p>
                               <p className="text-sm font-bold text-white" style={{ fontFamily: "'Playfair Display', serif" }}>Elysian Hills Estate</p>
                             </div>
                           </div>
@@ -238,13 +239,13 @@ const Navbar = () => {
                       onClick={() => navigate('/services')}
                       className="flex items-center gap-1 py-1 px-1 cursor-pointer outline-none transition-colors"
                       style={navLinkStyle(activeMegaMenu === 'services' || isLinkActive(link))}
-                      onMouseEnter={e => e.currentTarget.style.color = C.accent}
-                      onMouseLeave={e => { e.currentTarget.style.color = (activeMegaMenu === 'services' || isLinkActive(link)) ? C.accent : '#111111'; }}
+                      onMouseEnter={e => e.currentTarget.style.color = '#C9A96E'}
+                      onMouseLeave={e => { e.currentTarget.style.color = (activeMegaMenu === 'services' || isLinkActive(link)) ? '#C9A96E' : '#F4F1EA'; }}
                     >
                       Services
                       <ChevronDown
                         className="transition-transform duration-300"
-                        style={{ width: 13, height: 13, transform: activeMegaMenu === 'services' ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                        style={{ width: 12, height: 12, transform: activeMegaMenu === 'services' ? 'rotate(180deg)' : 'rotate(0deg)' }}
                       />
                     </button>
 
@@ -268,12 +269,12 @@ const Navbar = () => {
                               key={i}
                               to={item.to}
                               onClick={() => setActiveMegaMenu(null)}
-                              className="p-3 rounded-md flex items-start gap-3 hover:bg-[#F8F6F2] border border-[rgba(198,166,107,0.15)] transition-all"
+                              className="p-3 rounded-md flex items-start gap-3 hover:bg-white/5 border border-[rgba(201,169,110,0.15)] transition-all"
                             >
-                              <item.icon className="w-4 h-4 mt-0.5 shrink-0" style={{ color: C.accent }} />
+                              <item.icon className="w-4 h-4 mt-0.5 shrink-0 text-[#C9A96E]" />
                               <div>
-                                <p className="text-xs font-bold text-[#111111]">{item.title}</p>
-                                <p className="text-[11px] text-[#6B6B6B] mt-0.5 leading-relaxed">{item.sub}</p>
+                                <p className="text-xs font-bold text-[#F4F1EA]">{item.title}</p>
+                                <p className="text-[11px] text-[#A09D96] mt-0.5 leading-relaxed">{item.sub}</p>
                               </div>
                             </Link>
                           ))}
@@ -288,8 +289,8 @@ const Navbar = () => {
                 <Link
                   key={idx}
                   to={link.href}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = C.accent; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = isLinkActive(link) ? C.accent : '#111111'; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = '#C9A96E'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = isLinkActive(link) ? '#C9A96E' : '#F4F1EA'; }}
                   className="relative py-2 px-1 cursor-pointer outline-none transition-colors"
                   style={navLinkStyle(isLinkActive(link))}
                 >
@@ -297,7 +298,7 @@ const Navbar = () => {
                   {isLinkActive(link) && (
                     <span
                       className="absolute -bottom-[20px] left-0 right-0 h-0.5"
-                      style={{ background: C.accent }}
+                      style={{ background: '#C9A96E' }}
                     />
                   )}
                 </Link>
@@ -314,9 +315,9 @@ const Navbar = () => {
               title="My Wishlist"
               aria-label="View Wishlist"
             >
-              <Heart className="w-5 h-5 stroke-[2] text-[#111111] hover:text-[#C6A66B] transition-colors" />
+              <Heart className="w-5 h-5 stroke-[1.8] text-[#F4F1EA] hover:text-[#C9A96E] transition-colors" />
               {wishlistCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#C6A66B] text-white text-[9px] font-extrabold rounded-full flex items-center justify-center shadow-xs">
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#C9A96E] text-[#0B0B0B] text-[9px] font-extrabold rounded-full flex items-center justify-center shadow-xs">
                   {wishlistCount}
                 </span>
               )}
@@ -329,9 +330,9 @@ const Navbar = () => {
               title="Compare Properties"
               aria-label="Compare Properties"
             >
-              <Scale className="w-5 h-5 stroke-[2] text-[#111111] hover:text-[#C6A66B] transition-colors" />
+              <Scale className="w-5 h-5 stroke-[1.8] text-[#F4F1EA] hover:text-[#C9A96E] transition-colors" />
               {compareCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#0B0B0B] text-white text-[9px] font-extrabold rounded-full flex items-center justify-center shadow-xs">
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#C9A96E] text-[#0B0B0B] text-[9px] font-extrabold rounded-full flex items-center justify-center shadow-xs">
                   {compareCount}
                 </span>
               )}
@@ -344,7 +345,7 @@ const Navbar = () => {
                 className={iconBtnCls}
                 aria-label={currentUser ? 'Account menu' : 'Log in'}
               >
-                <User className="w-5 h-5 stroke-[2] text-[#111111] hover:text-[#C6A66B] transition-colors" />
+                <User className="w-5 h-5 stroke-[1.8] text-[#F4F1EA] hover:text-[#C9A96E] transition-colors" />
               </button>
 
               <AnimatePresence>
@@ -353,65 +354,65 @@ const Navbar = () => {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 6 }}
-                    className="absolute right-0 top-full mt-2 w-64 bg-white border border-[rgba(198,166,107,0.3)] rounded-xl shadow-2xl p-3 text-xs font-sans z-50"
+                    className="absolute right-0 top-full mt-2 w-64 bg-[#141416] border border-[rgba(201,169,110,0.25)] rounded-xl shadow-2xl p-3 text-xs font-sans z-50"
                   >
-                    <div className="px-3 py-2 border-b border-[rgba(198,166,107,0.2)] mb-1">
-                      <p className="font-bold text-[#111111] truncate">{currentUser.name}</p>
-                      <p className="text-[11px] text-[#6B6B6B] truncate">{currentUser.email}</p>
+                    <div className="px-3 py-2 border-b border-[rgba(201,169,110,0.2)] mb-1">
+                      <p className="font-bold text-[#F4F1EA] truncate">{currentUser.name}</p>
+                      <p className="text-[11px] text-[#A09D96] truncate">{currentUser.email}</p>
                     </div>
 
                     {currentUser.role === 'admin' && (
-                      <Link to="/admin" onClick={() => setAccountOpen(false)} className="block px-3 py-2 rounded-lg text-[#111111] hover:bg-[#F8F6F2] font-extrabold border-b border-[rgba(198,166,107,0.15)] mb-1">
+                      <Link to="/admin" onClick={() => setAccountOpen(false)} className="block px-3 py-2 rounded-lg text-[#F4F1EA] hover:bg-white/5 font-extrabold border-b border-[rgba(201,169,110,0.15)] mb-1">
                         Admin Portal
                       </Link>
                     )}
 
-                    <Link to="/dashboard" onClick={() => setAccountOpen(false)} className="flex items-center justify-between px-3 py-2 rounded-lg text-[#111111] hover:bg-[#F8F6F2] font-semibold">
+                    <Link to="/dashboard" onClick={() => setAccountOpen(false)} className="flex items-center justify-between px-3 py-2 rounded-lg text-[#F4F1EA] hover:bg-white/5 font-semibold">
                       <span className="flex items-center gap-2">
-                        <LayoutDashboard className="w-3.5 h-3.5 text-[#C6A66B]" />
+                        <LayoutDashboard className="w-3.5 h-3.5 text-[#C9A96E]" />
                         VIP Dashboard
                       </span>
                     </Link>
 
-                    <Link to="/profile" onClick={() => setAccountOpen(false)} className="flex items-center justify-between px-3 py-2 rounded-lg text-[#111111] hover:bg-[#F8F6F2] font-semibold">
+                    <Link to="/profile" onClick={() => setAccountOpen(false)} className="flex items-center justify-between px-3 py-2 rounded-lg text-[#F4F1EA] hover:bg-white/5 font-semibold">
                       <span className="flex items-center gap-2">
-                        <User className="w-3.5 h-3.5 text-[#6B6B6B]" />
+                        <User className="w-3.5 h-3.5 text-[#A09D96]" />
                         Profile Settings
                       </span>
                     </Link>
 
-                    <Link to="/wishlist" onClick={() => setAccountOpen(false)} className="flex items-center justify-between px-3 py-2 rounded-lg text-[#111111] hover:bg-[#F8F6F2] font-semibold">
+                    <Link to="/wishlist" onClick={() => setAccountOpen(false)} className="flex items-center justify-between px-3 py-2 rounded-lg text-[#F4F1EA] hover:bg-white/5 font-semibold">
                       <span className="flex items-center gap-2">
                         <Heart className="w-3.5 h-3.5 text-rose-500" />
                         My Wishlist
                       </span>
                       {wishlistCount > 0 && (
-                        <span className="px-1.5 py-0.5 bg-[#C6A66B] text-white text-[10px] font-bold rounded-full">
+                        <span className="px-1.5 py-0.5 bg-[#C9A96E] text-[#0B0B0B] text-[10px] font-bold rounded-full">
                           {wishlistCount}
                         </span>
                       )}
                     </Link>
 
-                    <Link to="/compare" onClick={() => setAccountOpen(false)} className="flex items-center justify-between px-3 py-2 rounded-lg text-[#111111] hover:bg-[#F8F6F2] font-semibold">
+                    <Link to="/compare" onClick={() => setAccountOpen(false)} className="flex items-center justify-between px-3 py-2 rounded-lg text-[#F4F1EA] hover:bg-white/5 font-semibold">
                       <span className="flex items-center gap-2">
-                        <Scale className="w-3.5 h-3.5 text-[#111111]" />
+                        <Scale className="w-3.5 h-3.5 text-[#C9A96E]" />
                         Compare Estates
                       </span>
                       {compareCount > 0 && (
-                        <span className="px-1.5 py-0.5 bg-[#0B0B0B] text-white text-[10px] font-bold rounded-full">
+                        <span className="px-1.5 py-0.5 bg-[#C9A96E] text-[#0B0B0B] text-[10px] font-bold rounded-full">
                           {compareCount}
                         </span>
                       )}
                     </Link>
 
-                    <Link to="/my-bookings" onClick={() => setAccountOpen(false)} className="flex items-center justify-between px-3 py-2 rounded-lg text-[#111111] hover:bg-[#F8F6F2] font-semibold">
+                    <Link to="/my-bookings" onClick={() => setAccountOpen(false)} className="flex items-center justify-between px-3 py-2 rounded-lg text-[#F4F1EA] hover:bg-white/5 font-semibold">
                       <span className="flex items-center gap-2">
-                        <Calendar className="w-3.5 h-3.5 text-emerald-600" />
+                        <Calendar className="w-3.5 h-3.5 text-emerald-400" />
                         My Bookings
                       </span>
                     </Link>
 
-                    <button onClick={() => { logoutUser(); setAccountOpen(false); }} className="w-full flex items-center gap-2 text-left px-3 py-2 rounded-lg text-rose-600 hover:bg-rose-50 font-bold mt-1 border-t border-[rgba(198,166,107,0.15)]">
+                    <button onClick={() => { logoutUser(); setAccountOpen(false); }} className="w-full flex items-center gap-2 text-left px-3 py-2 rounded-lg text-rose-400 hover:bg-rose-500/10 font-bold mt-1 border-t border-[rgba(201,169,110,0.15)]">
                       <LogOut className="w-3.5 h-3.5" />
                       Log Out
                     </button>
@@ -420,10 +421,10 @@ const Navbar = () => {
               </AnimatePresence>
             </div>
 
-            {/* Filled Ink Pill CTA Button */}
+            {/* Gold Outline to Solid Fill Luxury CTA Button */}
             <button
               onClick={openBookModal}
-              className="bg-[#0B0B0B] hover:bg-[#C6A66B] hover:text-[#0B0B0B] text-white rounded-full px-6 py-2.5 text-xs font-extrabold uppercase tracking-wider transition-all duration-300 shadow-md cursor-pointer"
+              className="border border-[#C9A96E] text-[#F4F1EA] hover:bg-[#C9A96E] hover:text-[#0B0B0B] rounded-full px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] transition-all duration-300 shadow-md cursor-pointer"
             >
               Book a Visit
             </button>
@@ -431,18 +432,17 @@ const Navbar = () => {
 
           {/* Mobile Quick Wishlist/Compare & Menu Trigger */}
           <div className="flex items-center gap-2 lg:hidden">
-            <Link to="/wishlist" className="p-2 text-[#4a4a4f] relative" title="Wishlist">
+            <Link to="/wishlist" className="p-2 text-[#F4F1EA] hover:text-[#C9A96E] relative transition-colors" title="Wishlist">
               <Heart className="w-5 h-5" />
               {wishlistCount > 0 && (
-                <span className="absolute top-0 right-0 w-4 h-4 bg-[#A98A5B] text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                <span className="absolute top-0 right-0 w-4 h-4 bg-[#C9A96E] text-[#0B0B0B] text-[9px] font-extrabold rounded-full flex items-center justify-center shadow-xs">
                   {wishlistCount}
                 </span>
               )}
             </Link>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={iconBtnCls}
-              style={{ color: C.graphite }}
+              className="p-2 rounded-full text-[#F4F1EA] hover:text-[#C9A96E] transition-colors duration-200 cursor-pointer outline-none flex items-center justify-center relative"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

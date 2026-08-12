@@ -37,45 +37,41 @@ const Wishlist = () => {
 
   if (!currentUser) {
     return (
-      <div className="min-h-screen bg-[#E0EEE9] text-[#363C46]">
-        <div className="pt-[64px] lg:pt-[72px]">
-          <PageHero
-            image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
-            breadcrumbs={[
-              { label: 'Home', href: '/' },
-              { label: 'Wishlist' },
-            ]}
-            eyebrow="VIP ACCESS REQUIRED"
-            heading={
-              <>Private <span className="font-normal text-[#5D6472]">Saved Collection</span></>
-            }
-            description="Log in to access your saved estates, manage wishlist items, and schedule private chauffeur-driven walkthroughs."
-          />
-        </div>
+      <div className="min-h-screen bg-[#F7F6F3] text-[#16161a] pb-20">
+        <PageHero
+          image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
+          breadcrumbs={[
+            { label: 'Home', href: '/' },
+            { label: 'Wishlist' },
+          ]}
+          eyebrow="VIP ACCESS REQUIRED"
+          heading="Private Saved Collection"
+          description="Please log in to your IMPERIA account to view your private saved portfolio."
+        />
         <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 text-center space-y-6 font-sans">
-          <div className="max-w-md mx-auto p-8 sm:p-10 rounded-xl bg-white border border-[rgba(93,100,114,0.15)] shadow-[0_12px_32px_rgba(54,60,70,0.06)] space-y-5">
-            <div className="w-16 h-16 rounded-full bg-[rgba(207,182,168,0.15)] border border-[#CFB6A8] text-[#CFB6A8] flex items-center justify-center mx-auto shadow-xs">
-              <Sparkles className="w-8 h-8" />
+          <div className="max-w-md mx-auto p-8 sm:p-10 rounded-2xl bg-white border border-[rgba(201,169,110,0.30)] shadow-[0_15px_40px_rgba(0,0,0,0.08)] space-y-6">
+            <div className="w-16 h-16 rounded-2xl bg-[rgba(201,169,110,0.15)] border border-[rgba(201,169,110,0.30)] text-[#C9A96E] flex items-center justify-center mx-auto shadow-sm">
+              <Sparkles className="w-8 h-8 text-[#C9A96E]" />
             </div>
             <h3
-              className="text-2xl font-bold text-[#363C46] tracking-tight"
-              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+              className="text-2xl sm:text-3xl font-bold text-[#0B0B0B] tracking-tight"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
             >
               Please Log In to Continue
             </h3>
-            <p className="text-xs text-[#5D6472] leading-relaxed font-normal">
+            <p className="text-xs sm:text-sm text-[#555555] leading-relaxed font-semibold">
               Wishlist features are reserved for registered account holders. Please sign in to view and manage your saved luxury properties.
             </p>
             <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={() => navigate('/login')}
-                className="px-8 py-3 bg-[#363C46] hover:bg-[#1A1A1A] text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow-xs transition-all cursor-pointer"
+                className="px-6 py-3.5 bg-[#0E0E10] text-[#F4F1EA] hover:bg-[#C9A96E] hover:text-[#0B0B0B] text-xs font-extrabold uppercase tracking-widest rounded-xl shadow-md transition-all cursor-pointer border border-[rgba(201,169,110,0.35)]"
               >
                 Continue to Login
               </button>
               <button
                 onClick={() => navigate('/signup')}
-                className="px-8 py-3 border border-[rgba(93,100,114,0.20)] bg-white text-[#363C46] hover:border-[#CFB6A8] text-xs font-bold uppercase tracking-wider rounded-lg shadow-xs transition-all cursor-pointer"
+                className="px-6 py-3.5 bg-white border border-[rgba(201,169,110,0.40)] text-[#0B0B0B] hover:border-[#C9A96E] hover:bg-[rgba(201,169,110,0.10)] text-xs font-extrabold uppercase tracking-widest rounded-xl shadow-xs transition-all cursor-pointer"
               >
                 Create Account
               </button>
@@ -87,22 +83,18 @@ const Wishlist = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#E0EEE9] text-[#363C46]">
+    <div className="min-h-screen bg-[#F7F6F3] text-[#16161a] pb-20">
       {/* Page Hero */}
-      <div className="pt-[64px] lg:pt-[72px]">
-        <PageHero
-          image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Wishlist' },
-          ]}
-          eyebrow="SAVED COLLECTION"
-          heading={
-            <>Your Saved <span className="font-normal text-[#5D6472]">Estates</span></>
-          }
-          description="A curated private portfolio of your saved luxury properties for comparison, private tours, and investment consultations."
-        />
-      </div>
+      <PageHero
+        image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Wishlist' },
+        ]}
+        eyebrow="SAVED COLLECTION"
+        heading="Your Saved Estates"
+        description="A curated private portfolio of your saved luxury properties for comparison, private tours, and investment consultations."
+      />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 space-y-20 font-sans">
         {/* Empty State */}
@@ -118,8 +110,8 @@ const Wishlist = () => {
         ) : (
           /* Wishlist Grid */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {wishlistItems.map((prop) => {
-              const propId = prop.id || prop._id;
+            {wishlistItems.map((prop, idx) => {
+              const propId = prop.id || prop._id || `wishlist-item-${idx}`;
               const isCompared = Array.isArray(compareList) && compareList.some(item => item && ((item.id || item._id) === propId || item === propId));
               return (
                 <motion.div
@@ -231,8 +223,8 @@ const Wishlist = () => {
             <SectionHeader tag="VIEWING TRACKER" title="Recently Viewed Estates" />
 
             <div className="flex gap-6 overflow-x-auto pb-4 custom-scrollbar">
-              {recentlyViewed.map((prop) => {
-                const recId = prop.id || prop._id;
+              {recentlyViewed.map((prop, idx) => {
+                const recId = prop.id || prop._id || `recently-viewed-${idx}`;
                 return (
                   <div
                     key={recId}

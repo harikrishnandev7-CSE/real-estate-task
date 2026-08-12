@@ -190,9 +190,18 @@ const DashboardPage = () => {
           </div>
 
           {recommendedProperties.length === 0 ? (
-            <div className="p-12 rounded-3xl bg-white border border-[#E8E4DA] text-center space-y-3 shadow-[0_20px_40px_rgba(0,0,0,0.06)]">
-              <p className="text-[#8A8A85] text-xs font-normal">No exact matches found for your criteria. Broaden your location or budget preferences in Profile Settings.</p>
-              <Link to="/profile" className="inline-block px-6 py-2.5 bg-[#1A1A1A] hover:bg-black text-white text-xs font-bold rounded-full uppercase tracking-wider shadow-md">Update Profile</Link>
+            <div className="p-12 rounded-3xl bg-white border border-[#E8E4DA] text-center space-y-4 shadow-[0_20px_40px_rgba(0,0,0,0.06)]">
+              <p className="text-[#8A8A85] text-xs font-medium max-w-lg mx-auto leading-relaxed">
+                No exact matches found for your active criteria. Broaden your location or budget preferences in Profile Settings to unlock personalized recommendations.
+              </p>
+              <Link
+                to="/profile"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#C9A96E] hover:bg-[#0E0E10] text-[#0B0B0B] hover:text-[#F4F1EA] text-xs font-extrabold rounded-full uppercase tracking-wider shadow-md border border-[#C9A96E] transition-all cursor-pointer"
+                style={{ color: '#0B0B0B' }}
+              >
+                <Settings className="w-4 h-4 text-[#0B0B0B]" />
+                <span>Update Profile</span>
+              </Link>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -288,7 +297,7 @@ const DashboardPage = () => {
             </div>
             <button
               onClick={() => openBookModal()}
-              className="px-5 py-2.5 bg-[#1A1A1A] hover:bg-black text-white text-xs font-bold rounded-full uppercase tracking-wider cursor-pointer shadow-md transition-all"
+              className="px-5 py-2.5 bg-[#0E0E10] hover:bg-[#C9A96E] text-[#F4F1EA] hover:text-[#0B0B0B] border border-[#C9A96E]/40 text-xs font-extrabold rounded-full uppercase tracking-wider cursor-pointer shadow-md transition-all"
             >
               Book New Visit
             </button>

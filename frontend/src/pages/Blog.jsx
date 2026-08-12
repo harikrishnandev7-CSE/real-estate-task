@@ -6,7 +6,7 @@ import { useApp } from '../context/AppContext';
 import PageHero from '../components/PageHero';
 
 const Blog = () => {
-  const { showToast } = useApp();
+  const { blogs = [], showToast } = useApp();
   const shouldReduceMotion = useReducedMotion();
   const [activeCategory, setActiveCategory] = useState('All');
   const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
@@ -14,7 +14,7 @@ const Blog = () => {
 
   const categories = ['All', 'Market Intelligence', 'Design & Style', 'Investment Guides'];
 
-  const articles = [
+  const articlesList = Array.isArray(blogs) && blogs.length > 0 ? blogs : [
     {
       id: "art-1",
       title: "The Rise of Branded Residences in South India",
@@ -65,41 +65,37 @@ const Blog = () => {
     e.preventDefault();
     if (emailVal) {
       setNewsletterSubscribed(true);
-      showToast("Subscribed to IMPERIA Intelligence Briefing.");
+      showToast("Subscribed to IMPERIA Intelligence Briefings.");
     }
   };
 
-  const filteredArticles = articles.filter(a => activeCategory === 'All' || a.category === activeCategory);
+  const filteredArticles = articlesList.filter(a => activeCategory === 'All' || a.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
-      <div className="pt-[64px] lg:pt-[72px]">
-        <PageHero
-          image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Editorial Insights' },
-          ]}
-          eyebrow="IMPERIA JOURNAL"
-          heading={
-            <>Market Intelligence &amp; <span className="font-normal text-[#5D6472]">Luxury Trends</span></>
-          }
-          description="Curated essays, tax compliance briefs, and architectural analyses published by our private office."
-        />
-      </div>
+    <div className="min-h-screen bg-[#F7F6F3] text-[#16161a] font-sans pb-20">
+      <PageHero
+        image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=85"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Insights & Journal' },
+        ]}
+        eyebrow="IMPERIA JOURNAL"
+        heading="Market Intelligence & Luxury Trends"
+        description="Curated essays, tax compliance briefs, and architectural analyses published by our private office."
+      />
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 space-y-16 font-sans">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 space-y-12 font-sans">
         
         {/* Category Pills */}
-        <div className="flex flex-wrap gap-2 justify-center border-b border-[rgba(93,100,114,0.15)] pb-6">
+        <div className="flex flex-wrap gap-3 justify-center border-b border-[rgba(22,22,26,0.10)] pb-6">
           {categories.map((c) => (
             <button
               key={c}
               onClick={() => setActiveCategory(c)}
-              className={`px-5 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              className={`px-6 py-2.5 rounded-full text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
                 activeCategory === c
-                  ? 'bg-[#363C46] text-white shadow-xs'
-                  : 'bg-white border border-[rgba(93,100,114,0.15)] text-[#5D6472] hover:text-[#363C46]'
+                  ? 'bg-[#C9A96E] text-[#0B0B0B] font-bold shadow-xs'
+                  : 'bg-white border border-[rgba(22,22,26,0.10)] text-[#6B6B6B] hover:text-[#0B0B0B] hover:border-[#C9A96E]'
               }`}
             >
               {c}
@@ -111,30 +107,30 @@ const Blog = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredArticles.map((art) => (
             <article
-              key={art.id}
-              className="group border border-[rgba(93,100,114,0.15)] hover:border-[#CFB6A8] rounded-xl overflow-hidden bg-white shadow-[0_12px_32px_rgba(54,60,70,0.06)] transition-all cursor-pointer flex flex-col justify-between"
+              key={art.id || art._id}
+              className="group border border-[rgba(22,22,26,0.10)] hover:border-[#C9A96E] rounded-lg overflow-hidden bg-white shadow-xs hover:shadow-xl transition-all cursor-pointer flex flex-col justify-between"
             >
-              <div className="relative h-[220px] overflow-hidden bg-[#E0EEE9]">
+              <div className="relative h-[230px] overflow-hidden bg-[#141416]">
                 <ImageWithSkeleton
-                  src={art.image}
+                  src={art.image || art.imageUrl || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80"}
                   alt={art.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
               <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
                 <div className="space-y-2">
-                  <span className="text-[10px] uppercase font-bold text-[#CFB6A8]">{art.category}</span>
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-[#C9A96E]">{art.category}</span>
                   <h3
-                    className="text-lg font-bold text-[#363C46] tracking-tight group-hover:text-[#CFB6A8] transition-colors"
-                    style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                    className="text-lg font-bold text-[#16161a] tracking-tight group-hover:text-[#C9A96E] transition-colors leading-snug"
+                    style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
                   >
                     {art.title}
                   </h3>
-                  <p className="text-xs text-[#5D6472] leading-relaxed line-clamp-2">{art.excerpt}</p>
+                  <p className="text-xs text-[#6B6B6B] leading-relaxed line-clamp-2">{art.excerpt || art.description}</p>
                 </div>
-                <div className="pt-4 border-t border-[rgba(93,100,114,0.15)] flex justify-between items-center text-[10px] text-[#5D6472] font-bold">
-                  <span>{art.date}</span>
-                  <span>{art.readTime}</span>
+                <div className="pt-4 border-t border-[rgba(22,22,26,0.08)] flex justify-between items-center text-[10px] text-[#6B6B6B] font-semibold">
+                  <span>{art.date || "July 2026"}</span>
+                  <span>{art.readTime || "5 Min Read"}</span>
                 </div>
               </div>
             </article>
@@ -142,18 +138,18 @@ const Blog = () => {
         </div>
 
         {/* Newsletter Signup Banner */}
-        <div className="p-8 md:p-12 rounded-xl bg-white border border-[rgba(93,100,114,0.15)] shadow-[0_12px_32px_rgba(54,60,70,0.06)] text-center space-y-6 max-w-3xl mx-auto">
-          <div className="w-12 h-12 rounded-lg bg-[rgba(207,182,168,0.15)] text-[#CFB6A8] flex items-center justify-center mx-auto">
+        <div className="p-8 md:p-12 rounded-xl bg-[#0E0E10] text-[#F4F1EA] border border-[rgba(201,169,110,0.25)] shadow-2xl text-center space-y-6 max-w-3xl mx-auto">
+          <div className="w-12 h-12 rounded-full bg-[rgba(201,169,110,0.15)] text-[#C9A96E] flex items-center justify-center mx-auto">
             <Mail className="w-6 h-6" />
           </div>
           <div className="space-y-2">
             <h3
-              className="text-2xl font-bold text-[#363C46] tracking-tight"
-              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+              className="text-2xl md:text-3xl font-medium tracking-tight text-[#F4F1EA]"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
             >
               Subscribe to Private Briefings
             </h3>
-            <p className="text-xs text-[#5D6472] max-w-md mx-auto">
+            <p className="text-xs text-[rgba(244,241,234,0.70)] max-w-md mx-auto leading-relaxed">
               Receive confidential market reports, off-market opportunities, and legal regulatory updates directly in your inbox.
             </p>
           </div>
@@ -164,18 +160,18 @@ const Blog = () => {
                 placeholder="Enter your private email..."
                 value={emailVal}
                 onChange={(e) => setEmailVal(e.target.value)}
-                className="flex-1 bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] rounded-lg px-4 py-3 text-xs text-[#363C46] outline-none focus:border-[#CFB6A8]"
+                className="flex-1 bg-white/5 border border-white/15 rounded-md px-4 py-3 text-xs text-[#F4F1EA] outline-none focus:border-[#C9A96E]"
                 required
               />
               <button
                 type="submit"
-                className="px-6 py-3 bg-[#363C46] hover:bg-[#1A1A1A] text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow-xs cursor-pointer transition-all shrink-0"
+                className="px-6 py-3 bg-[#C9A96E] hover:bg-[#E5D3A3] text-[#0B0B0B] text-xs font-bold uppercase tracking-wider rounded-md shadow-xs cursor-pointer transition-all shrink-0"
               >
                 Subscribe
               </button>
             </form>
           ) : (
-            <p className="text-xs text-emerald-600 font-bold">You are subscribed to IMPERIA Intelligence Briefings.</p>
+            <p className="text-xs text-[#C9A96E] font-bold">You are subscribed to IMPERIA Intelligence Briefings.</p>
           )}
         </div>
 

@@ -115,7 +115,7 @@ const AdminDashboard = () => {
           const [cx, cy] = coord.split(',').map(Number);
           return (
             <g key={`dot-${idx}-${coord}`}>
-              <circle cx={cx} cy={cy} r="5" fill="#363C46" stroke="#CFB6A8" strokeWidth="2.5" />
+              <circle cx={cx} cy={cy} r="5" fill="#0E0E10" stroke="#C9A96E" strokeWidth="2.5" />
             </g>
           );
         })}
@@ -162,15 +162,15 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
         {/* Left Column: Analytics Chart */}
-        <div className="lg:col-span-8 bg-white border border-[rgba(93,100,114,0.15)] rounded-xl p-6 sm:p-7 shadow-[0_12px_32px_rgba(54,60,70,0.06)] space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[rgba(93,100,114,0.15)] pb-5">
+        <div className="lg:col-span-8 bg-white border border-[rgba(201,169,110,0.30)] rounded-2xl p-6 sm:p-7 shadow-[0_12px_32px_rgba(0,0,0,0.05)] space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[rgba(201,169,110,0.20)] pb-5">
             <div>
-              <span className="text-[10px] uppercase tracking-[0.25em] text-[#CFB6A8] font-bold block font-sans">
+              <span className="text-[10px] uppercase tracking-[0.25em] text-[#C9A96E] font-extrabold block font-sans">
                 PERFORMANCE METRICS
               </span>
               <h3
-                className="text-xl font-bold text-[#363C46] tracking-tight"
-                style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                className="text-xl font-bold text-[#0B0B0B] tracking-tight"
+                style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
               >
                 Lead Acquisition &amp; Traffic Trends
               </h3>
@@ -187,21 +187,21 @@ const AdminDashboard = () => {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4 bg-[#E0EEE9]/40 p-4 rounded-lg border border-[rgba(93,100,114,0.15)] font-sans">
+          <div className="grid grid-cols-2 gap-4 bg-[#F8F6F2] p-4 rounded-xl border border-[rgba(201,169,110,0.20)] font-sans">
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-[#5D6472] font-bold">Total Inquiries</p>
+              <p className="text-[10px] uppercase tracking-wider text-[#6B6B6B] font-bold">Total Inquiries</p>
               <p
-                className="text-2xl font-bold text-[#363C46]"
-                style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                className="text-2xl font-bold text-[#0B0B0B]"
+                style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
               >
                 {currentChart.totalEnquiries}
               </p>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-[#5D6472] font-bold">Conversion Rate</p>
+              <p className="text-[10px] uppercase tracking-wider text-[#6B6B6B] font-bold">Conversion Rate</p>
               <p
-                className="text-2xl font-bold text-[#CFB6A8]"
-                style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                className="text-2xl font-bold text-[#C9A96E]"
+                style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
               >
                 {currentChart.conversion}
               </p>
@@ -217,10 +217,10 @@ const AdminDashboard = () => {
         <div className="lg:col-span-4 space-y-6">
           
           {/* Quick Actions Panel */}
-          <div className="bg-white border border-[rgba(93,100,114,0.15)] rounded-xl p-6 shadow-[0_12px_32px_rgba(54,60,70,0.06)] space-y-4">
+          <div className="bg-white border border-[rgba(201,169,110,0.30)] rounded-2xl p-6 shadow-[0_12px_32px_rgba(0,0,0,0.05)] space-y-4">
             <h4
-              className="text-sm font-bold text-[#363C46] uppercase tracking-wider"
-              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+              className="text-xs font-bold text-[#0B0B0B] uppercase tracking-wider"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
             >
               Control Actions
             </h4>
@@ -228,48 +228,48 @@ const AdminDashboard = () => {
             <div className="space-y-2.5">
               <button
                 onClick={() => navigate('/admin/properties/new')}
-                className="w-full py-3 px-4 bg-[#363C46] hover:bg-[#1A1A1A] text-white rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-between transition-all shadow-xs cursor-pointer"
+                className="w-full py-3.5 px-4 bg-[#0E0E10] hover:bg-[#C9A96E] text-[#F4F1EA] hover:text-[#0B0B0B] rounded-xl text-xs font-extrabold uppercase tracking-wider flex items-center justify-between transition-all shadow-md cursor-pointer border border-[#C9A96E]"
               >
                 <span className="flex items-center gap-2">
-                  <PlusCircle className="w-4 h-4 text-[#CFB6A8]" />
+                  <PlusCircle className="w-4 h-4 text-[#C9A96E] group-hover:text-[#0B0B0B]" />
                   Add New Property
                 </span>
-                <ArrowRight className="w-4 h-4 text-[#CFB6A8]" />
+                <ArrowRight className="w-4 h-4" />
               </button>
 
               <button
-                onClick={() => navigate('/admin/visits')}
-                className="w-full py-3 px-4 bg-white border border-[rgba(93,100,114,0.20)] hover:border-[#363C46] text-[#363C46] rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-between transition-all shadow-xs cursor-pointer"
+                onClick={() => navigate('/admin/site-visits')}
+                className="w-full py-3.5 px-4 bg-[#F8F6F2] hover:bg-[#0E0E10] text-[#0B0B0B] hover:text-[#F4F1EA] border border-[rgba(201,169,110,0.30)] rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-between transition-all shadow-xs cursor-pointer"
               >
                 <span className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-[#CFB6A8]" />
+                  <Calendar className="w-4 h-4 text-[#C9A96E]" />
                   Schedule Site Visit
                 </span>
-                <ArrowRight className="w-4 h-4 text-[#CFB6A8]" />
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>
 
           {/* Activity Log Feed */}
-          <div className="bg-white border border-[rgba(93,100,114,0.15)] rounded-xl p-6 shadow-[0_12px_32px_rgba(54,60,70,0.06)] space-y-4">
-            <div className="flex justify-between items-center border-b border-[rgba(93,100,114,0.15)] pb-3">
+          <div className="bg-white border border-[rgba(201,169,110,0.30)] rounded-2xl p-6 shadow-[0_12px_32px_rgba(0,0,0,0.05)] space-y-4">
+            <div className="flex justify-between items-center border-b border-[rgba(201,169,110,0.20)] pb-3">
               <h4
-                className="text-xs font-bold text-[#363C46] uppercase tracking-wider"
-                style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+                className="text-xs font-bold text-[#0B0B0B] uppercase tracking-wider"
+                style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
               >
                 Real-Time Activity
               </h4>
-              <span className="text-[10px] text-[#CFB6A8] font-bold">Live Stream</span>
+              <span className="text-[10px] text-[#C9A96E] font-extrabold">Live Stream</span>
             </div>
 
             <div className="space-y-4 text-xs font-sans">
               {mockActivities.map(act => (
                 <div key={act.id} className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#CFB6A8] mt-1.5 shrink-0" />
+                  <div className="w-2 h-2 rounded-full bg-[#C9A96E] mt-1.5 shrink-0" />
                   <div className="space-y-0.5">
-                    <p className="font-bold text-[#363C46] text-xs">{act.title}</p>
-                    <p className="text-[11px] text-[#5D6472]">{act.desc}</p>
-                    <span className="text-[10px] text-[#5D6472]/70 font-medium block pt-0.5">{act.time}</span>
+                    <p className="font-bold text-[#0B0B0B] text-xs">{act.title}</p>
+                    <p className="text-[11px] text-[#6B6B6B] font-medium">{act.desc}</p>
+                    <span className="text-[10px] text-[#6B6B6B]/80 font-medium block pt-0.5">{act.time}</span>
                   </div>
                 </div>
               ))}

@@ -166,24 +166,19 @@ const HomeFinancingPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F4F1EA] text-[#1A1A1A]">
-      
+    <div className="min-h-screen bg-[#F7F6F3] text-[#16161a] pb-20">
       {/* Hero Banner */}
-      <div className="pt-[64px] lg:pt-[72px]">
-        <PageHero
-          image="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1600&q=80"
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Services', href: '/services' },
-            { label: 'Home Financing' },
-          ]}
-          eyebrow="PRIVATE BANKING DESK"
-          heading={
-            <>Bespoke Home Financing & <span className="font-normal text-[#8A8A85]">Debt Structuring</span></>
-          }
-          description="Institutional debt advisory, express 48-hour approvals, and ultra-low interest rates through our direct collaborations with Tier-1 private banking networks."
-        />
-      </div>
+      <PageHero
+        image="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1600&q=80"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Services', href: '/services' },
+          { label: 'Home Financing' },
+        ]}
+        eyebrow="PRIVATE BANKING DESK"
+        heading="Bespoke Home Financing & Debt Structuring"
+        description="Institutional debt advisory, express 48-hour approvals, and ultra-low interest rates through our direct collaborations with Tier-1 private banking networks."
+      />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 space-y-24 font-sans">
         

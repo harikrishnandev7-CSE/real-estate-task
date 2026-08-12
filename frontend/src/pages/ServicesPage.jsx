@@ -67,21 +67,17 @@ const ServicesPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
-      <div className="pt-[64px] lg:pt-[72px]">
-        <PageHero
-          image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Services' },
-          ]}
-          eyebrow="IMPERIA CONCIERGE SUITE"
-          heading={
-            <>Comprehensive Advisory <span className="font-normal text-[#5D6472]">Services</span></>
-          }
-          description="End-to-end luxury real estate advisory spanning title due diligence, interior architectural design, home financing, and high-yield asset sales."
-        />
-      </div>
+    <div className="min-h-screen bg-[#F7F6F3] text-[#16161a] font-sans pb-20">
+      <PageHero
+        image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Services' },
+        ]}
+        eyebrow="IMPERIA CONCIERGE SUITE"
+        heading="Comprehensive Advisory Services"
+        description="End-to-end luxury real estate advisory spanning title due diligence, interior architectural design, home financing, and high-yield asset sales."
+      />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 space-y-16 font-sans">
         {/* OFFERINGS GRID */}

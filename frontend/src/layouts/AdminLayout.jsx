@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, createContext, useContext } from 'react';
 import { Link, useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -69,6 +69,14 @@ const NAV_GROUPS = [
   }
 ];
 
+// Context for sidebar collapsed state
+const AdminLayoutContext = createContext({
+  collapsed: false,
+  setCollapsed: () => {},
+});
+
+export const useAdminLayout = () => useContext(AdminLayoutContext);
+
 const AdminLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -109,36 +117,28 @@ const AdminLayout = () => {
   // Auth & Role Guard Check
   if (!currentUser) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-6 py-20 font-sans" style={{ background: '#E0EEE9' }}>
-        <div
-          className="max-w-md w-full p-8 text-center space-y-6"
-          style={{ background: '#FFFFFF', border: '1px solid rgba(93,100,114,0.15)', borderRadius: 10, boxShadow: '0 20px 48px rgba(54,60,70,0.08)' }}
-        >
-          <div
-            className="w-16 h-16 rounded-full flex items-center justify-center mx-auto"
-            style={{ background: 'rgba(207,182,168,0.12)', border: '1px solid rgba(207,182,168,0.28)', color: '#CFB6A8' }}
-          >
+      <div className="min-h-screen flex items-center justify-center px-6 py-20 font-sans bg-[#F7F6F3]">
+        <div className="max-w-md w-full p-8 text-center space-y-6 bg-white border border-[rgba(201,169,110,0.30)] rounded-2xl shadow-[0_20px_48px_rgba(0,0,0,0.08)]">
+          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto bg-amber-50 border border-amber-200 text-[#C9A96E]">
             <Lock className="w-8 h-8 stroke-[2]" />
           </div>
           <div className="space-y-2">
-            <h2 className="text-2xl font-medium tracking-tight" style={{ fontFamily: "'Fraunces','Playfair Display',serif", color: '#363C46' }}>Admin Login Required</h2>
-            <p className="text-xs leading-relaxed font-normal" style={{ color: '#5D6472' }}>
+            <h2 className="text-2xl font-bold text-[#0B0B0B] tracking-tight" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>Admin Login Required</h2>
+            <p className="text-xs text-[#6B6B6B] leading-relaxed font-semibold">
               You must be signed into an authorized admin or consultant account to view the IMPERIA Control Panel.
             </p>
           </div>
           <div className="pt-2 space-y-3">
             <Link
               to="/admin/login"
-              className="w-full py-3 text-white text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 cursor-pointer transition-opacity hover:opacity-85 block"
-              style={{ background: '#363C46', borderRadius: 6, boxShadow: '0 4px 14px rgba(54,60,70,0.18)' }}
+              className="w-full py-3.5 bg-[#0E0E10] hover:bg-[#C9A96E] text-[#F4F1EA] hover:text-[#0B0B0B] text-xs font-extrabold tracking-widest uppercase rounded-xl shadow-md border border-[#C9A96E] transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
-              <User className="w-4 h-4" style={{ color: '#CFB6A8' }} />
+              <User className="w-4 h-4 text-[#C9A96E]" />
               <span>LOG IN TO ADMIN PORTAL</span>
             </Link>
             <Link
               to="/"
-              className="w-full py-3 text-xs font-bold tracking-wider uppercase flex items-center justify-center transition-opacity hover:opacity-75 block cursor-pointer"
-              style={{ border: '1px solid rgba(93,100,114,0.18)', background: '#E0EEE9', color: '#363C46', borderRadius: 6 }}
+              className="w-full py-3 bg-[#F8F6F2] hover:bg-[#0E0E10] text-[#0B0B0B] hover:text-[#F4F1EA] text-xs font-bold tracking-wider uppercase rounded-xl border border-[rgba(201,169,110,0.30)] transition-all flex items-center justify-center cursor-pointer"
             >
               <span>RETURN TO MAIN SITE</span>
             </Link>
@@ -150,36 +150,28 @@ const AdminLayout = () => {
 
   if (currentUser.role === 'customer') {
     return (
-      <div className="min-h-screen flex items-center justify-center px-6 py-20 font-sans" style={{ background: '#E0EEE9' }}>
-        <div
-          className="max-w-md w-full p-8 text-center space-y-6"
-          style={{ background: '#FFFFFF', border: '1px solid rgba(93,100,114,0.15)', borderRadius: 10, boxShadow: '0 20px 48px rgba(54,60,70,0.08)' }}
-        >
-          <div
-            className="w-16 h-16 rounded-full flex items-center justify-center mx-auto"
-            style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#DC2626' }}
-          >
+      <div className="min-h-screen flex items-center justify-center px-6 py-20 font-sans bg-[#F7F6F3]">
+        <div className="max-w-md w-full p-8 text-center space-y-6 bg-white border border-[rgba(201,169,110,0.30)] rounded-2xl shadow-[0_20px_48px_rgba(0,0,0,0.08)]">
+          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto bg-rose-50 border border-rose-200 text-rose-600">
             <ShieldAlert className="w-8 h-8 stroke-[2]" />
           </div>
           <div className="space-y-2">
-            <h2 className="text-2xl font-medium tracking-tight" style={{ fontFamily: "'Fraunces','Playfair Display',serif", color: '#363C46' }}>Access Denied</h2>
-            <p className="text-xs leading-relaxed font-normal" style={{ color: '#5D6472' }}>
-              Your account currently has <span className="font-bold" style={{ color: '#363C46' }}>Customer</span> status. Admin or Consultant privileges are required to access this panel.
+            <h2 className="text-2xl font-bold text-[#0B0B0B] tracking-tight" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>Access Denied</h2>
+            <p className="text-xs text-[#6B6B6B] leading-relaxed font-semibold">
+              Your account currently has <span className="font-extrabold text-[#0B0B0B]">Customer</span> status. Admin or Consultant privileges are required to access this panel.
             </p>
           </div>
           <div className="pt-2 space-y-3">
             <button
               onClick={() => switchRole('admin')}
-              className="w-full py-3 text-white text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 cursor-pointer transition-opacity hover:opacity-85"
-              style={{ background: '#363C46', borderRadius: 6, boxShadow: '0 4px 14px rgba(54,60,70,0.18)' }}
+              className="w-full py-3.5 bg-[#0E0E10] hover:bg-[#C9A96E] text-[#F4F1EA] hover:text-[#0B0B0B] text-xs font-extrabold tracking-widest uppercase rounded-xl shadow-md border border-[#C9A96E] transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
-              <Sparkles className="w-4 h-4" style={{ color: '#CFB6A8' }} />
+              <Sparkles className="w-4 h-4 text-[#C9A96E]" />
               <span>SWITCH ROLE TO ADMIN (DEMO)</span>
             </button>
             <Link
               to="/dashboard"
-              className="w-full py-3 text-xs font-bold tracking-wider uppercase flex items-center justify-center transition-opacity hover:opacity-75 block cursor-pointer"
-              style={{ border: '1px solid rgba(93,100,114,0.18)', background: '#E0EEE9', color: '#363C46', borderRadius: 6 }}
+              className="w-full py-3 bg-[#F8F6F2] hover:bg-[#0E0E10] text-[#0B0B0B] hover:text-[#F4F1EA] text-xs font-bold tracking-wider uppercase rounded-xl border border-[rgba(201,169,110,0.30)] transition-all flex items-center justify-center cursor-pointer"
             >
               <span>GO TO CUSTOMER DASHBOARD</span>
             </Link>
@@ -219,267 +211,198 @@ const AdminLayout = () => {
     return 'Admin Panel';
   };
 
-    return (
-      <div className="min-h-screen font-sans flex flex-col md:flex-row" style={{ background: '#F8F6F2', color: '#111111' }}>
+  return (
+    <AdminLayoutContext.Provider value={{ collapsed, setCollapsed }}>
+      <div className="min-h-screen font-sans flex flex-col md:flex-row bg-[#F7F6F3] text-[#0B0B0B]">
         
         {/* ── DESKTOP SIDEBAR ────────────────────────────────────────── */}
         <aside
           className={`hidden md:flex flex-col fixed top-0 bottom-0 left-0 z-40 transition-all duration-300 ${
             collapsed ? 'w-20' : 'w-64'
-          }`}
-          style={{ background: '#FFFFFF', borderRight: '1px solid rgba(198,166,107,0.20)' }}
+          } bg-[#0E0E10] border-r border-[rgba(201,169,110,0.20)] shadow-xl`}
         >
-        {/* Sidebar Header / Logo */}
-        <div className="h-16 px-5 flex items-center justify-between shrink-0" style={{ borderBottom: '1px solid rgba(93,100,114,0.15)' }}>
-          <Link to="/admin" className="flex items-center gap-3 overflow-hidden">
-            <ImperiaLogo layout="icon" variant="dark" height={26} className="shrink-0" />
-            {!collapsed && (
-              <div className="flex flex-col" style={{ fontFamily: "'Inter','Plus Jakarta Sans',sans-serif" }}>
-                <span className="font-bold text-sm tracking-[0.18em]" style={{ color: '#363C46', lineHeight: 1 }}>
-                  IMPERIA
-                </span>
-                <span className="text-[9px] font-bold uppercase tracking-[0.22em] mt-1" style={{ color: '#CFB6A8', lineHeight: 1 }}>
-                  ADMIN PANEL
-                </span>
-              </div>
-            )}
-          </Link>
-        </div>
-
-        {/* Navigation List */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar py-6 px-3 space-y-6">
-          {NAV_GROUPS.map((group, gIdx) => (
-            <div key={gIdx} className="space-y-1">
+          {/* Sidebar Header / Logo */}
+          <div className="h-16 px-4 flex items-center justify-between shrink-0 border-b border-[rgba(201,169,110,0.20)]">
+            <Link to="/admin" className="flex items-center gap-3 overflow-hidden">
+              <ImperiaLogo layout="icon" variant="light" height={26} className="shrink-0" />
               {!collapsed && (
-                <span
-                  className="text-[9px] uppercase tracking-widest font-bold px-3 block mb-2"
-                  style={{ color: 'rgba(93,100,114,0.50)', fontFamily: "'Inter',sans-serif" }}
-                >
-                  {group.title}
-                </span>
-              )}
-              <ul className="space-y-0.5">
-                {group.items.map((item, iIdx) => {
-                  const active = isNavActive(item.href);
-                  const Icon = item.icon;
-                  return (
-                    <li key={iIdx}>
-                      <Link
-                        to={item.href}
-                        title={collapsed ? item.label : undefined}
-                        className="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-medium transition-all"
-                        style={{
-                          background: active ? '#363C46' : 'transparent',
-                          color: active ? '#FFFFFF' : '#5D6472',
-                          fontFamily: "'Inter','Plus Jakarta Sans',sans-serif",
-                        }}
-                        onMouseEnter={e => { if (!active) { e.currentTarget.style.background = '#E0EEE9'; e.currentTarget.style.color = '#363C46'; } }}
-                        onMouseLeave={e => { if (!active) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#5D6472'; } }}
-                      >
-                        {/* Dark Vanilla left bar for active item */}
-                        {active && (
-                          <span
-                            className="absolute left-0 top-2 bottom-2 w-[3px] rounded-r"
-                            style={{ background: '#CFB6A8' }}
-                          />
-                        )}
-                        <Icon
-                          className="w-4 h-4 shrink-0 stroke-[1.8]"
-                          style={{ color: active ? '#CFB6A8' : undefined }}
-                        />
-                        {!collapsed && <span className="truncate">{item.label}</span>}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        {/* Sidebar Footer: User Card + Collapse Toggle */}
-        <div className="p-3 shrink-0 space-y-2" style={{ borderTop: '1px solid rgba(93,100,114,0.12)', background: 'rgba(224,238,233,0.35)' }}>
-          {!collapsed ? (
-            <div
-              className="flex items-center justify-between p-2 rounded-lg"
-              style={{ background: '#FFFFFF', border: '1px solid rgba(93,100,114,0.12)' }}
-            >
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div
-                  className="w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center shrink-0"
-                  style={{ background: '#363C46', color: '#CFB6A8' }}
-                >
-                  {currentUser.name ? currentUser.name.charAt(0) : 'A'}
-                </div>
-                <div className="min-w-0">
-                  <p className="text-xs font-bold truncate" style={{ color: '#363C46' }}>{currentUser.name}</p>
-                  <span
-                    className="text-[9px] font-bold uppercase tracking-wider block"
-                    style={{ color: '#CFB6A8' }}
-                  >
-                    {currentUser.role || 'ADMIN'}
+                <div className="flex flex-col font-sans whitespace-nowrap">
+                  <span className="font-bold text-sm tracking-[0.18em] text-[#F4F1EA] leading-none">
+                    IMPERIA
+                  </span>
+                  <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-[#C9A96E] mt-1 leading-none">
+                    ADMIN PANEL
                   </span>
                 </div>
-              </div>
-              <button
-                onClick={logoutUser}
-                className="p-1.5 rounded-lg transition-colors cursor-pointer"
-                style={{ color: '#5D6472' }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.background = '#FEF2F2'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = '#5D6472'; e.currentTarget.style.background = 'transparent'; }}
-                title="Log Out"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
-            </div>
-          ) : (
+              )}
+            </Link>
             <button
-              onClick={logoutUser}
-              className="w-full flex justify-center py-2 transition-colors cursor-pointer"
-              style={{ color: '#5D6472' }}
-              onMouseEnter={e => e.currentTarget.style.color = '#DC2626'}
-              onMouseLeave={e => e.currentTarget.style.color = '#5D6472'}
-              title="Log Out"
+              onClick={() => setCollapsed(!collapsed)}
+              className="hidden md:flex p-1.5 rounded-lg text-[#F4F1EA]/70 hover:text-[#C9A96E] hover:bg-white/10 transition-all cursor-pointer shrink-0"
+              title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             >
-              <LogOut className="w-5 h-5" />
+              {collapsed ? <ChevronRight className="w-4 h-4 text-[#C9A96E]" /> : <ChevronLeft className="w-4 h-4 text-[#C9A96E]" />}
             </button>
-          )}
-
-          {/* Collapse Toggle */}
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            className="w-full flex items-center justify-center py-2 text-xs font-bold transition-all cursor-pointer rounded-lg"
-            style={{ color: '#5D6472', border: '1px solid rgba(93,100,114,0.15)', background: '#FFFFFF' }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#E0EEE9'; e.currentTarget.style.color = '#363C46'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.color = '#5D6472'; }}
-          >
-            {collapsed ? <ChevronRight className="w-4 h-4" /> : <div className="flex items-center gap-1.5"><ChevronLeft className="w-4 h-4" /><span>Collapse</span></div>}
-          </button>
-        </div>
-      </aside>
-
-      {/* ── MAIN CONTENT CONTAINER ─────────────────────────────────── */}
-      <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ${
-        collapsed ? 'md:ml-20' : 'md:ml-64'
-      }`}>
-        
-        {/* ── TOPBAR HEADER ───────────────────────────────────────── */}
-        <header
-          className="sticky top-0 z-30 h-16 px-6 lg:px-10 flex items-center justify-between gap-4 font-sans"
-          style={{
-            background: 'rgba(224,238,233,0.94)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            borderBottom: '1px solid rgba(93,100,114,0.14)',
-          }}
-        >
-          {/* Left: Mobile Menu Trigger + Page Title */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setMobileMenuOpen(true)}
-              className="md:hidden p-2 rounded-lg cursor-pointer transition-colors"
-              style={{ color: '#363C46' }}
-              onMouseEnter={e => e.currentTarget.style.background = 'rgba(93,100,114,0.10)'}
-              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-              aria-label="Open sidebar"
-            >
-              <Menu className="w-5 h-5" />
-            </button>
-
-            <div>
-              <div
-                className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold"
-                style={{ color: '#5D6472', fontFamily: "'Inter',sans-serif" }}
-              >
-                <span>ADMIN</span>
-                <span>/</span>
-                <span style={{ color: '#CFB6A8' }}>{getPageTitle()}</span>
-              </div>
-              <h1
-                className="text-sm font-semibold tracking-tight leading-none mt-0.5"
-                style={{ fontFamily: "'Fraunces','Playfair Display',serif", color: '#363C46' }}
-              >
-                {getPageTitle()}
-              </h1>
-            </div>
           </div>
 
-          {/* Right Controls */}
-          <div className="flex items-center gap-3">
-            {/* Search Input */}
-            <div className="relative hidden sm:block">
-              <Search className="w-3.5 h-3.5 absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: '#5D6472' }} />
-              <input
-                type="text"
-                placeholder="Search admin entities..."
-                value={searchVal}
-                onChange={(e) => setSearchVal(e.target.value)}
-                className="text-xs px-4 py-2 pl-9 focus:outline-none w-48 lg:w-64 transition-all rounded-lg"
-                style={{
-                  background: '#FFFFFF',
-                  border: '1px solid rgba(93,100,114,0.18)',
-                  color: '#363C46',
-                  fontFamily: "'Inter',sans-serif",
-                }}
-              />
-            </div>
-
-            {/* Notifications Bell Dropdown */}
-            <div className="relative" ref={notifRef}>
-              <button
-                onClick={() => setAdminNotifOpen(!adminNotifOpen)}
-                className="w-9 h-9 rounded-full flex items-center justify-center relative cursor-pointer transition-colors"
-                style={{ background: '#FFFFFF', border: '1px solid rgba(93,100,114,0.18)', color: '#5D6472' }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#E0EEE9'; e.currentTarget.style.color = '#363C46'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.color = '#5D6472'; }}
-                aria-label="Admin Alerts"
-              >
-                <Bell className="w-4 h-4 stroke-[1.8]" />
-                {unreadAlertsCount > 0 && (
-                  <span className="absolute top-1 right-1 w-2 h-2 rounded-full" style={{ background: '#CFB6A8' }} />
+          {/* Navigation List */}
+          <div className="flex-1 overflow-y-auto custom-scrollbar py-6 px-3 space-y-6">
+            {NAV_GROUPS.map((group, gIdx) => (
+              <div key={gIdx} className="space-y-1">
+                {!collapsed && (
+                  <span className="text-[10px] uppercase tracking-widest font-extrabold px-3 block mb-2" style={{ color: '#C9A96E' }}>
+                    {group.title}
+                  </span>
                 )}
+                <ul className="space-y-1">
+                  {group.items.map((item, iIdx) => {
+                    const active = isNavActive(item.href);
+                    const Icon = item.icon;
+                    return (
+                      <li key={iIdx}>
+                        <Link
+                          to={item.href}
+                          title={collapsed ? item.label : undefined}
+                          className="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all"
+                          style={{
+                            background: active ? '#C9A96E' : 'transparent',
+                            color: active ? '#0B0B0B' : '#F4F1EA',
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!active) {
+                              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.10)';
+                              e.currentTarget.style.color = '#C9A96E';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!active) {
+                              e.currentTarget.style.background = 'transparent';
+                              e.currentTarget.style.color = '#F4F1EA';
+                            }
+                          }}
+                        >
+                          {active && (
+                            <span className="absolute left-0 top-2 bottom-2 w-[3px] rounded-r bg-[#0B0B0B]" />
+                          )}
+                          <Icon
+                            className="w-4 h-4 shrink-0 stroke-[2]"
+                            style={{ color: active ? '#0B0B0B' : '#C9A96E' }}
+                          />
+                          {!collapsed && (
+                            <span className="truncate" style={{ color: active ? '#0B0B0B' : '#F4F1EA' }}>
+                              {item.label}
+                            </span>
+                          )}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          {/* Sidebar Footer: Sleek Icon Collapse Toggle */}
+          <div className="p-3 shrink-0 border-t border-[rgba(201,169,110,0.20)] bg-[#141416]">
+            <button
+              onClick={() => setCollapsed(!collapsed)}
+              className="w-full py-2 flex items-center justify-center text-xs font-bold bg-[#0E0E10] hover:bg-white/10 border border-[rgba(201,169,110,0.25)] rounded-xl transition-all cursor-pointer"
+              style={{ color: '#C9A96E' }}
+              title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            >
+              {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+            </button>
+          </div>
+        </aside>
+
+        {/* ── MAIN CONTENT CONTAINER ─────────────────────────────────── */}
+        <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ${
+          collapsed ? 'md:ml-20' : 'md:ml-64'
+        }`}>
+          
+          {/* ── TOPBAR HEADER ───────────────────────────────────────── */}
+          <header className="sticky top-0 z-30 h-16 px-6 lg:px-10 flex items-center justify-between gap-4 font-sans bg-[#0E0E10]/95 backdrop-blur-md border-b border-[rgba(201,169,110,0.20)] shadow-sm">
+            {/* Left: Mobile Menu Trigger + Page Title */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setMobileMenuOpen(true)}
+                className="md:hidden p-2 rounded-lg text-[#F4F1EA] hover:text-[#C9A96E] hover:bg-white/5 cursor-pointer transition-colors"
+                aria-label="Open sidebar"
+              >
+                <Menu className="w-5 h-5" />
               </button>
 
-              <AnimatePresence>
-                {adminNotifOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.98 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-3 w-80 z-50 text-left p-4"
-                    style={{ background: '#FFFFFF', border: '1px solid rgba(93,100,114,0.15)', borderRadius: 10, boxShadow: '0 20px 48px rgba(54,60,70,0.12)' }}
-                  >
-                    <div className="flex items-center justify-between pb-3 mb-3" style={{ borderBottom: '1px solid rgba(93,100,114,0.12)' }}>
-                      <span
-                        className="font-bold text-xs uppercase tracking-wider"
-                        style={{ color: '#363C46', fontFamily: "'Inter',sans-serif" }}
-                      >
-                        Admin Alerts
-                      </span>
-                      {unreadAlertsCount > 0 && (
-                        <span
-                          className="px-2 py-0.5 text-[9px] font-bold rounded-full"
-                          style={{ background: 'rgba(207,182,168,0.15)', color: '#CFB6A8', border: '1px solid rgba(207,182,168,0.25)' }}
-                        >
-                          {unreadAlertsCount} New
+              <div>
+                <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-extrabold text-[#6B6B6B]">
+                  <span>ADMIN</span>
+                  <span>/</span>
+                  <span className="text-[#C9A96E]">{getPageTitle()}</span>
+                </div>
+                <h1
+                  className="text-base font-bold text-[#F4F1EA] tracking-tight leading-none mt-0.5"
+                  style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+                >
+                  {getPageTitle()}
+                </h1>
+              </div>
+            </div>
+
+            {/* Right Controls */}
+            <div className="flex items-center gap-3">
+              {/* Search Input */}
+              <div className="relative hidden sm:block">
+                <Search className="w-3.5 h-3.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#C9A96E]" />
+                <input
+                  type="text"
+                  placeholder="Search admin entities..."
+                  value={searchVal}
+                  onChange={(e) => setSearchVal(e.target.value)}
+                  className="text-xs px-4 py-2 pl-9 focus:outline-none w-48 lg:w-64 transition-all rounded-xl bg-[#141416] border border-[rgba(201,169,110,0.25)] text-[#F4F1EA] placeholder-[#8A8A85] focus:border-[#C9A96E]"
+                />
+              </div>
+
+              {/* Notifications Bell Dropdown */}
+              <div className="relative" ref={notifRef}>
+                <button
+                  onClick={() => setAdminNotifOpen(!adminNotifOpen)}
+                  className="w-9 h-9 rounded-full flex items-center justify-center relative cursor-pointer transition-colors bg-[#141416] border border-[rgba(201,169,110,0.25)] text-[#F4F1EA] hover:text-[#C9A96E]"
+                  aria-label="Admin Alerts"
+                >
+                  <Bell className="w-4 h-4 stroke-[1.8]" />
+                  {unreadAlertsCount > 0 && (
+                    <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#C9A96E]" />
+                  )}
+                </button>
+
+                <AnimatePresence>
+                  {adminNotifOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute right-0 mt-3 w-80 z-50 text-left p-4 bg-[#141416] border border-[rgba(201,169,110,0.25)] rounded-2xl shadow-2xl"
+                    >
+                      <div className="flex items-center justify-between pb-3 mb-3 border-b border-[rgba(201,169,110,0.20)]">
+                        <span className="font-extrabold text-xs uppercase tracking-wider text-[#F4F1EA]">
+                          Admin Alerts
                         </span>
-                      )}
-                    </div>
+                        {unreadAlertsCount > 0 && (
+                          <span className="px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-[#C9A96E] text-[#0B0B0B]">
+                            {unreadAlertsCount} New
+                          </span>
+                        )}
+                      </div>
 
                     <div className="space-y-2 max-h-60 overflow-y-auto custom-scrollbar pr-1">
                       {adminAlerts.map(alert => (
                         <div
                           key={alert.id}
-                          className="p-2.5 rounded-lg border text-xs"
-                          style={{
-                            background: alert.unread ? 'rgba(207,182,168,0.08)' : 'rgba(224,238,233,0.50)',
-                            border: `1px solid ${alert.unread ? 'rgba(207,182,168,0.25)' : 'rgba(93,100,114,0.12)'}`,
-                          }}
+                          className="p-2.5 rounded-xl border text-xs bg-[#0E0E10] border-[rgba(201,169,110,0.20)]"
                         >
-                          <p className="font-semibold" style={{ color: '#363C46' }}>{alert.title}</p>
-                          <p className="text-[11px] mt-0.5 leading-relaxed" style={{ color: '#5D6472' }}>{alert.desc}</p>
-                          <span className="text-[9px] mt-1 block font-medium" style={{ color: 'rgba(93,100,114,0.55)' }}>{alert.time}</span>
+                          <p className="font-bold text-[#F4F1EA]">{alert.title}</p>
+                          <p className="text-[11px] mt-0.5 leading-relaxed text-[#A09D96]">{alert.desc}</p>
+                          <span className="text-[9px] mt-1 block font-medium text-[#C9A96E]">{alert.time}</span>
                         </div>
                       ))}
                     </div>
@@ -492,59 +415,55 @@ const AdminLayout = () => {
             <div className="relative" ref={profileRef}>
               <button
                 onClick={() => setAdminProfileOpen(!adminProfileOpen)}
-                className="flex items-center gap-2 p-1.5 rounded-full cursor-pointer transition-colors"
-                style={{ border: '1px solid rgba(93,100,114,0.18)', background: '#FFFFFF' }}
-                onMouseEnter={e => e.currentTarget.style.background = '#E0EEE9'}
-                onMouseLeave={e => e.currentTarget.style.background = '#FFFFFF'}
+                className="flex items-center gap-2.5 p-1.5 pr-2.5 rounded-full cursor-pointer transition-all bg-[#141416] hover:bg-[#1C1C20] border border-[rgba(201,169,110,0.25)] shadow-xs"
               >
-                <div
-                  className="w-7 h-7 rounded-full font-bold text-xs flex items-center justify-center"
-                  style={{ background: '#363C46', color: '#CFB6A8' }}
-                >
+                <div className="w-7 h-7 rounded-full font-extrabold text-xs flex items-center justify-center bg-[#C9A96E] text-[#0B0B0B] shadow-xs">
                   {currentUser.name ? currentUser.name.charAt(0) : 'A'}
                 </div>
-                <ChevronDown className="w-3.5 h-3.5 mr-1" style={{ color: '#5D6472' }} />
+                <span className="text-xs font-bold text-[#F4F1EA] hidden md:inline-block max-w-[100px] truncate">
+                  {currentUser.name ? currentUser.name.split(' ')[0] : 'Admin'}
+                </span>
+                <ChevronDown className={`w-3.5 h-3.5 text-[#C9A96E] transition-transform duration-200 ${adminProfileOpen ? 'rotate-180' : ''}`} />
               </button>
 
               <AnimatePresence>
                 {adminProfileOpen && (
                   <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                    initial={{ opacity: 0, y: 8, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.98 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-3 w-60 z-50 text-left p-3"
-                    style={{ background: '#FFFFFF', border: '1px solid rgba(93,100,114,0.15)', borderRadius: 10, boxShadow: '0 20px 48px rgba(54,60,70,0.12)' }}
+                    exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
+                    className="absolute right-0 mt-3 w-64 z-50 text-left p-3.5 bg-[#141416] border border-[rgba(201,169,110,0.30)] rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
                   >
-                    <div className="px-3 py-2 mb-2" style={{ borderBottom: '1px solid rgba(93,100,114,0.12)' }}>
-                      <p className="text-xs font-bold" style={{ color: '#363C46' }}>{currentUser.name}</p>
-                      <p className="text-[10px]" style={{ color: '#5D6472' }}>{currentUser.email}</p>
-                      <span
-                        className="inline-block mt-1 px-2 py-0.5 text-[9px] font-bold uppercase rounded-full"
-                        style={{ background: 'rgba(207,182,168,0.12)', border: '1px solid rgba(207,182,168,0.28)', color: '#CFB6A8' }}
-                      >
-                        Role: {currentUser.role || 'Admin'}
-                      </span>
+                    {/* User Identity Header */}
+                    <div className="px-3 py-2.5 mb-2.5 border-b border-[rgba(201,169,110,0.20)] flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-[#C9A96E] text-[#0B0B0B] font-extrabold text-sm flex items-center justify-center shrink-0">
+                        {currentUser.name ? currentUser.name.charAt(0) : 'A'}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-[#F4F1EA] truncate">{currentUser.name}</p>
+                        <p className="text-[10px] text-[#A09D96] truncate">{currentUser.email}</p>
+                        <span className="inline-block mt-1 px-2 py-0.5 text-[9px] font-extrabold uppercase rounded-full bg-[#C9A96E]/20 text-[#C9A96E] border border-[#C9A96E]/40">
+                          Role: {currentUser.role || 'Admin'}
+                        </span>
+                      </div>
                     </div>
 
                     {/* Role Switcher */}
-                    <div className="px-3 py-1 mb-2 space-y-1" style={{ borderBottom: '1px solid rgba(93,100,114,0.10)' }}>
-                      <p
-                        className="text-[9px] uppercase tracking-wider font-bold"
-                        style={{ color: 'rgba(93,100,114,0.55)' }}
-                      >
+                    <div className="px-3 py-1.5 mb-2.5 space-y-1.5 border-b border-[rgba(201,169,110,0.20)]">
+                      <p className="text-[9px] uppercase tracking-wider font-extrabold text-[#C9A96E]">
                         Switch Role (Testing)
                       </p>
-                      <div className="flex gap-1 pt-1 pb-2">
+                      <div className="flex gap-1 pt-0.5 pb-1.5">
                         {['admin', 'consultant', 'customer'].map(r => (
                           <button
                             key={r}
                             onClick={() => { switchRole(r); setAdminProfileOpen(false); }}
-                            className="px-2 py-1 rounded text-[10px] font-bold uppercase cursor-pointer"
-                            style={{
-                              background: currentUser.role === r ? '#363C46' : '#E0EEE9',
-                              color: currentUser.role === r ? '#FFFFFF' : '#363C46',
-                            }}
+                            className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold uppercase cursor-pointer transition-all ${
+                              currentUser.role === r 
+                                ? 'bg-[#C9A96E] text-[#0B0B0B] shadow-xs' 
+                                : 'bg-[#0E0E10] text-[#F4F1EA] hover:bg-white/10 border border-[rgba(201,169,110,0.2)]'
+                            }`}
                           >
                             {r}
                           </button>
@@ -552,29 +471,34 @@ const AdminLayout = () => {
                       </div>
                     </div>
 
-                    <ul className="space-y-0.5 text-xs">
+                    {/* Menu Links */}
+                    <ul className="space-y-1 text-xs">
                       <li>
                         <Link
                           to="/admin/settings"
                           onClick={() => setAdminProfileOpen(false)}
-                          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-colors"
-                          style={{ color: '#363C46', fontWeight: 600 }}
-                          onMouseEnter={e => e.currentTarget.style.background = '#E0EEE9'}
-                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#F4F1EA] hover:bg-white/10 hover:text-[#C9A96E] font-semibold transition-colors"
                         >
-                          <Settings className="w-3.5 h-3.5" style={{ color: '#CFB6A8' }} />
-                          <span>Admin Settings</span>
+                          <User className="w-4 h-4 text-[#C9A96E]" />
+                          <span>View Profile</span>
                         </Link>
                       </li>
                       <li>
+                        <Link
+                          to="/admin/settings"
+                          onClick={() => setAdminProfileOpen(false)}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#F4F1EA] hover:bg-white/10 hover:text-[#C9A96E] font-semibold transition-colors"
+                        >
+                          <Settings className="w-4 h-4 text-[#C9A96E]" />
+                          <span>Admin Settings</span>
+                        </Link>
+                      </li>
+                      <li className="pt-1.5 border-t border-[rgba(201,169,110,0.15)]">
                         <button
                           onClick={() => { logoutUser(); setAdminProfileOpen(false); }}
-                          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-colors cursor-pointer"
-                          style={{ color: '#DC2626', fontWeight: 600 }}
-                          onMouseEnter={e => e.currentTarget.style.background = '#FEF2F2'}
-                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-rose-400 hover:bg-rose-500/15 font-bold transition-all cursor-pointer"
                         >
-                          <LogOut className="w-3.5 h-3.5" />
+                          <LogOut className="w-4 h-4 text-rose-400" />
                           <span>Log Out</span>
                         </button>
                       </li>
@@ -587,10 +511,7 @@ const AdminLayout = () => {
         </header>
 
         {/* ── CONTENT CANVAS ───────────────────────────────────────── */}
-        <main
-          className="flex-1 max-w-[1600px] w-full mx-auto px-3.5 sm:px-6 lg:px-10 py-4 sm:py-8 font-sans"
-          style={{ background: '#E0EEE9' }}
-        >
+        <main className="flex-1 max-w-[1600px] w-full mx-auto px-3.5 sm:px-6 lg:px-10 py-4 sm:py-8 font-sans bg-[#F7F6F3]">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
@@ -622,15 +543,13 @@ const AdminLayout = () => {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed top-0 bottom-0 left-0 w-72 z-50 flex flex-col font-sans md:hidden"
-              style={{ background: '#FFFFFF', borderRight: '1px solid rgba(93,100,114,0.15)' }}
+              className="fixed top-0 bottom-0 left-0 w-72 z-50 flex flex-col font-sans bg-[#0E0E10] border-r border-[rgba(201,169,110,0.20)] md:hidden"
             >
-              <div className="h-16 px-6 flex items-center justify-between" style={{ borderBottom: '1px solid rgba(93,100,114,0.15)' }}>
-                <ImperiaLogo layout="lockup" variant="dark" height={26} />
+              <div className="h-16 px-6 flex items-center justify-between border-b border-[rgba(201,169,110,0.20)]">
+                <ImperiaLogo layout="lockup" variant="light" height={26} />
                 <button
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-1 rounded-full transition-colors cursor-pointer"
-                  style={{ color: '#5D6472' }}
+                  className="p-1 rounded-full text-[#F4F1EA] hover:text-[#C9A96E] transition-colors cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -639,13 +558,10 @@ const AdminLayout = () => {
               <div className="flex-1 overflow-y-auto py-6 px-3 space-y-5">
                 {NAV_GROUPS.map((group, gIdx) => (
                   <div key={gIdx} className="space-y-1">
-                    <span
-                      className="text-[9px] uppercase tracking-widest font-bold px-3 block mb-1"
-                      style={{ color: 'rgba(93,100,114,0.50)', fontFamily: "'Inter',sans-serif" }}
-                    >
+                    <span className="text-[9px] uppercase tracking-widest font-bold px-3 block mb-1 text-[#C9A96E]">
                       {group.title}
                     </span>
-                    <ul className="space-y-0.5">
+                    <ul className="space-y-1">
                       {group.items.map((item, iIdx) => {
                         const active = isNavActive(item.href);
                         const Icon = item.icon;
@@ -654,15 +570,13 @@ const AdminLayout = () => {
                             <Link
                               to={item.href}
                               onClick={() => setMobileMenuOpen(false)}
-                              className="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-medium transition-all"
-                              style={{
-                                background: active ? '#363C46' : 'transparent',
-                                color: active ? '#FFFFFF' : '#5D6472',
-                              }}
-                              onMouseEnter={e => { if (!active) { e.currentTarget.style.background = '#E0EEE9'; e.currentTarget.style.color = '#363C46'; } }}
-                              onMouseLeave={e => { if (!active) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#5D6472'; } }}
+                              className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+                                active
+                                  ? 'bg-[#C9A96E] text-[#0B0B0B] font-extrabold'
+                                  : 'text-[#F4F1EA]/75 hover:bg-white/10 hover:text-[#C9A96E]'
+                              }`}
                             >
-                              <Icon className="w-4 h-4 stroke-[1.8]" style={{ color: active ? '#CFB6A8' : undefined }} />
+                              <Icon className={`w-4 h-4 stroke-[1.8] ${active ? 'text-[#0B0B0B]' : 'text-[#C9A96E]'}`} />
                               <span>{item.label}</span>
                             </Link>
                           </li>
@@ -676,8 +590,8 @@ const AdminLayout = () => {
           </>
         )}
       </AnimatePresence>
-
-    </div>
+      </div>
+    </AdminLayoutContext.Provider>
   );
 };
 

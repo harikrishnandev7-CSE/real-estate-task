@@ -44,7 +44,8 @@
   transform-style: preserve-3d;
   cursor: pointer;
   will-change: transform, opacity;
-  transition: opacity 0.3s ease;
+  backface-visibility: hidden;
+  transition: opacity 0.3s ease, transform 0.05s linear;
 }
 
 @media (min-width: 640px) {

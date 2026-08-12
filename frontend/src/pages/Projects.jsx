@@ -105,23 +105,19 @@ const Projects = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
+    <div className="min-h-screen bg-[#F7F6F3] text-[#16161a] font-sans pb-20">
 
       {/* PageHero */}
-      <div className="pt-[64px] lg:pt-[72px]">
-        <PageHero
-          image="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80"
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Projects' },
-          ]}
-          eyebrow="SIGNATURE PROJECTS"
-          heading={
-            <>Masterful Architectural <span className="font-normal text-[#5D6472]">Creations</span></>
-          }
-          description="A curated showcase of luxury landmarks developed by IMPERIA ESTATES in collaboration with elite global designers, mapping out upcoming luxury horizons."
-        />
-      </div>
+      <PageHero
+        image="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Projects' },
+        ]}
+        eyebrow="SIGNATURE PROJECTS"
+        heading="Masterful Architectural Creations"
+        description="A curated showcase of luxury landmarks developed by IMPERIA ESTATES in collaboration with elite global designers, mapping out upcoming luxury horizons."
+      />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -271,9 +267,10 @@ const Projects = () => {
                     <label className="block text-[10px] uppercase tracking-wider text-[#5D6472] mb-1.5 font-bold">Phone Number</label>
                     <input
                       type="tel"
-                      placeholder="+91 98765 43210"
+                      maxLength={10}
+                      placeholder="9876543210"
                       value={formData.phone}
-                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value.replace(/\D/g, '').slice(0, 10)})}
                       className="w-full bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] focus:border-[#CFB6A8] outline-none rounded-lg py-3 px-4 text-xs text-[#363C46] font-medium"
                       required
                     />

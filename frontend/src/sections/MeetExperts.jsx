@@ -73,27 +73,29 @@ const MeetExperts = () => {
             <motion.div
               key={idx}
               variants={cardVariants}
-              className="group flex flex-col bg-white border border-[rgba(22,22,26,0.10)] rounded-md overflow-hidden shadow-[0_1px_2px_rgba(22,22,26,0.04),0_8px_24px_rgba(22,22,26,0.05)] transition-colors duration-300 hover:border-[rgba(22,22,26,0.22)]"
+              className="group flex flex-col bg-white border border-[rgba(201,169,110,0.30)] rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-2 hover:border-[#C9A96E] hover:shadow-[0_25px_50px_rgba(201,169,110,0.25)] cursor-pointer"
             >
-              <div className="relative h-[320px] overflow-hidden bg-[#F7F6F3]">
+              <div className="relative h-[320px] overflow-hidden bg-[#141416]">
                 <ImageWithSkeleton
                   src={exp.image} 
                   alt={exp.name} 
-                  className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+                  className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-108"
                 />
               </div>
 
-              <div className="p-5 space-y-1.5 font-sans border-t border-[rgba(22,22,26,0.08)]">
-                <h3
-                  className="text-lg font-medium text-[#16161a] group-hover:text-[#A98A5B] transition-colors"
-                  style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
-                >
-                  {exp.name}
-                </h3>
-                <p className="text-[#A98A5B] text-xs font-semibold uppercase tracking-wider">
-                  {exp.role}
-                </p>
-                <p className="text-[#4a4a4f] text-xs font-normal pt-1">
+              <div className="p-6 space-y-2 font-sans border-t border-[rgba(201,169,110,0.20)] bg-white flex-1 flex flex-col justify-between">
+                <div className="space-y-1">
+                  <h3
+                    className="text-xl font-bold text-[#0B0B0B] group-hover:text-[#C9A96E] transition-colors"
+                    style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+                  >
+                    {exp.name}
+                  </h3>
+                  <p className="text-[#C9A96E] text-xs font-bold uppercase tracking-wider">
+                    {exp.role}
+                  </p>
+                </div>
+                <p className="text-[#555555] text-xs font-medium pt-2 border-t border-[rgba(201,169,110,0.15)]">
                   {exp.creds}
                 </p>
               </div>

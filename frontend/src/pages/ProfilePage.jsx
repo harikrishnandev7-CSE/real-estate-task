@@ -22,21 +22,17 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
-      <div className="pt-[64px] lg:pt-[72px]">
-        <PageHero
-          image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Profile' }
-          ]}
-          eyebrow="VIP MEMBER CONSOLE"
-          heading={
-            <>Account <span className="font-normal text-[#5D6472]">Settings</span></>
-          }
-          description="Manage your account preferences, saved portfolio alerts, and private concierge coordinates."
-        />
-      </div>
+    <div className="min-h-screen bg-[#F7F6F3] text-[#16161a] font-sans pb-20">
+      <PageHero
+        image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Profile' }
+        ]}
+        eyebrow="VIP MEMBER CONSOLE"
+        heading="Account Settings"
+        description="Manage your private profile details, VIP client tier credentials, contact preferences, and security settings."
+      />
 
       <div className="max-w-4xl mx-auto px-6 md:px-12 py-16 font-sans">
         <div className="bg-white border border-[rgba(93,100,114,0.15)] rounded-xl p-8 md:p-10 shadow-[0_12px_32px_rgba(54,60,70,0.06)] space-y-8">
@@ -79,8 +75,10 @@ const ProfilePage = () => {
                 <label className="block text-[10px] uppercase text-[#5D6472] mb-1.5">Phone Number</label>
                 <input
                   type="tel"
+                  maxLength={10}
+                  placeholder="9876543210"
                   value={formData.phone}
-                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  onChange={(e) => setFormData({...formData, phone: e.target.value.replace(/\D/g, '').slice(0, 10)})}
                   className="w-full bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] rounded-lg p-3 text-[#363C46] outline-none focus:border-[#CFB6A8]"
                 />
               </div>

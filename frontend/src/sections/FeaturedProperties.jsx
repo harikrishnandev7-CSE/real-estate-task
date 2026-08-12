@@ -131,28 +131,23 @@ const PropertyCard = ({ prop, cardVariants }) => {
     <motion.div
       variants={cardVariants}
       onClick={handleCardClick}
-      className="group relative flex flex-col bg-white border border-[rgba(198,166,107,0.2)] rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.05)] cursor-pointer transition-all duration-300 ease-out hover:scale-[1.03] hover:shadow-[0_20px_40px_rgba(198,166,107,0.15)] hover:border-[#C6A66B]"
+      className="group relative flex flex-col bg-white border border-[rgba(201,169,110,0.30)] rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.08)] cursor-pointer transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0_25px_50px_rgba(201,169,110,0.22)] hover:border-[#C9A96E]"
     >
-      {/* Photo (Edge-to-Edge) with Gradient Overlay */}
-      <div className="relative h-[290px] overflow-hidden bg-[#F8F6F2]">
-        {!imgLoaded && (
-          <div className="absolute inset-0 bg-[#F8F6F2] z-10" />
-        )}
-
+      {/* Photo (Edge-to-Edge) with High-Visibility Rendering */}
+      <div className="relative h-[290px] overflow-hidden bg-[#141416]">
         <img
           src={propImg}
           alt={prop.title}
           loading="lazy"
-          onLoad={() => setImgLoaded(true)}
-          className={`w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
         />
 
         {/* Gradient Overlay for luxury depth */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B]/50 via-transparent to-transparent opacity-80 z-10 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B]/60 via-transparent to-transparent opacity-80 z-10 pointer-events-none" />
 
         {/* Gold Tag */}
         {prop.tag && (
-          <span className="absolute top-4 left-4 z-20 px-3 py-1 bg-[#0B0B0B]/90 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-[#C6A66B] rounded-md border border-[rgba(198,166,107,0.3)]">
+          <span className="absolute top-4 left-4 z-20 px-3 py-1 bg-[#0B0B0B]/90 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-[#C9A96E] rounded-md border border-[rgba(201,169,110,0.4)] shadow-sm">
             {prop.tag}
           </span>
         )}
@@ -161,13 +156,13 @@ const PropertyCard = ({ prop, cardVariants }) => {
         <button
           onClick={handleHeartClick}
           aria-label={isLiked ? 'Remove from wishlist' : 'Save to wishlist'}
-          className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-white/90 hover:bg-white text-[#0B0B0B] transition-all duration-300 cursor-pointer shadow-md"
+          className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-white/95 hover:bg-white text-[#0B0B0B] transition-all duration-300 cursor-pointer shadow-md hover:scale-110"
         >
           <Heart
             className="w-4 h-4 transition-colors"
             style={{
-              fill: isLiked ? '#C6A66B' : 'transparent',
-              color: isLiked ? '#C6A66B' : '#0B0B0B'
+              fill: isLiked ? '#C9A96E' : 'transparent',
+              color: isLiked ? '#C9A96E' : '#0B0B0B'
             }}
           />
         </button>

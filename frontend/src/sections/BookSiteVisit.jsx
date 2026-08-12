@@ -72,9 +72,10 @@ const BookSiteVisit = () => {
                     <label className="text-[11px] uppercase tracking-wider font-extrabold text-[#111111] block">Phone Number</label>
                     <input 
                       type="tel" 
-                      placeholder="+91 98765 43210" 
+                      maxLength={10}
+                      placeholder="9876543210" 
                       value={formData.phone}
-                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value.replace(/\D/g, '').slice(0, 10)})}
                       className="input-luxury"
                       required
                     />

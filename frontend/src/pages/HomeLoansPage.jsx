@@ -25,22 +25,18 @@ const HomeLoansPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
-      <div className="pt-[64px] lg:pt-[72px]">
-        <PageHero
-          image="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1600&q=80"
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Services', href: '/services' },
-            { label: 'Home Loans' }
-          ]}
-          eyebrow="PREFERRED DEBT ADVISORY"
-          heading={
-            <>Institutional Wealth &amp; <span className="font-normal text-[#5D6472]">Home Financing</span></>
-          }
-          description="Tailored mortgage structuring, express pre-approvals, and preferential interest rates via private banking partners."
-        />
-      </div>
+    <div className="min-h-screen bg-[#F7F6F3] text-[#16161a] font-sans pb-20">
+      <PageHero
+        image="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1600&q=80"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Services', href: '/services' },
+          { label: 'Home Loans' }
+        ]}
+        eyebrow="PREFERRED DEBT ADVISORY"
+        heading="Institutional Wealth & Home Financing"
+        description="Priority underwriting, express 48-hour pre-approvals, and customized debt structuring for high-value acquisitions."
+      />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 space-y-16 font-sans">
         {/* EMI CALCULATOR & BANK MATRIX */}

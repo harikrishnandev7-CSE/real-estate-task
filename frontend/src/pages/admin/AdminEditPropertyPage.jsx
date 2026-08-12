@@ -29,6 +29,7 @@ import {
 } from '../../components/admin/primitives/FormField';
 import StatusChip from '../../components/admin/primitives/StatusChip';
 import AdminModal from '../../components/admin/primitives/AdminModal';
+import PropertyVideoUploader from '../../components/admin/PropertyVideoUploader';
 import { formatPricePreview } from '../../utils/formatters';
 
 const TABS = [
@@ -583,8 +584,32 @@ const AdminEditPropertyPage = () => {
             {/* MEDIA TAB */}
             {activeTab === 'media' && (
               <motion.div key="media" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 font-sans">
+                {/* Property Video Tour Upload Section */}
+                <div className="p-5 bg-white border border-[rgba(198,166,107,0.25)] rounded-2xl shadow-xs space-y-4 font-sans">
+                  <div>
+                    <span className="text-[10px] uppercase tracking-[0.25em] text-[#C6A66B] font-extrabold block">
+                      CINEMATIC WALKTHROUGH
+                    </span>
+                    <h3 className="text-base font-bold text-[#0B0B0B] tracking-tight">
+                      Property Video Tour
+                    </h3>
+                    <p className="text-xs text-[#6B6B6B] mt-0.5 font-medium">
+                      Upload or update high-definition property video walkthrough (stored &amp; optimized on Cloudinary CDN).
+                    </p>
+                  </div>
+
+                  <PropertyVideoUploader
+                    videoUrl={formData.videoUrl || existingProp?.videoUrl || (typeof formData.images?.video === 'string' ? formData.images.video : '')}
+                    videoFile={formData.videoFile}
+                    onChange={({ url, file }) => {
+                      updateField('videoUrl', url);
+                      if (file) updateField('videoFile', file);
+                    }}
+                  />
+                </div>
+
                 <div className="border-b border-[#E8E4DA] pb-3">
-                  <h4 className="text-base font-extrabold text-[#1A1A1A]">Structured Media & Room Assets</h4>
+                  <h4 className="text-base font-extrabold text-[#1A1A1A]">Structured Media &amp; Room Assets</h4>
                   <p className="text-xs text-[#8A8A85]">Adjust room counts below to generate upload dropzones for each bedroom and bathroom in order: Entrance, Hall, Kitchen, Bedrooms, Bathrooms, and Terrace.</p>
                 </div>
 
@@ -618,9 +643,10 @@ const AdminEditPropertyPage = () => {
                   <FormLabel required>1. ENTRANCE IMAGE (Single Photo)</FormLabel>
                   <ImageDropzone
                     id="edit-dropzone-entrance"
-                    images={formData.images?.entrance ? [formData.images.entrance] : []}
-                    onChange={(imgs) => updateImageCategory('entrance', imgs[0] || '')}
+                    value={formData.images?.entrance}
+                    onChange={(val) => updateImageCategory('entrance', Array.isArray(val) ? val[0] || '' : val)}
                     maxFiles={1}
+                    multiple={false}
                   />
                 </div>
 
@@ -629,9 +655,10 @@ const AdminEditPropertyPage = () => {
                   <FormLabel>2. HALL IMAGES (LIVING ROOM)</FormLabel>
                   <ImageDropzone
                     id="edit-dropzone-hall"
-                    images={formData.images?.hall || []}
+                    value={formData.images?.hall || []}
                     onChange={(imgs) => updateImageCategory('hall', imgs)}
                     maxFiles={10}
+                    multiple
                   />
                 </div>
 
@@ -640,9 +667,10 @@ const AdminEditPropertyPage = () => {
                   <FormLabel>3. KITCHEN IMAGES</FormLabel>
                   <ImageDropzone
                     id="edit-dropzone-kitchen"
-                    images={formData.images?.kitchen || []}
+                    value={formData.images?.kitchen || []}
                     onChange={(imgs) => updateImageCategory('kitchen', imgs)}
                     maxFiles={10}
+                    multiple
                   />
                 </div>
 
@@ -661,9 +689,10 @@ const AdminEditPropertyPage = () => {
                           <span className="text-xs font-bold text-[#1A1A1A] block">🛏️ Bedroom {bedNum} Photos</span>
                           <ImageDropzone
                             id={`edit-dropzone-bedroom-${bedNum}`}
-                            images={currentImgs}
+                            value={currentImgs}
                             onChange={(imgs) => updateBedroomImages(bedNum, imgs)}
                             maxFiles={6}
+                            multiple
                           />
                         </div>
                       );
@@ -686,9 +715,10 @@ const AdminEditPropertyPage = () => {
                           <span className="text-xs font-bold text-[#1A1A1A] block">🚿 Bathroom {bathNum} Photos</span>
                           <ImageDropzone
                             id={`edit-dropzone-bathroom-${bathNum}`}
-                            images={currentImgs}
+                            value={currentImgs}
                             onChange={(imgs) => updateBathroomImages(bathNum, imgs)}
                             maxFiles={6}
+                            multiple
                           />
                         </div>
                       );
@@ -698,12 +728,13 @@ const AdminEditPropertyPage = () => {
 
                 {/* 6. Terrace Images (Multiple Photos) */}
                 <div className="space-y-2 pt-2 border-t border-[#E8E4DA]">
-                  <FormLabel>6. TERRACE & BALCONY IMAGES</FormLabel>
+                  <FormLabel>6. TERRACE &amp; BALCONY IMAGES</FormLabel>
                   <ImageDropzone
                     id="edit-dropzone-terrace"
-                    images={formData.images?.terrace || []}
+                    value={formData.images?.terrace || []}
                     onChange={(imgs) => updateImageCategory('terrace', imgs)}
                     maxFiles={10}
+                    multiple
                   />
                 </div>
               </motion.div>

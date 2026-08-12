@@ -4,23 +4,50 @@ import { Calendar, FileText, Tag } from 'lucide-react';
 
 const QuickQuestions = ({ questions = [], onSelectQuestion }) => {
   return (
-    <div className="flex flex-wrap gap-2.5">
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
       {questions.map((question, index) => {
-        // Mapped icons based on question text content
-        const Icon = question.toLowerCase().includes('visit') ? Calendar :
-                     question.toLowerCase().includes('details') ? FileText :
-                     question.toLowerCase().includes('pricing') ? Tag : null;
+        const Icon = question.toLowerCase().includes('visit') ? Calendar
+                   : question.toLowerCase().includes('details') ? FileText
+                   : question.toLowerCase().includes('pricing') ? Tag : null;
         return (
           <motion.button
             key={index}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            transition={{ duration: 0.2 }}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ duration: 0.16 }}
             type="button"
             onClick={() => onSelectQuestion(question)}
-            className="h-[40px] flex items-center justify-center gap-2 text-xs font-bold tracking-wider px-4 rounded-full border border-[#E8E4DA] bg-white text-[#8A8A85] hover:text-[#1A1A1A] hover:border-[#F5A623] hover:bg-stone-50 transition-all duration-200 cursor-pointer outline-none shadow-2xs font-sans"
+            style={{
+              height: 36,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 6,
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: '0.08em',
+              padding: '0 14px',
+              borderRadius: 6,
+              border: '1px solid rgba(201,169,110,0.22)',
+              background: 'rgba(201,169,110,0.06)',
+              color: 'rgba(201,169,110,0.80)',
+              cursor: 'pointer',
+              outline: 'none',
+              transition: 'background 0.18s, border 0.18s, color 0.18s',
+              whiteSpace: 'nowrap',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(201,169,110,0.14)';
+              e.currentTarget.style.borderColor = 'rgba(201,169,110,0.5)';
+              e.currentTarget.style.color = '#C9A96E';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(201,169,110,0.06)';
+              e.currentTarget.style.borderColor = 'rgba(201,169,110,0.22)';
+              e.currentTarget.style.color = 'rgba(201,169,110,0.80)';
+            }}
           >
-            {Icon && <Icon className="w-3.5 h-3.5 text-[#F5A623] stroke-[2]" />}
+            {Icon && <Icon style={{ width: 13, height: 13, color: '#C9A96E', strokeWidth: 2 }} />}
             {question}
           </motion.button>
         );

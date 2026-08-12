@@ -1,9 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Search, Heart, Filter, ArrowRight } from 'lucide-react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import ImageWithSkeleton from '../components/ImageWithSkeleton';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import PageHero from '../components/PageHero';
 
 const Rent = () => {
   const [searchParams] = useSearchParams();
@@ -94,19 +95,15 @@ const Rent = () => {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-20 bg-[#F7F6F3] text-[#16161a] font-sans">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-10">
-
-        {/* Header */}
-        <div className="space-y-3 border-b border-[rgba(22,22,26,0.08)] pb-8">
-          <span className="eyebrow">LEASING PORTFOLIO</span>
-          <h1 className="text-3xl md:text-5xl font-medium tracking-tight text-[#16161a]" style={{ fontFamily: "'Fraunces', serif" }}>
-            Luxury Rental Estates
-          </h1>
-          <p className="text-sm text-[#4a4a4f] max-w-xl font-normal leading-relaxed">
-            Curated long-term residential leases, luxury serviced apartments, and estate rentals.
-          </p>
-        </div>
+    <div className="min-h-screen pb-20 bg-[#F7F6F3] text-[#16161a] font-sans">
+      <PageHero
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Leasing Portfolio' }]}
+        eyebrow="LEASING PORTFOLIO"
+        heading="Luxury Rental Estates"
+        description="Curated long-term residential leases, luxury serviced apartments, and estate rentals."
+        image="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1920&q=85"
+      />
+      <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-10 pt-10">
 
         {/* Top Control Bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white border border-[rgba(22,22,26,0.10)] rounded-md p-4 shadow-xs">

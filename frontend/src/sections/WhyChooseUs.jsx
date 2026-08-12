@@ -105,28 +105,28 @@ const WhyChooseUs = () => {
               <motion.div
                 key={feat.num}
                 variants={cardVariants}
-                className="group relative flex flex-col bg-white border border-[rgba(198,166,107,0.2)] rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-300 hover:border-[#C6A66B] hover:shadow-[0_20px_40px_rgba(198,166,107,0.15)] hover:scale-[1.03]"
+                className="group relative flex flex-col bg-white border border-[rgba(201,169,110,0.30)] rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-2 hover:border-[#C9A96E] hover:shadow-[0_25px_50px_rgba(201,169,110,0.22)] cursor-pointer"
               >
                 {/* Feature Image Header */}
-                <div className="relative h-48 overflow-hidden bg-[#F8F6F2]">
+                <div className="relative h-48 overflow-hidden bg-[#141416]">
                   <img
                     src={feat.image}
                     alt={feat.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B]/70 via-[#0B0B0B]/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B]/80 via-[#0B0B0B]/30 to-transparent" />
                   
                   {/* Badge & Icon */}
                   <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
-                    <span className="px-3 py-1 bg-[#0B0B0B]/90 backdrop-blur-md text-[10px] font-extrabold tracking-widest text-[#C6A66B] uppercase rounded-md border border-[rgba(198,166,107,0.3)]">
+                    <span className="px-3 py-1 bg-[#0B0B0B]/90 backdrop-blur-md text-[10px] font-extrabold tracking-widest text-[#C9A96E] uppercase rounded-md border border-[rgba(201,169,110,0.4)] shadow-sm">
                       {feat.badge}
                     </span>
-                    <div className="w-8 h-8 rounded-lg bg-white/90 text-[#0B0B0B] flex items-center justify-center shadow-md">
-                      <Icon className="w-4 h-4 text-[#C6A66B]" />
+                    <div className="w-9 h-9 rounded-lg bg-white/95 text-[#0B0B0B] flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                      <Icon className="w-4 h-4 text-[#C9A96E]" />
                     </div>
                   </div>
 
-                  <span className="absolute bottom-3 left-4 text-[10px] font-bold text-white/90 uppercase tracking-widest font-sans">
+                  <span className="absolute bottom-3 left-4 text-[10px] font-bold text-[#F4F1EA] uppercase tracking-widest font-sans">
                     FEATURE {feat.num}
                   </span>
                 </div>
@@ -135,19 +135,19 @@ const WhyChooseUs = () => {
                 <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                   <div className="space-y-2">
                     <h3
-                      className="text-xl font-bold text-[#0B0B0B] tracking-tight group-hover:text-[#C6A66B] transition-colors"
+                      className="text-xl font-bold text-[#0B0B0B] tracking-tight group-hover:text-[#C9A96E] transition-colors"
                       style={{ fontFamily: "'Playfair Display', 'Fraunces', serif" }}
                     >
                       {feat.title}
                     </h3>
-                    <p className="text-xs text-[#6B6B6B] font-normal leading-relaxed">
+                    <p className="text-xs text-[#555555] font-normal leading-relaxed">
                       {feat.desc}
                     </p>
                   </div>
 
-                  <div className="pt-4 border-t border-[rgba(198,166,107,0.15)] flex items-center justify-between text-[11px] uppercase tracking-wider font-extrabold text-[#C6A66B]">
+                  <div className="pt-4 border-t border-[rgba(201,169,110,0.20)] flex items-center justify-between text-[11px] uppercase tracking-wider font-extrabold text-[#C9A96E]">
                     <span>Explore Assurance</span>
-                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    <span className="group-hover:translate-x-1.5 transition-transform">→</span>
                   </div>
                 </div>
               </motion.div>

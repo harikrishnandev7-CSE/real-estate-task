@@ -22,21 +22,17 @@ const SellPropertyPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
-      <div className="pt-[64px] lg:pt-[72px]">
-        <PageHero
-          image="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1600&q=80"
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Sell Property' }
-          ]}
-          eyebrow="DISCRETIONARY MARKETING"
-          heading={
-            <>List Your Signature <span className="font-normal text-[#5D6472]">Estate</span></>
-          }
-          description="Access our confidential private client network of high-net-worth investors and family offices."
-        />
-      </div>
+    <div className="min-h-screen bg-[#F7F6F3] text-[#16161a] font-sans pb-20">
+      <PageHero
+        image="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1600&q=80"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Sell Property' }
+        ]}
+        eyebrow="DISCRETIONARY MARKETING"
+        heading="List Your Signature Estate"
+        description="Direct private placement to verified high-net-worth buyers, ultra-luxury marketing campaigns, and Confidentiality Agreements."
+      />
 
       <div className="max-w-3xl mx-auto px-6 md:px-12 py-16 font-sans">
         <div className="bg-white border border-[rgba(93,100,114,0.15)] rounded-xl p-8 md:p-10 shadow-[0_12px_32px_rgba(54,60,70,0.06)]">
@@ -93,9 +89,10 @@ const SellPropertyPage = () => {
                   <label className="block text-[10px] uppercase text-[#5D6472] mb-1">Contact Phone</label>
                   <input
                     type="tel"
-                    placeholder="+91 98765 43210"
+                    maxLength={10}
+                    placeholder="9876543210"
                     value={formData.phone}
-                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                    onChange={(e) => setFormData({...formData, phone: e.target.value.replace(/\D/g, '').slice(0, 10)})}
                     className="w-full bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] rounded-lg p-3 text-[#363C46] outline-none focus:border-[#CFB6A8]"
                     required
                   />

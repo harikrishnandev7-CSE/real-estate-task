@@ -1,6 +1,6 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
-import Hero from '../sections/Hero';
+import HeroSection from '../sections/HeroSection';
 import Categories from '../sections/Categories';
 import FeaturedProperties from '../sections/FeaturedProperties';
 import WhyChooseUs from '../sections/WhyChooseUs';
@@ -16,7 +16,7 @@ const Home = () => {
   const { openBookModal } = useApp();
   return (
     <>
-      <Hero onCtaClick={openBookModal} />
+      <HeroSection onCtaClick={openBookModal} />
       <Categories />
       <FeaturedProperties />
       <WhyChooseUs />

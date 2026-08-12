@@ -1,9 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Search, Heart, Grid, List, ChevronDown, Check, ShieldCheck, MapPin, BedDouble, Bath, Square, Sparkles, Filter, RefreshCw, X, Eye, Calendar, ArrowRight } from 'lucide-react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import ImageWithSkeleton from '../components/ImageWithSkeleton';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import PageHero from '../components/PageHero';
 
 const Buy = () => {
   const [searchParams] = useSearchParams();
@@ -135,19 +136,15 @@ const Buy = () => {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-20 bg-[#F7F6F3] text-[#16161a] font-sans">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-10">
-
-        {/* Page Title & Breadcrumb Header */}
-        <div className="space-y-3 border-b border-[rgba(22,22,26,0.08)] pb-8">
-          <span className="eyebrow">BUY PORTFOLIO</span>
-          <h1 className="text-3xl md:text-5xl font-medium tracking-tight text-[#16161a]" style={{ fontFamily: "'Fraunces', serif" }}>
-            Curated Luxury Estates
-          </h1>
-          <p className="text-sm text-[#4a4a4f] max-w-xl font-normal leading-relaxed">
-            Explore exclusive architectural villas, penthouses, and prime residential developments.
-          </p>
-        </div>
+    <div className="min-h-screen pb-20 bg-[#F7F6F3] text-[#16161a] font-sans">
+      <PageHero
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Buy Portfolio' }]}
+        eyebrow="BUY PORTFOLIO"
+        heading="Curated Luxury Estates"
+        description="Explore exclusive architectural villas, penthouses, and prime residential developments."
+        image="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1920&q=85"
+      />
+      <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-10 pt-10">
 
         {/* Top Control Bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white border border-[rgba(22,22,26,0.10)] rounded-md p-4 shadow-xs">

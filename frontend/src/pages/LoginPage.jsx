@@ -1,40 +1,51 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { loginUser, showToast } = useApp();
+  const { loginUser, login, showToast } = useApp();
+  const doLogin = loginUser || login;
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(true);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const validateForm = () => {
+    const errs = {};
+    if (!email.trim()) {
+      errs.email = "Email address is required.";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      errs.email = "Please enter a valid email format.";
+    }
+
+    if (!password) {
+      errs.password = "Password is required.";
+    }
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const errs = {};
-    if (!email.trim()) errs.email = 'Email address is required';
-    if (!password) errs.password = 'Password is required';
-
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs);
-      return;
-    }
+    if (!validateForm()) return;
 
     setIsSubmitting(true);
     try {
-      const user = await loginUser({ email, password });
+      const res = await doLogin({ email, password });
       setIsSubmitting(false);
-      if (user?.role === 'admin') {
-        navigate('/admin/dashboard');
-      } else if (user?.role === 'consultant') {
-        navigate('/consultant/dashboard');
-      } else {
-        navigate('/dashboard');
+
+      const loggedUser = res?.user || res;
+      if (loggedUser) {
+        if (loggedUser.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/dashboard');
+        }
       }
     } catch (err) {
       setIsSubmitting(false);
@@ -46,31 +57,31 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="pt-32 pb-24 min-h-screen bg-[#E0EEE9] text-[#363C46] flex items-center justify-center font-sans">
+    <div className="pt-32 pb-24 min-h-screen bg-[#F7F6F3] text-[#0B0B0B] flex items-center justify-center font-sans">
       <div className="max-w-md w-full mx-auto px-6 space-y-8">
         
         {/* Header */}
         <div className="text-center space-y-2">
-          <span className="text-[10px] uppercase tracking-[0.25em] text-[#CFB6A8] font-bold block">
-            VIP LOGIN
+          <span className="text-[11px] uppercase tracking-[0.25em] text-[#C9A96E] font-extrabold block">
+            IMPERIA PRIVATE ACCESS
           </span>
           <h1
-            className="text-3xl sm:text-4xl font-medium text-[#363C46] tracking-tight"
-            style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+            className="text-3xl sm:text-4xl font-bold text-[#0B0B0B] tracking-tight"
+            style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
           >
             Welcome Back
           </h1>
-          <p className="text-xs text-[#5D6472] font-normal">
+          <p className="text-xs sm:text-sm text-[#555555] font-semibold">
             Sign in to access your curated portfolio and saved properties.
           </p>
         </div>
 
         {/* Card Form */}
-        <form onSubmit={handleSubmit} className="p-8 sm:p-10 rounded-xl bg-white border border-[rgba(93,100,114,0.15)] shadow-[0_12px_32px_rgba(54,60,70,0.06)] space-y-6">
+        <form onSubmit={handleSubmit} className="p-8 sm:p-10 rounded-2xl bg-white border border-[rgba(201,169,110,0.30)] shadow-[0_15px_40px_rgba(0,0,0,0.08)] space-y-6">
           
           {/* Email */}
           <div className="space-y-1.5">
-            <label className="text-[10px] uppercase tracking-wider text-[#5D6472] font-bold block">
+            <label className="text-[10px] uppercase tracking-wider text-[#555555] font-bold block">
               Email Address *
             </label>
             <div className="relative">
@@ -79,32 +90,32 @@ const LoginPage = () => {
                 placeholder="name@domain.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={`w-full bg-[#E0EEE9]/50 border ${errors.email ? 'border-red-500' : 'border-[rgba(93,100,114,0.20)]'} rounded-lg pl-10 pr-4 py-3 text-xs text-[#363C46] font-medium placeholder-[#5D6472]/60 outline-none focus:border-[#CFB6A8] transition-all`}
+                className={`w-full bg-[#F7F6F3] border ${errors.email ? 'border-red-500' : 'border-[rgba(22,22,26,0.15)]'} rounded-xl pl-10 pr-4 py-3.5 text-xs text-[#0B0B0B] font-bold placeholder-[#888888] outline-none focus:border-[#C9A96E] focus:bg-white transition-all`}
               />
-              <Mail className="w-4 h-4 text-[#CFB6A8] absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Mail className="w-4 h-4 text-[#C9A96E] absolute left-3.5 top-1/2 -translate-y-1/2" />
             </div>
             {errors.email && <p className="text-[10px] text-red-500 font-bold">{errors.email}</p>}
           </div>
 
           {/* Password */}
           <div className="space-y-1.5">
-            <label className="text-[10px] uppercase tracking-wider text-[#5D6472] font-bold block">Password *</label>
+            <label className="text-[10px] uppercase tracking-wider text-[#555555] font-bold block">Password *</label>
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className={`w-full bg-[#E0EEE9]/50 border ${errors.password ? 'border-red-500' : 'border-[rgba(93,100,114,0.20)]'} rounded-lg pl-10 pr-10 py-3 text-xs text-[#363C46] font-medium placeholder-[#5D6472]/60 outline-none focus:border-[#CFB6A8] transition-all`}
+                className={`w-full bg-[#F7F6F3] border ${errors.password ? 'border-red-500' : 'border-[rgba(22,22,26,0.15)]'} rounded-xl pl-10 pr-10 py-3.5 text-xs text-[#0B0B0B] font-bold placeholder-[#888888] outline-none focus:border-[#C9A96E] focus:bg-white transition-all`}
               />
-              <Lock className="w-4 h-4 text-[#CFB6A8] absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Lock className="w-4 h-4 text-[#C9A96E] absolute left-3.5 top-1/2 -translate-y-1/2" />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#5D6472] hover:text-[#363C46] focus:outline-none cursor-pointer"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#555555] hover:text-[#0B0B0B] focus:outline-none cursor-pointer"
                 title={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? <EyeOff className="w-4 h-4 text-[#CFB6A8]" /> : <Eye className="w-4 h-4" />}
+                {showPassword ? <EyeOff className="w-4 h-4 text-[#C9A96E]" /> : <Eye className="w-4 h-4 text-[#C9A96E]" />}
               </button>
             </div>
             {errors.password && <p className="text-[10px] text-red-500 font-bold">{errors.password}</p>}
@@ -112,19 +123,19 @@ const LoginPage = () => {
 
           {/* Remember Me & Forgot Password */}
           <div className="flex items-center justify-between text-xs font-sans">
-            <label className="flex items-center gap-2 cursor-pointer text-[#5D6472] hover:text-[#363C46] font-medium">
+            <label className="flex items-center gap-2 cursor-pointer text-[#555555] hover:text-[#0B0B0B] font-semibold">
               <input
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="accent-[#CFB6A8] cursor-pointer"
+                className="accent-[#C9A96E] cursor-pointer"
               />
               Remember Me
             </label>
             <button
               type="button"
               onClick={handleForgotPassword}
-              className="text-[#CFB6A8] hover:underline text-xs cursor-pointer font-bold"
+              className="text-[#C9A96E] hover:underline text-xs cursor-pointer font-bold"
             >
               Forgot Password?
             </button>
@@ -134,15 +145,15 @@ const LoginPage = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-3.5 bg-[#363C46] hover:bg-[#1A1A1A] text-white font-bold text-xs tracking-[0.2em] uppercase rounded-lg shadow-sm cursor-pointer flex items-center justify-center gap-2 transition-all duration-300"
+            className="w-full py-4 bg-[#0E0E10] hover:bg-[#C9A96E] text-[#F4F1EA] hover:text-[#0B0B0B] font-extrabold text-xs tracking-[0.2em] uppercase rounded-xl shadow-md cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 border border-[rgba(201,169,110,0.35)]"
           >
             <span>{isSubmitting ? 'VERIFYING CREDENTIALS...' : 'LOGIN'}</span>
-            <ArrowRight className="w-4 h-4 text-[#CFB6A8]" />
+            <ArrowRight className="w-4 h-4" />
           </button>
 
-          <p className="text-center text-xs text-[#5D6472] font-normal">
+          <p className="text-center text-xs text-[#555555] font-semibold">
             Don't have an account?{' '}
-            <Link to="/signup" className="text-[#CFB6A8] hover:underline font-bold">Create Account</Link>
+            <Link to="/signup" className="text-[#C9A96E] hover:underline font-bold">Create Account</Link>
           </p>
         </form>
 

@@ -14,22 +14,18 @@ const InteriorsPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
-      <div className="pt-[64px] lg:pt-[72px]">
-        <PageHero
-          image="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=80"
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Services', href: '/services' },
-            { label: 'Interior Design' }
-          ]}
-          eyebrow="ARCHITECTURAL DESIGN STUDIO"
-          heading={
-            <>Architectural Interiors &amp; <span className="font-normal text-[#5D6472]">Turnkey Fitouts</span></>
-          }
-          description="Transforming residential foundations into bespoke sanctuaries crafted by international interior architects."
-        />
-      </div>
+    <div className="min-h-screen bg-[#F7F6F3] text-[#16161a] font-sans pb-20">
+      <PageHero
+        image="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=80"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Services', href: '/services' },
+          { label: 'Interior Design' }
+        ]}
+        eyebrow="ARCHITECTURAL DESIGN STUDIO"
+        heading="Architectural Interiors & Turnkey Fitouts"
+        description="Transforming residential foundations into bespoke sanctuaries crafted by international interior architects."
+      />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 space-y-16 font-sans">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

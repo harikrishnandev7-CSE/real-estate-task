@@ -9,20 +9,16 @@ const NotificationsPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
-      <div className="pt-[64px] lg:pt-[72px]">
-        <PageHero
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Notifications' }
-          ]}
-          eyebrow="VIP INTELLIGENCE ALERTS"
-          heading={
-            <>Notification <span className="font-normal text-[#5D6472]">Center</span></>
-          }
-          description="Real-time alerts on off-market opportunities, price updates, and site visit confirmations."
-        />
-      </div>
+    <div className="min-h-screen bg-[#F7F6F3] text-[#16161a] font-sans pb-20">
+      <PageHero
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Notifications' }
+        ]}
+        eyebrow="VIP INTELLIGENCE ALERTS"
+        heading="Notification Center"
+        description="Real-time alerts on off-market opportunities, price updates, and site visit confirmations."
+      />
 
       <div className="max-w-4xl mx-auto px-6 md:px-12 py-16 font-sans">
         <div className="space-y-4">

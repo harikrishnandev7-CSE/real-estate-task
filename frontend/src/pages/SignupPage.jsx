@@ -72,63 +72,63 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="pt-32 pb-24 min-h-screen bg-[#E0EEE9] text-[#363C46] flex items-center justify-center font-sans">
+    <div className="pt-32 pb-24 min-h-screen bg-[#F7F6F3] text-[#0B0B0B] flex items-center justify-center font-sans">
       <div className="max-w-md w-full mx-auto px-6 space-y-8">
         
         {/* Header */}
-        <div className="text-center space-y-3">
-          <span className="text-[10px] uppercase tracking-[0.25em] text-[#CFB6A8] font-bold block">
+        <div className="text-center space-y-2">
+          <span className="text-[11px] uppercase tracking-[0.25em] text-[#C9A96E] font-extrabold block">
             STEP 1 OF 3 — PRIVILEGE ACCESS
           </span>
           <h1
-            className="text-3xl sm:text-4xl font-medium text-[#363C46] tracking-tight"
-            style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+            className="text-3xl sm:text-4xl font-bold text-[#0B0B0B] tracking-tight"
+            style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
           >
             Create Your Account
           </h1>
-          <p className="text-xs text-[#5D6472] font-normal max-w-sm mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#555555] font-semibold max-w-sm mx-auto leading-relaxed">
             Gain bespoke access to off-market luxury listings, advisory services, and private estate tours.
           </p>
         </div>
 
         {/* Card Form */}
-        <form onSubmit={handleSubmit} className="p-8 sm:p-10 rounded-xl bg-white border border-[rgba(93,100,114,0.15)] shadow-[0_12px_32px_rgba(54,60,70,0.06)] space-y-5">
+        <form onSubmit={handleSubmit} className="p-8 sm:p-10 rounded-2xl bg-white border border-[rgba(201,169,110,0.30)] shadow-[0_15px_40px_rgba(0,0,0,0.08)] space-y-5">
           
           {/* Full Name */}
           <div className="space-y-1.5">
-            <label className="text-[10px] uppercase tracking-wider text-[#5D6472] font-bold block">Full Name *</label>
+            <label className="text-[10px] uppercase tracking-wider text-[#555555] font-bold block">Full Name *</label>
             <div className="relative">
               <input
                 type="text"
                 placeholder="e.g. Vikramaditya Roy"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className={`w-full bg-[#E0EEE9]/50 border ${errors.name ? 'border-red-500' : 'border-[rgba(93,100,114,0.20)]'} rounded-lg pl-10 pr-4 py-3 text-xs text-[#363C46] font-medium placeholder-[#5D6472]/60 outline-none focus:border-[#CFB6A8] transition-all`}
+                className={`w-full bg-[#F7F6F3] border ${errors.name ? 'border-red-500' : 'border-[rgba(22,22,26,0.15)]'} rounded-xl pl-10 pr-4 py-3.5 text-xs text-[#0B0B0B] font-bold placeholder-[#888888] outline-none focus:border-[#C9A96E] focus:bg-white transition-all`}
               />
-              <User className="w-4 h-4 text-[#CFB6A8] absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <User className="w-4 h-4 text-[#C9A96E] absolute left-3.5 top-1/2 -translate-y-1/2" />
             </div>
             {errors.name && <p className="text-[10px] text-red-500 font-bold">{errors.name}</p>}
           </div>
 
           {/* Email Address */}
           <div className="space-y-1.5">
-            <label className="text-[10px] uppercase tracking-wider text-[#5D6472] font-bold block">Email Address *</label>
+            <label className="text-[10px] uppercase tracking-wider text-[#555555] font-bold block">Email Address *</label>
             <div className="relative">
               <input
                 type="email"
                 placeholder="name@domain.com"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className={`w-full bg-[#E0EEE9]/50 border ${errors.email ? 'border-red-500' : 'border-[rgba(93,100,114,0.20)]'} rounded-lg pl-10 pr-4 py-3 text-xs text-[#363C46] font-medium placeholder-[#5D6472]/60 outline-none focus:border-[#CFB6A8] transition-all`}
+                className={`w-full bg-[#F7F6F3] border ${errors.email ? 'border-red-500' : 'border-[rgba(22,22,26,0.15)]'} rounded-xl pl-10 pr-4 py-3.5 text-xs text-[#0B0B0B] font-bold placeholder-[#888888] outline-none focus:border-[#C9A96E] focus:bg-white transition-all`}
               />
-              <Mail className="w-4 h-4 text-[#CFB6A8] absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Mail className="w-4 h-4 text-[#C9A96E] absolute left-3.5 top-1/2 -translate-y-1/2" />
             </div>
             {errors.email && <p className="text-[10px] text-red-500 font-bold">{errors.email}</p>}
           </div>
 
           {/* Mobile Number */}
           <div className="space-y-1.5">
-            <label className="text-[10px] uppercase tracking-wider text-[#5D6472] font-bold block">Mobile Number (10 digits) *</label>
+            <label className="text-[10px] uppercase tracking-wider text-[#555555] font-bold block">Mobile Number (10 digits) *</label>
             <div className="relative">
               <input
                 type="tel"
@@ -141,41 +141,41 @@ const SignupPage = () => {
                     setFormData({ ...formData, phone: val });
                   }
                 }}
-                className={`w-full bg-[#E0EEE9]/50 border ${errors.phone ? 'border-red-500' : 'border-[rgba(93,100,114,0.20)]'} rounded-lg pl-10 pr-4 py-3 text-xs text-[#363C46] font-medium placeholder-[#5D6472]/60 outline-none focus:border-[#CFB6A8] transition-all`}
+                className={`w-full bg-[#F7F6F3] border ${errors.phone ? 'border-red-500' : 'border-[rgba(22,22,26,0.15)]'} rounded-xl pl-10 pr-4 py-3.5 text-xs text-[#0B0B0B] font-bold placeholder-[#888888] outline-none focus:border-[#C9A96E] focus:bg-white transition-all`}
               />
-              <Phone className="w-4 h-4 text-[#CFB6A8] absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Phone className="w-4 h-4 text-[#C9A96E] absolute left-3.5 top-1/2 -translate-y-1/2" />
             </div>
             {errors.phone && <p className="text-[10px] text-red-500 font-bold">{errors.phone}</p>}
           </div>
 
           {/* Password */}
           <div className="space-y-1.5">
-            <label className="text-[10px] uppercase tracking-wider text-[#5D6472] font-bold block">Password *</label>
+            <label className="text-[10px] uppercase tracking-wider text-[#555555] font-bold block">Password *</label>
             <div className="relative">
               <input
                 type="password"
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className={`w-full bg-[#E0EEE9]/50 border ${errors.password ? 'border-red-500' : 'border-[rgba(93,100,114,0.20)]'} rounded-lg pl-10 pr-4 py-3 text-xs text-[#363C46] font-medium placeholder-[#5D6472]/60 outline-none focus:border-[#CFB6A8] transition-all`}
+                className={`w-full bg-[#F7F6F3] border ${errors.password ? 'border-red-500' : 'border-[rgba(22,22,26,0.15)]'} rounded-xl pl-10 pr-4 py-3.5 text-xs text-[#0B0B0B] font-bold placeholder-[#888888] outline-none focus:border-[#C9A96E] focus:bg-white transition-all`}
               />
-              <Lock className="w-4 h-4 text-[#CFB6A8] absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Lock className="w-4 h-4 text-[#C9A96E] absolute left-3.5 top-1/2 -translate-y-1/2" />
             </div>
             {errors.password && <p className="text-[10px] text-red-500 font-bold">{errors.password}</p>}
           </div>
 
           {/* Confirm Password */}
           <div className="space-y-1.5">
-            <label className="text-[10px] uppercase tracking-wider text-[#5D6472] font-bold block">Confirm Password *</label>
+            <label className="text-[10px] uppercase tracking-wider text-[#555555] font-bold block">Confirm Password *</label>
             <div className="relative">
               <input
                 type="password"
                 placeholder="••••••••"
                 value={formData.confirmPassword}
                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                className={`w-full bg-[#E0EEE9]/50 border ${errors.confirmPassword ? 'border-red-500' : 'border-[rgba(93,100,114,0.20)]'} rounded-lg pl-10 pr-4 py-3 text-xs text-[#363C46] font-medium placeholder-[#5D6472]/60 outline-none focus:border-[#CFB6A8] transition-all`}
+                className={`w-full bg-[#F7F6F3] border ${errors.confirmPassword ? 'border-red-500' : 'border-[rgba(22,22,26,0.15)]'} rounded-xl pl-10 pr-4 py-3.5 text-xs text-[#0B0B0B] font-bold placeholder-[#888888] outline-none focus:border-[#C9A96E] focus:bg-white transition-all`}
               />
-              <Lock className="w-4 h-4 text-[#CFB6A8] absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Lock className="w-4 h-4 text-[#C9A96E] absolute left-3.5 top-1/2 -translate-y-1/2" />
             </div>
             {errors.confirmPassword && <p className="text-[10px] text-red-500 font-bold">{errors.confirmPassword}</p>}
           </div>
@@ -184,15 +184,15 @@ const SignupPage = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-3.5 bg-[#363C46] hover:bg-[#1A1A1A] text-white font-bold text-xs tracking-[0.2em] uppercase rounded-lg shadow-sm cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 pt-2"
+            className="w-full py-4 bg-[#0E0E10] hover:bg-[#C9A96E] text-[#F4F1EA] hover:text-[#0B0B0B] font-extrabold text-xs tracking-[0.2em] uppercase rounded-xl shadow-md cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 border border-[rgba(201,169,110,0.35)] mt-2"
           >
             <span>{isSubmitting ? 'CREATING ACCOUNT...' : 'CREATE ACCOUNT'}</span>
-            <ArrowRight className="w-4 h-4 text-[#CFB6A8]" />
+            <ArrowRight className="w-4 h-4" />
           </button>
 
-          <p className="text-center text-xs text-[#5D6472] font-normal pt-2">
+          <p className="text-center text-xs text-[#555555] font-semibold pt-2">
             Already have an account?{' '}
-            <Link to="/login" className="text-[#CFB6A8] hover:underline font-bold">LOGIN</Link>
+            <Link to="/login" className="text-[#C9A96E] hover:underline font-bold">LOGIN</Link>
           </p>
         </form>
 

@@ -15,21 +15,17 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
-      <div className="pt-[64px] lg:pt-[72px]">
-        <PageHero
-          image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Contact' }
-          ]}
-          eyebrow="PRIVATE ADVISORY DESK"
-          heading={
-            <>Connect With <span className="font-normal text-[#5D6472]">IMPERIA</span></>
-          }
-          description="Direct access to our senior real estate advisors, private client desk, and commercial yield specialists."
-        />
-      </div>
+    <div className="min-h-screen bg-[#F7F6F3] text-[#16161a] font-sans pb-20">
+      <PageHero
+        image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Contact' }
+        ]}
+        eyebrow="PRIVATE ADVISORY DESK"
+        heading="Connect With IMPERIA"
+        description="Direct access to our senior real estate advisors, private client desk, and commercial yield specialists."
+      />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 font-sans">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -116,9 +112,10 @@ const Contact = () => {
                       <label className="block text-[10px] uppercase text-[#5D6472] mb-1">Phone Number</label>
                       <input
                         type="tel"
-                        placeholder="+91 98765 43210"
+                        maxLength={10}
+                        placeholder="9876543210"
                         value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                        onChange={(e) => setFormData({...formData, phone: e.target.value.replace(/\D/g, '').slice(0, 10)})}
                         className="w-full bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] rounded-lg p-3 text-[#363C46] outline-none focus:border-[#CFB6A8]"
                         required
                       />

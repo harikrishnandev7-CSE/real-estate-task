@@ -15,45 +15,41 @@ const Compare = () => {
 
   if (!currentUser) {
     return (
-      <div className="min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
-        <div className="pt-[64px] lg:pt-[72px]">
-          <PageHero
-            image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
-            breadcrumbs={[
-              { label: 'Home', href: '/' },
-              { label: 'Compare' },
-            ]}
-            eyebrow="VIP ACCESS REQUIRED"
-            heading={
-              <>Compare <span className="font-normal text-[#5D6472]">Estates</span></>
-            }
-            description="Log in to access side-by-side estate comparisons, technical specs, and investment analytics."
-          />
-        </div>
+      <div className="min-h-screen bg-[#F7F6F3] text-[#16161a] font-sans pb-20">
+        <PageHero
+          image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
+          breadcrumbs={[
+            { label: 'Home', href: '/' },
+            { label: 'Compare' },
+          ]}
+          eyebrow="VIP ACCESS REQUIRED"
+          heading="Compare Estates"
+          description="Log in to access side-by-side estate comparisons, technical specs, and investment analytics."
+        />
         <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 text-center space-y-6 font-sans">
-          <div className="max-w-md mx-auto p-8 sm:p-10 rounded-xl bg-white border border-[rgba(93,100,114,0.15)] shadow-[0_12px_32px_rgba(54,60,70,0.06)] space-y-5">
-            <div className="w-16 h-16 rounded-full bg-[rgba(207,182,168,0.15)] border border-[#CFB6A8] text-[#CFB6A8] flex items-center justify-center mx-auto shadow-xs">
-              <Scale className="w-8 h-8" />
+          <div className="max-w-md mx-auto p-8 sm:p-10 rounded-2xl bg-white border border-[rgba(201,169,110,0.30)] shadow-[0_15px_40px_rgba(0,0,0,0.08)] space-y-6">
+            <div className="w-16 h-16 rounded-2xl bg-[rgba(201,169,110,0.15)] border border-[rgba(201,169,110,0.30)] text-[#C9A96E] flex items-center justify-center mx-auto shadow-sm">
+              <Scale className="w-8 h-8 text-[#C9A96E]" />
             </div>
             <h3
-              className="text-2xl font-bold text-[#363C46] tracking-tight"
-              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+              className="text-2xl sm:text-3xl font-bold text-[#0B0B0B] tracking-tight"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
             >
               Please Log In to Continue
             </h3>
-            <p className="text-xs text-[#5D6472] leading-relaxed font-normal">
+            <p className="text-xs sm:text-sm text-[#555555] leading-relaxed font-semibold">
               Property comparison features are reserved for logged-in VIP members. Please sign in to compare property specifications side-by-side.
             </p>
             <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={() => navigate('/login')}
-                className="px-8 py-3 bg-[#363C46] hover:bg-[#1A1A1A] text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow-xs transition-all cursor-pointer"
+                className="px-6 py-3.5 bg-[#0E0E10] text-[#F4F1EA] hover:bg-[#C9A96E] hover:text-[#0B0B0B] text-xs font-extrabold uppercase tracking-widest rounded-xl shadow-md transition-all cursor-pointer border border-[rgba(201,169,110,0.35)]"
               >
                 Continue to Login
               </button>
               <button
                 onClick={() => navigate('/signup')}
-                className="px-8 py-3 border border-[rgba(93,100,114,0.20)] bg-[#E0EEE9] text-[#363C46] hover:border-[#CFB6A8] text-xs font-bold uppercase tracking-wider rounded-lg shadow-xs transition-all cursor-pointer"
+                className="px-6 py-3.5 bg-white border border-[rgba(201,169,110,0.40)] text-[#0B0B0B] hover:border-[#C9A96E] hover:bg-[rgba(201,169,110,0.10)] text-xs font-extrabold uppercase tracking-widest rounded-xl shadow-xs transition-all cursor-pointer"
               >
                 Create Account
               </button>
@@ -125,21 +121,17 @@ const Compare = () => {
   }, [resolvedCompareList]);
 
   return (
-    <div className="min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
-      <div className="pt-[64px] lg:pt-[72px]">
-        <PageHero
-          image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
-          breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Compare' },
-          ]}
-          eyebrow="COMPARATIVE ANALYTICS"
-          heading={
-            <>Estate Specs <span className="font-normal text-[#5D6472]">Comparison</span></>
-          }
-          description="Side-by-side technical matrix comparing pricing, carpet area, zoning approvals, and expected capital yields."
-        />
-      </div>
+    <div className="min-h-screen bg-[#F7F6F3] text-[#16161a] font-sans pb-20">
+      <PageHero
+        image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Compare' },
+        ]}
+        eyebrow="COMPARATIVE ANALYTICS"
+        heading="Estate Specs Comparison"
+        description="Side-by-side technical matrix comparing pricing, carpet area, zoning approvals, and expected capital yields."
+      />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 font-sans space-y-12">
         {resolvedCompareList.length === 0 ? (

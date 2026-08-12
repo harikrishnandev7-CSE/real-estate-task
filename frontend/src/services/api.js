@@ -122,6 +122,7 @@ export const api = {
   deleteProperty: (id) => request(`/admin/properties/${id}`, { method: 'DELETE' }),
   bulkPropertiesAction: (ids, action) => request('/admin/properties/bulk', { method: 'POST', body: { ids, action } }),
   uploadMedia: (formData) => request('/admin/properties/upload', { method: 'POST', body: formData }),
+  uploadVideo: (formData) => request('/properties/upload-video', { method: 'POST', body: formData }),
 
   // --- SITE VISITS ---
   createSiteVisit: (visitData) => request('/site-visits', { method: 'POST', body: visitData }),

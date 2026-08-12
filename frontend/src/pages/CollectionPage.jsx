@@ -125,16 +125,12 @@ const CollectionPage = () => {
   const cities = ['All', 'Chennai', 'Coimbatore', 'Madurai', 'Bangalore', 'Hyderabad', 'Mumbai'];
 
   return (
-    <div className="min-h-screen bg-[#E0EEE9] text-[#363C46] font-sans">
-      <div className="pt-20">
-        <PageHero
-          tag="IMPERIA CURATED SPECTRUM"
-          heading={
-            <>{config.title} <span className="font-normal text-[#5D6472]">Listings</span></>
-          }
-          description={config.subtitle}
-        />
-      </div>
+    <div className="min-h-screen bg-[#F7F6F3] text-[#16161a] font-sans pb-20">
+      <PageHero
+        eyebrow="IMPERIA CURATED SPECTRUM"
+        heading={`${config.title} Listings`}
+        description={config.subtitle}
+      />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 space-y-12 font-sans">
         

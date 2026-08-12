@@ -32,7 +32,8 @@ import {
   SelectInput, 
   TextAreaInput, 
   SegmentedControl, 
-  ToggleSwitch 
+  ToggleSwitch,
+  PhoneInput
 } from '../../components/admin/primitives/FormField';
 import { EmptyState } from '../../components/common/FeedbackStates';
 
@@ -267,26 +268,29 @@ const AdminCustomersPage = () => {
       </div>
 
       {/* ── TOOLBAR CONTROLS & ACTIONS ──────────────────────────────── */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-[#E8E4DA] rounded-2xl p-5 shadow-[0_10px_25px_rgba(0,0,0,0.04)]">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-[rgba(201,169,110,0.30)] rounded-2xl p-5 shadow-[0_12px_32px_rgba(0,0,0,0.05)]">
         <div>
-          <span className="text-[10px] uppercase tracking-[0.25em] text-[#F5A623] font-extrabold block">
+          <span className="text-[10px] uppercase tracking-[0.25em] text-[#C9A96E] font-extrabold block font-sans">
             CLIENT RELATIONSHIP MANAGEMENT
           </span>
-          <h2 className="text-2xl font-extrabold text-[#1A1A1A] tracking-tight">
+          <h2
+            className="text-2xl font-bold text-[#0B0B0B] tracking-tight"
+            style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+          >
             VIP Customers Roster
           </h2>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 font-sans">
           {/* Search Input */}
           <div className="relative">
-            <Search className="w-3.5 h-3.5 text-[#8A8A85] absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-[#C9A96E] absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search name, phone, city..."
               value={searchVal}
               onChange={(e) => setSearchVal(e.target.value)}
-              className="bg-[#F4F1EA] border border-[#E8E4DA] rounded-full text-xs px-4 py-2 pl-9 text-[#1A1A1A] placeholder-[#8A8A85] focus:outline-none focus:border-[#F5A623] w-48 sm:w-60 transition-all"
+              className="bg-[#F8F6F2] border border-[rgba(201,169,110,0.25)] rounded-xl text-xs px-4 py-2.5 pl-9 text-[#0B0B0B] placeholder-[#8A8A85] focus:outline-none focus:border-[#C9A96E] w-48 sm:w-60 transition-all font-medium"
             />
           </div>
 
@@ -302,18 +306,18 @@ const AdminCustomersPage = () => {
           {/* Export CSV */}
           <button
             onClick={handleExportCSV}
-            className="px-4 py-2 bg-white border border-[#E8E4DA] hover:bg-[#F4F1EA] text-[#1A1A1A] text-xs font-bold rounded-full transition-colors flex items-center gap-1.5 cursor-pointer"
+            className="px-4 py-2.5 bg-white border border-[rgba(201,169,110,0.25)] hover:bg-[#F8F6F2] text-[#0B0B0B] text-xs font-bold rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer"
           >
-            <Download className="w-3.5 h-3.5 text-[#8A8A85]" />
+            <Download className="w-3.5 h-3.5 text-[#C9A96E]" />
             <span className="hidden sm:inline">Export CSV</span>
           </button>
 
           {/* Add Customer Button */}
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="px-5 py-2.5 bg-[#1A1A1A] hover:bg-black text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-md transition-all cursor-pointer flex items-center gap-2"
+            className="px-5 py-2.5 bg-[#0E0E10] hover:bg-[#C9A96E] text-[#F4F1EA] hover:text-[#0B0B0B] text-xs font-extrabold uppercase tracking-wider rounded-xl shadow-md border border-[#C9A96E] transition-all cursor-pointer flex items-center gap-2"
           >
-            <UserPlus className="w-4 h-4 text-[#F5A623]" />
+            <UserPlus className="w-4 h-4 text-[#C9A96E]" />
             <span>Add Lead</span>
           </button>
         </div>
@@ -447,12 +451,12 @@ const AdminCustomersPage = () => {
               onChange={(e) => setNewCustForm(prev => ({ ...prev, email: e.target.value }))}
               placeholder="anand@gmail.com"
             />
-            <TextInput
-              label="Phone Number *"
+            <PhoneInput
+              label="Phone Number"
               required
               value={newCustForm.phone}
               onChange={(e) => setNewCustForm(prev => ({ ...prev, phone: e.target.value }))}
-              placeholder="+91 98765 43210"
+              placeholder="9876543210"
             />
           </div>
 

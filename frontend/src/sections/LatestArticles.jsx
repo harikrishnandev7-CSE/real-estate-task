@@ -42,20 +42,20 @@ const LatestArticles = () => {
           </p>
         </div>
 
-        {/* JamesEdition Exact Replica Grid: No Border Radius, Sharp Corners, Tight 1px Spacing */}
+        {/* JamesEdition Grid: Border Radius 0, Sharp Corners, 1px Flush Gap */}
         <motion.div 
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-50px' }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-1 md:gap-1.5 bg-[#FFFFFF] p-1 shadow-sm"
+          className="grid grid-cols-1 md:grid-cols-3 gap-px"
         >
           
           {/* ── CARD 1: Executive Interview Card (Top Left) ───────────────── */}
           <motion.article
             variants={cardVariants}
             onClick={() => navigate('/blog')}
-            className="group relative h-[420px] md:h-[460px] rounded-none overflow-hidden cursor-pointer"
+            className="group relative h-[320px] md:h-[350px] rounded-none overflow-hidden cursor-pointer border border-[rgba(201,169,110,0.30)] shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:-translate-y-1 hover:border-[#C9A96E] hover:shadow-[0_20px_40px_rgba(201,169,110,0.25)] transition-all duration-300"
           >
             <img 
               src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1000&q=80" 
@@ -65,43 +65,43 @@ const LatestArticles = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/40" />
 
             {/* Top Half: Executive Portraits */}
-            <div className="absolute top-8 left-0 right-0 z-10 flex items-center justify-center gap-4 px-4 text-center">
+            <div className="absolute top-5 left-0 right-0 z-10 flex items-center justify-center gap-3 px-4 text-center">
               <div className="flex flex-col items-center">
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-white/80 shadow-md mb-2">
+                <div className="w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden border-2 border-white/80 shadow-md mb-1">
                   <img 
                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&h=300&q=80" 
                     alt="Jason Waller" 
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <p className="text-[11px] font-bold text-white uppercase tracking-wider">JASON WALLER</p>
-                <p className="text-[9px] text-white/70 uppercase max-w-[120px] leading-tight">CEO OF CHRISTIE'S INT. REAL ESTATE</p>
+                <p className="text-[10px] font-bold text-white uppercase tracking-wider">JASON WALLER</p>
+                <p className="text-[8px] text-white/70 uppercase max-w-[110px] leading-tight">CEO OF CHRISTIE'S INT. REAL ESTATE</p>
               </div>
 
-              <span className="text-xl md:text-2xl font-serif text-white/80 italic font-light">&amp;</span>
+              <span className="text-lg md:text-xl font-serif text-white/80 italic font-light">&amp;</span>
 
               <div className="flex flex-col items-center">
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-white/80 shadow-md mb-2">
+                <div className="w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden border-2 border-white/80 shadow-md mb-1">
                   <img 
                     src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&h=300&q=80" 
                     alt="Eric Finnas Dahlstrom" 
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <p className="text-[11px] font-bold text-white uppercase tracking-wider">ERIC DAHLSTROM</p>
-                <p className="text-[9px] text-white/70 uppercase max-w-[120px] leading-tight">CEO OF JAMESEDITION</p>
+                <p className="text-[10px] font-bold text-white uppercase tracking-wider">ERIC DAHLSTROM</p>
+                <p className="text-[8px] text-white/70 uppercase max-w-[110px] leading-tight">CEO OF JAMESEDITION</p>
               </div>
             </div>
 
             {/* Bottom Title & Subtitle Quote */}
-            <div className="absolute bottom-6 left-0 right-0 px-6 text-center z-10 space-y-1">
+            <div className="absolute bottom-5 left-0 right-0 px-5 text-center z-10 space-y-0.5">
               <h3 
-                className="text-2xl md:text-3xl font-medium text-white tracking-tight leading-tight group-hover:text-[#C6A66B] transition-colors"
+                className="text-lg md:text-xl font-medium text-white tracking-tight leading-tight group-hover:text-[#C6A66B] transition-colors"
                 style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
               >
                 Mexico's Coastal Property Rise
               </h3>
-              <p className="text-xs md:text-sm text-white/80 font-serif italic">
+              <p className="text-xs text-white/80 font-serif italic">
                 "We're not really salespeople, we are tour guides."
               </p>
             </div>
@@ -112,7 +112,7 @@ const LatestArticles = () => {
           <motion.article
             variants={cardVariants}
             onClick={() => navigate('/blog')}
-            className="group relative h-[420px] md:h-[460px] rounded-none overflow-hidden cursor-pointer"
+            className="group relative h-[320px] md:h-[350px] rounded-none overflow-hidden cursor-pointer border border-[rgba(201,169,110,0.30)] shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:-translate-y-1 hover:border-[#C9A96E] hover:shadow-[0_20px_40px_rgba(201,169,110,0.25)] transition-all duration-300"
           >
             <img 
               src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80" 
@@ -121,9 +121,9 @@ const LatestArticles = () => {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/20" />
 
-            <div className="absolute bottom-10 left-6 right-6 z-10">
+            <div className="absolute bottom-6 left-5 right-5 z-10">
               <h3 
-                className="text-2xl md:text-3xl font-normal text-white leading-snug group-hover:text-[#C6A66B] transition-colors drop-shadow-md"
+                className="text-lg md:text-xl font-normal text-white leading-snug group-hover:text-[#C6A66B] transition-colors drop-shadow-md"
                 style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
               >
                 The New Trophy Asset: How U.S. Buyers Drive Italy's Shift to Waterfront Luxury
@@ -136,7 +136,7 @@ const LatestArticles = () => {
           <motion.article
             variants={cardVariants}
             onClick={() => navigate('/blog')}
-            className="group relative h-[420px] md:h-[460px] rounded-none overflow-hidden cursor-pointer"
+            className="group relative h-[320px] md:h-[350px] rounded-none overflow-hidden cursor-pointer border border-[rgba(201,169,110,0.30)] shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:-translate-y-1 hover:border-[#C9A96E] hover:shadow-[0_20px_40px_rgba(201,169,110,0.25)] transition-all duration-300"
           >
             <img 
               src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80" 
@@ -145,9 +145,9 @@ const LatestArticles = () => {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/20" />
 
-            <div className="absolute bottom-10 left-6 right-6 z-10">
+            <div className="absolute bottom-6 left-5 right-5 z-10">
               <h3 
-                className="text-2xl md:text-3xl font-normal text-white leading-snug group-hover:text-[#C6A66B] transition-colors drop-shadow-md"
+                className="text-lg md:text-xl font-normal text-white leading-snug group-hover:text-[#C6A66B] transition-colors drop-shadow-md"
                 style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
               >
                 This Villa Is Believed to Have Once Belonged to the Woman Behind the Mona Lisa
@@ -160,7 +160,7 @@ const LatestArticles = () => {
           <motion.article
             variants={cardVariants}
             onClick={() => navigate('/blog')}
-            className="group relative h-[420px] md:h-[460px] rounded-none overflow-hidden cursor-pointer"
+            className="group relative h-[320px] md:h-[350px] rounded-none overflow-hidden cursor-pointer border border-[rgba(201,169,110,0.30)] shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:-translate-y-1 hover:border-[#C9A96E] hover:shadow-[0_20px_40px_rgba(201,169,110,0.25)] transition-all duration-300"
           >
             <img 
               src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80" 
@@ -170,13 +170,13 @@ const LatestArticles = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/20" />
 
             {/* Video Badge Top Right */}
-            <div className="absolute top-4 right-4 z-10 p-2 text-white/90">
-              <Video className="w-5 h-5" />
+            <div className="absolute top-3.5 right-3.5 z-10 p-1.5 text-white/90">
+              <Video className="w-4.5 h-4.5" />
             </div>
 
-            <div className="absolute bottom-10 left-6 right-6 z-10">
+            <div className="absolute bottom-6 left-5 right-5 z-10">
               <h3 
-                className="text-2xl md:text-3xl font-normal text-white leading-snug group-hover:text-[#C6A66B] transition-colors drop-shadow-md"
+                className="text-lg md:text-xl font-normal text-white leading-snug group-hover:text-[#C6A66B] transition-colors drop-shadow-md"
                 style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
               >
                 These Are the Most Expensive Homes for Sale in the U.S.
@@ -189,7 +189,7 @@ const LatestArticles = () => {
           <motion.article
             variants={cardVariants}
             onClick={() => navigate('/blog')}
-            className="group relative h-[420px] md:h-[460px] rounded-none overflow-hidden cursor-pointer"
+            className="group relative h-[320px] md:h-[350px] rounded-none overflow-hidden cursor-pointer border border-[rgba(201,169,110,0.30)] shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:-translate-y-1 hover:border-[#C9A96E] hover:shadow-[0_20px_40px_rgba(201,169,110,0.25)] transition-all duration-300"
           >
             <img 
               src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1000&q=80" 
@@ -199,13 +199,13 @@ const LatestArticles = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/20" />
 
             {/* Video Badge Top Right */}
-            <div className="absolute top-4 right-4 z-10 p-2 text-white/90">
-              <Video className="w-5 h-5" />
+            <div className="absolute top-3.5 right-3.5 z-10 p-1.5 text-white/90">
+              <Video className="w-4.5 h-4.5" />
             </div>
 
-            <div className="absolute bottom-10 left-6 right-6 z-10">
+            <div className="absolute bottom-6 left-5 right-5 z-10">
               <h3 
-                className="text-2xl md:text-3xl font-normal text-white leading-snug group-hover:text-[#C6A66B] transition-colors drop-shadow-md"
+                className="text-lg md:text-xl font-normal text-white leading-snug group-hover:text-[#C6A66B] transition-colors drop-shadow-md"
                 style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
               >
                 An Architectural Vineyard Estate Shaped by the Beauty of Knights Valley, California
@@ -218,7 +218,7 @@ const LatestArticles = () => {
           <motion.article
             variants={cardVariants}
             onClick={() => navigate('/blog')}
-            className="group relative h-[420px] md:h-[460px] rounded-none overflow-hidden cursor-pointer"
+            className="group relative h-[320px] md:h-[350px] rounded-none overflow-hidden cursor-pointer border border-[rgba(201,169,110,0.30)] shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:-translate-y-1 hover:border-[#C9A96E] hover:shadow-[0_20px_40px_rgba(201,169,110,0.25)] transition-all duration-300"
           >
             <img 
               src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=80" 
@@ -228,13 +228,13 @@ const LatestArticles = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/20" />
 
             {/* Gallery Badge Top Right */}
-            <div className="absolute top-4 right-4 z-10 p-2 text-white/90">
-              <Layers className="w-5 h-5" />
+            <div className="absolute top-3.5 right-3.5 z-10 p-1.5 text-white/90">
+              <Layers className="w-4.5 h-4.5" />
             </div>
 
-            <div className="absolute bottom-8 left-6 right-20 z-10">
+            <div className="absolute bottom-5 left-5 right-16 z-10">
               <h3 
-                className="text-2xl md:text-3xl font-normal text-white leading-snug group-hover:text-[#C6A66B] transition-colors drop-shadow-md"
+                className="text-lg md:text-xl font-normal text-white leading-snug group-hover:text-[#C6A66B] transition-colors drop-shadow-md"
                 style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
               >
                 Rapper Swae Lee Is Selling His Gated Estate
@@ -242,7 +242,7 @@ const LatestArticles = () => {
             </div>
 
             {/* Bottom Right Avatar Circle */}
-            <div className="absolute bottom-6 right-6 z-20 w-14 h-14 rounded-full border-2 border-white overflow-hidden shadow-lg">
+            <div className="absolute bottom-5 right-5 z-20 w-11 h-11 rounded-full border-2 border-white overflow-hidden shadow-lg">
               <img 
                 src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80" 
                 alt="Swae Lee Avatar" 

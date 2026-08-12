@@ -21,22 +21,22 @@ export const EMICard = ({ initialPrincipal = 50000000 }) => {
   }, [loanAmount, interestRate, tenureYears]);
 
   return (
-    <div className="border border-[rgba(93,100,114,0.15)] bg-white rounded-xl p-6 space-y-6 font-sans shadow-xs">
-      <div className="flex items-center gap-2 border-b border-[rgba(93,100,114,0.15)] pb-4">
-        <Calculator className="w-4 h-4 text-[#CFB6A8]" />
+    <div className="border border-[rgba(201,169,110,0.30)] bg-white rounded-xl p-6 space-y-6 font-sans shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
+      <div className="flex items-center gap-2 border-b border-[rgba(201,169,110,0.20)] pb-4">
+        <Calculator className="w-5 h-5 text-[#C9A96E]" />
         <h4
-          className="text-xs uppercase tracking-wider font-bold text-[#363C46]"
-          style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+          className="text-base font-bold text-[#0B0B0B]"
+          style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
         >
           EMI Estimation Tool
         </h4>
       </div>
 
-      <div className="space-y-4 text-xs font-bold">
-        <div className="space-y-1">
-          <div className="flex justify-between">
-            <span className="text-[#5D6472] font-medium">Loan Principal</span>
-            <span className="text-[#363C46] font-bold">₹{(loanAmount / 10000000).toFixed(2)} Cr</span>
+      <div className="space-y-5 text-xs font-bold">
+        <div className="space-y-1.5">
+          <div className="flex justify-between text-xs">
+            <span className="text-[#555555] font-bold">Loan Principal</span>
+            <span className="text-[#0B0B0B] font-extrabold text-sm">₹{(loanAmount / 10000000).toFixed(2)} Cr</span>
           </div>
           <input 
             type="range" 
@@ -45,14 +45,14 @@ export const EMICard = ({ initialPrincipal = 50000000 }) => {
             step="500000"
             value={loanAmount}
             onChange={(e) => setLoanAmount(parseInt(e.target.value))}
-            className="w-full accent-[#CFB6A8] cursor-pointer"
+            className="w-full accent-[#C9A96E] cursor-pointer"
           />
         </div>
 
-        <div className="space-y-1">
-          <div className="flex justify-between">
-            <span className="text-[#5D6472] font-medium">Interest Rate (YoY)</span>
-            <span className="text-[#363C46] font-bold">{interestRate}%</span>
+        <div className="space-y-1.5">
+          <div className="flex justify-between text-xs">
+            <span className="text-[#555555] font-bold">Interest Rate (YoY)</span>
+            <span className="text-[#0B0B0B] font-extrabold text-sm">{interestRate}%</span>
           </div>
           <input 
             type="range" 
@@ -61,14 +61,14 @@ export const EMICard = ({ initialPrincipal = 50000000 }) => {
             step="0.1"
             value={interestRate}
             onChange={(e) => setInterestRate(parseFloat(e.target.value))}
-            className="w-full accent-[#CFB6A8] cursor-pointer"
+            className="w-full accent-[#C9A96E] cursor-pointer"
           />
         </div>
 
-        <div className="space-y-1">
-          <div className="flex justify-between">
-            <span className="text-[#5D6472] font-medium">Loan Tenure</span>
-            <span className="text-[#363C46] font-bold">{tenureYears} Years</span>
+        <div className="space-y-1.5">
+          <div className="flex justify-between text-xs">
+            <span className="text-[#555555] font-bold">Loan Tenure</span>
+            <span className="text-[#0B0B0B] font-extrabold text-sm">{tenureYears} Years</span>
           </div>
           <input 
             type="range" 
@@ -77,21 +77,21 @@ export const EMICard = ({ initialPrincipal = 50000000 }) => {
             step="1"
             value={tenureYears}
             onChange={(e) => setTenureYears(parseInt(e.target.value))}
-            className="w-full accent-[#CFB6A8] cursor-pointer"
+            className="w-full accent-[#C9A96E] cursor-pointer"
           />
         </div>
 
-        <div className="border-t border-[rgba(93,100,114,0.15)] pt-4 mt-2 flex justify-between items-end">
+        <div className="border-t border-[rgba(201,169,110,0.20)] pt-4 mt-2 flex justify-between items-end">
           <div>
-            <span className="text-[#5D6472] text-[10px] uppercase font-bold">Estimated monthly payment</span>
+            <span className="text-[#6B6B6B] text-[10px] uppercase font-extrabold tracking-wider block">Estimated monthly payment</span>
             <p
-              className="text-xl font-bold text-[#CFB6A8] mt-0.5"
-              style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+              className="text-2xl font-extrabold text-[#C9A96E] mt-1"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
             >
               ₹{calculatedEMI.toLocaleString('en-IN')}
             </p>
           </div>
-          <span className="text-[9px] text-[#5D6472] uppercase tracking-widest font-bold bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.15)] px-2 py-1 rounded-md">
+          <span className="text-[10px] text-[#0B0B0B] uppercase tracking-widest font-extrabold bg-[rgba(201,169,110,0.15)] border border-[rgba(201,169,110,0.30)] px-2.5 py-1 rounded-md">
             80% LTV Max
           </span>
         </div>
@@ -146,12 +146,12 @@ export const BookingCard = ({ propertyTitle, propertyCity, propertyId, onConsult
   };
 
   return (
-    <div className="border border-[rgba(93,100,114,0.15)] bg-white rounded-xl p-6 md:p-8 space-y-6 font-sans shadow-xs">
-      <div className="border-b border-[rgba(93,100,114,0.15)] pb-4 space-y-1">
-        <span className="text-[9px] uppercase tracking-[0.25em] text-[#CFB6A8] font-bold block">Walkthrough Booking</span>
+    <div className="border border-[rgba(201,169,110,0.30)] bg-white rounded-xl p-6 md:p-8 space-y-6 font-sans shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
+      <div className="border-b border-[rgba(201,169,110,0.20)] pb-4 space-y-1">
+        <span className="text-[10px] uppercase tracking-[0.25em] text-[#C9A96E] font-extrabold block">VIP CHAUFFEUR WALKTHROUGH</span>
         <h3
-          className="text-lg font-bold text-[#363C46] tracking-tight"
-          style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+          className="text-xl font-bold text-[#0B0B0B] tracking-tight"
+          style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
         >
           Schedule Private Visit
         </h3>
@@ -161,37 +161,37 @@ export const BookingCard = ({ propertyTitle, propertyCity, propertyId, onConsult
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="border border-[#CFB6A8] bg-[rgba(207,182,168,0.12)] rounded-lg p-6 text-center space-y-4"
+          className="border border-[#C9A96E] bg-[rgba(201,169,110,0.12)] rounded-lg p-6 text-center space-y-4"
         >
-          <div className="w-12 h-12 rounded-full bg-[#CFB6A8] text-[#363C46] flex items-center justify-center mx-auto shadow-xs">
-            <Check className="w-5 h-5 stroke-[2.5]" />
+          <div className="w-12 h-12 rounded-full bg-[#C9A96E] text-[#0B0B0B] flex items-center justify-center mx-auto shadow-xs">
+            <Check className="w-6 h-6 stroke-[3]" />
           </div>
           <h4
-            className="text-base font-bold text-[#363C46]"
-            style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+            className="text-lg font-bold text-[#0B0B0B]"
+            style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
           >
             Visit Request Scheduled
           </h4>
-          <p className="text-xs text-[#5D6472] leading-relaxed font-sans font-medium">
-            A private relationships coordinator will reach out to organize logistics for <span className="text-[#363C46] font-bold">{bookingDate}</span> at <span className="text-[#363C46] font-bold">{bookingTime}</span>.
+          <p className="text-xs text-[#555555] leading-relaxed font-sans font-semibold">
+            A private relationships coordinator will reach out to organize logistics for <span className="text-[#0B0B0B] font-extrabold">{bookingDate}</span> at <span className="text-[#0B0B0B] font-extrabold">{bookingTime}</span>.
           </p>
         </motion.div>
       ) : (
-        <form onSubmit={handleBookingSubmit} className="space-y-4 text-xs text-[#363C46]">
+        <form onSubmit={handleBookingSubmit} className="space-y-4 text-xs text-[#0B0B0B]">
           <div className="space-y-1.5">
-            <label className="text-[10px] text-[#5D6472] uppercase tracking-wider font-bold">Your Name</label>
+            <label className="text-[10px] text-[#555555] uppercase tracking-wider font-bold">Your Name</label>
             <input 
               type="text" 
               placeholder="Enter full name" 
               value={bookingName}
               onChange={(e) => setBookingName(e.target.value)}
               required
-              className="w-full bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] rounded-lg px-4 py-3 text-[#363C46] placeholder-[#5D6472]/60 outline-none focus:border-[#CFB6A8]"
+              className="w-full bg-[#F7F6F3] border border-[rgba(22,22,26,0.15)] rounded-lg px-4 py-3 text-[#0B0B0B] font-bold placeholder-[#888888] outline-none focus:border-[#C9A96E]"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-[10px] text-[#5D6472] uppercase tracking-wider font-bold">Your Phone</label>
+            <label className="text-[10px] text-[#555555] uppercase tracking-wider font-bold">Your Phone</label>
             <input 
               type="tel" 
               maxLength={10}
@@ -199,27 +199,27 @@ export const BookingCard = ({ propertyTitle, propertyCity, propertyId, onConsult
               value={bookingPhone}
               onChange={(e) => setBookingPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
               required
-              className="w-full bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] rounded-lg px-4 py-3 text-[#363C46] placeholder-[#5D6472]/60 outline-none focus:border-[#CFB6A8]"
+              className="w-full bg-[#F7F6F3] border border-[rgba(22,22,26,0.15)] rounded-lg px-4 py-3 text-[#0B0B0B] font-bold placeholder-[#888888] outline-none focus:border-[#C9A96E]"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-[10px] text-[#5D6472] uppercase tracking-wider font-bold">Select Date</label>
+              <label className="text-[10px] text-[#555555] uppercase tracking-wider font-bold">Select Date</label>
               <input 
                 type="date" 
                 value={bookingDate}
                 onChange={(e) => setBookingDate(e.target.value)}
                 required
-                className="w-full bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] rounded-lg px-3 py-2.5 text-[#363C46] outline-none focus:border-[#CFB6A8]"
+                className="w-full bg-[#F7F6F3] border border-[rgba(22,22,26,0.15)] rounded-lg px-3 py-2.5 text-[#0B0B0B] font-bold outline-none focus:border-[#C9A96E]"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-[10px] text-[#5D6472] uppercase tracking-wider font-bold">Preferred Time</label>
+              <label className="text-[10px] text-[#555555] uppercase tracking-wider font-bold">Preferred Time</label>
               <select 
                 value={bookingTime}
                 onChange={(e) => setBookingTime(e.target.value)}
-                className="w-full bg-[#E0EEE9]/50 border border-[rgba(93,100,114,0.20)] rounded-lg px-3 py-2.5 text-[#363C46] outline-none focus:border-[#CFB6A8] cursor-pointer"
+                className="w-full bg-[#F7F6F3] border border-[rgba(22,22,26,0.15)] rounded-lg px-3 py-2.5 text-[#0B0B0B] font-bold outline-none focus:border-[#C9A96E] cursor-pointer"
               >
                 <option value="10:00 AM">10:00 AM</option>
                 <option value="12:00 PM">12:00 PM</option>
@@ -231,9 +231,10 @@ export const BookingCard = ({ propertyTitle, propertyCity, propertyId, onConsult
 
           <button 
             type="submit"
-            className="w-full py-3.5 bg-[#363C46] hover:bg-[#1A1A1A] text-xs font-bold text-white tracking-wider uppercase rounded-lg shadow-xs cursor-pointer transition-all"
+            disabled={isSubmitting}
+            className="w-full py-3.5 bg-[#0E0E10] hover:bg-[#C9A96E] text-xs font-bold text-[#F4F1EA] hover:text-[#0B0B0B] tracking-widest uppercase rounded-lg shadow-md cursor-pointer transition-all border border-[rgba(201,169,110,0.30)]"
           >
-            REQUEST WALKTHROUGH VISIT
+            {isSubmitting ? 'PROCESSING...' : 'REQUEST WALKTHROUGH VISIT'}
           </button>
         </form>
       )}
@@ -244,18 +245,18 @@ export const BookingCard = ({ propertyTitle, propertyCity, propertyId, onConsult
 // Section Header: Editorial labels with mixed-weight typography
 export const SectionHeader = ({ tag, title, desc }) => {
   return (
-    <div className="space-y-3 mb-10 text-left font-sans">
-      {tag && <span className="text-xs uppercase tracking-[0.25em] text-[#CFB6A8] font-bold block">{tag}</span>}
+    <div className="space-y-2 mb-6 text-left font-sans">
+      {tag && <span className="text-xs uppercase tracking-[0.25em] text-[#C9A96E] font-extrabold block">{tag}</span>}
       {title && (
         <h2
-          className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#363C46] tracking-tight [&_em]:font-normal [&_em]:text-[#5D6472] [&_em]:not-italic [&_span.light]:font-normal [&_span.light]:text-[#5D6472]"
-          style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
+          className="text-2xl md:text-3xl font-bold text-[#0B0B0B] tracking-tight"
+          style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
         >
           {title}
         </h2>
       )}
       {desc && (
-        <p className="text-[#5D6472] text-xs md:text-sm font-sans font-normal leading-relaxed max-w-xl">
+        <p className="text-[#555555] text-xs md:text-sm font-sans font-semibold leading-relaxed max-w-xl">
           {desc}
         </p>
       )}
@@ -272,8 +273,8 @@ export const AnimatedButton = ({ children, onClick, className = "", variant = "p
       onClick={onClick}
       className={`px-6 py-3 rounded-lg text-xs font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer font-sans ${
         variant === 'primary'
-          ? 'bg-[#363C46] hover:bg-[#1A1A1A] text-white shadow-xs'
-          : 'border border-[rgba(93,100,114,0.20)] bg-white hover:border-[#CFB6A8] text-[#363C46] shadow-xs'
+          ? 'bg-[#0E0E10] hover:bg-[#C9A96E] text-[#F4F1EA] hover:text-[#0B0B0B] shadow-md border border-[rgba(201,169,110,0.30)]'
+          : 'border border-[rgba(201,169,110,0.30)] bg-white hover:border-[#C9A96E] text-[#0B0B0B] shadow-xs'
       } ${className}`}
     >
       {children}
